@@ -1,0 +1,696 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Enterprise Search API",
+    "version": "v1",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "{schemes}://{host}:{port}",
+      "variables": {
+        "schemes": {
+          "enum": [
+            "http",
+            "https"
+          ],
+          "default": "http"
+        },
+        "host": {
+          "default": "localhost",
+          "description": "The hostname running the server"
+        },
+        "port": {
+          "default": "3002"
+        }
+      }
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "basic_auth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "version": {
+        "type": "object",
+        "required": [
+          "number",
+          "build_hash",
+          "build_date"
+        ],
+        "properties": {
+          "number": {
+            "type": "string"
+          },
+          "build_hash": {
+            "type": "string"
+          },
+          "build_date": {
+            "type": "string",
+            "x-nullable": true
+          }
+        }
+      },
+      "memory_usage": {
+        "type": "object",
+        "required": [
+          "heap_init",
+          "heap_used",
+          "heap_committed",
+          "heap_max",
+          "non_heap_init",
+          "non_heap_committed"
+        ],
+        "properties": {
+          "heap_init": {
+            "type": "integer"
+          },
+          "heap_used": {
+            "type": "integer"
+          },
+          "heap_committed": {
+            "type": "integer"
+          },
+          "heap_max": {
+            "type": "integer"
+          },
+          "non_heap_init": {
+            "type": "integer"
+          },
+          "non_heap_committed": {
+            "type": "integer"
+          }
+        }
+      },
+      "thread_stats": {
+        "type": "object",
+        "required": [
+          "thread_count",
+          "peak_thread_count",
+          "total_started_thread_count",
+          "daemon_thread_count"
+        ],
+        "properties": {
+          "thread_count": {
+            "type": "integer"
+          },
+          "peak_thread_count": {
+            "type": "integer"
+          },
+          "total_started_thread_count": {
+            "type": "integer"
+          },
+          "daemon_thread_count": {
+            "type": "integer"
+          }
+        }
+      },
+      "jvm_info": {
+        "type": "object",
+        "required": [
+          "pid",
+          "uptime",
+          "memory_usage",
+          "memory_pools",
+          "threads",
+          "vm_version",
+          "vm_vendor",
+          "vm_name"
+        ],
+        "properties": {
+          "pid": {
+            "type": "integer"
+          },
+          "uptime": {
+            "type": "integer"
+          },
+          "memory_usage": {
+            "$ref": "#/components/schemas/memory_usage"
+          },
+          "memory_pools": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "threads": {
+            "$ref": "#/components/schemas/thread_stats"
+          },
+          "vm_version": {
+            "type": "string"
+          },
+          "vm_vendor": {
+            "type": "string"
+          },
+          "vm_name": {
+            "type": "string"
+          }
+        }
+      },
+      "filebeat_info": {
+        "type": "object",
+        "required": [
+          "alive"
+        ],
+        "properties": {
+          "pid": {
+            "type": "integer"
+          },
+          "alive": {
+            "type": "boolean"
+          },
+          "restart_count": {
+            "type": "integer"
+          },
+          "seconds_since_last_restart": {
+            "type": "integer"
+          }
+        }
+      },
+      "system_info": {
+        "type": "object",
+        "required": [
+          "java_version",
+          "jruby_version",
+          "os_name",
+          "os_version"
+        ],
+        "properties": {
+          "java_version": {
+            "type": "string"
+          },
+          "jruby_version": {
+            "type": "string"
+          },
+          "os_name": {
+            "type": "string"
+          },
+          "os_version": {
+            "type": "string"
+          }
+        }
+      },
+      "health_response": {
+        "type": "object",
+        "required": [
+          "name",
+          "version",
+          "jvm",
+          "filebeat",
+          "system"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "$ref": "#/components/schemas/version"
+          },
+          "jvm": {
+            "$ref": "#/components/schemas/jvm_info"
+          },
+          "filebeat": {
+            "$ref": "#/components/schemas/filebeat_info"
+          },
+          "system": {
+            "$ref": "#/components/schemas/system_info"
+          }
+        }
+      },
+      "timer": {
+        "type": "object",
+        "required": [
+          "sum",
+          "max",
+          "mean"
+        ],
+        "properties": {
+          "sum": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "mean": {
+            "type": "number"
+          }
+        }
+      },
+      "app_metrics": {
+        "type": "object",
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "$ref": "#/components/schemas/timer"
+            }
+          ]
+        }
+      },
+      "app_stats": {
+        "type": "object",
+        "required": [
+          "pid",
+          "start",
+          "end",
+          "metrics"
+        ],
+        "properties": {
+          "pid": {
+            "type": "integer"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/app_metrics"
+          }
+        }
+      },
+      "queue_progress": {
+        "type": "object",
+        "required": [
+          "pending"
+        ],
+        "properties": {
+          "pending": {
+            "type": "integer"
+          }
+        }
+      },
+      "queue_stats": {
+        "type": "object",
+        "required": [
+          "failed"
+        ],
+        "properties": {
+          "failed": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/queue_progress"
+        }
+      },
+      "connector_pool": {
+        "type": "object",
+        "required": [
+          "running",
+          "queue_depth",
+          "size",
+          "busy",
+          "idle",
+          "total_scheduled",
+          "total_completed"
+        ],
+        "properties": {
+          "running": {
+            "type": "boolean"
+          },
+          "queue_depth": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "busy": {
+            "type": "integer"
+          },
+          "idle": {
+            "type": "integer"
+          },
+          "total_scheduled": {
+            "type": "integer"
+          },
+          "total_completed": {
+            "type": "integer"
+          }
+        }
+      },
+      "connector_pools": {
+        "type": "object",
+        "required": [
+          "extract_worker_pool",
+          "subextract_worker_pool",
+          "publish_worker_pool",
+          "status_update_worker_pool"
+        ],
+        "properties": {
+          "extract_worker_pool": {
+            "$ref": "#/components/schemas/connector_pool"
+          },
+          "subextract_worker_pool": {
+            "$ref": "#/components/schemas/connector_pool"
+          },
+          "publish_worker_pool": {
+            "$ref": "#/components/schemas/connector_pool"
+          },
+          "status_update_worker_pool": {
+            "$ref": "#/components/schemas/connector_pool"
+          }
+        }
+      },
+      "job_types": {
+        "type": "object",
+        "required": [
+          "full",
+          "incremental",
+          "delete",
+          "permissions"
+        ],
+        "properties": {
+          "full": {
+            "type": "integer"
+          },
+          "incremental": {
+            "type": "integer"
+          },
+          "delete": {
+            "type": "integer"
+          },
+          "permissions": {
+            "type": "integer"
+          }
+        }
+      },
+      "job_store": {
+        "type": "object",
+        "required": [
+          "waiting",
+          "working",
+          "job_types"
+        ],
+        "properties": {
+          "waiting": {
+            "type": "integer"
+          },
+          "working": {
+            "type": "integer"
+          },
+          "job_types": {
+            "$ref": "#/components/schemas/job_types"
+          }
+        }
+      },
+      "connector_stats": {
+        "type": "object",
+        "required": [
+          "alive",
+          "pool",
+          "job_store"
+        ],
+        "properties": {
+          "alive": {
+            "type": "boolean"
+          },
+          "pool": {
+            "$ref": "#/components/schemas/connector_pools"
+          },
+          "job_store": {
+            "$ref": "#/components/schemas/job_store"
+          }
+        }
+      },
+      "stats_response": {
+        "type": "object",
+        "properties": {
+          "app": {
+            "$ref": "#/components/schemas/app_stats"
+          },
+          "queues": {
+            "$ref": "#/components/schemas/queue_stats"
+          },
+          "connectors": {
+            "$ref": "#/components/schemas/connector_stats"
+          }
+        }
+      },
+      "read_only_state": {
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "included_stats": {
+        "name": "include",
+        "in": "query",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "required": false,
+        "style": "form",
+        "explode": false,
+        "description": "Comma-separated list of stats to return"
+      }
+    }
+  },
+  "paths": {
+    "/api/ent/v1/internal/health": {
+      "get": {
+        "summary": "Get information on the health of a deployment and basic statistics around resource usage",
+        "tags": [
+          "Health API"
+        ],
+        "description": "[Get information on the health of a deployment and basic statistics around resource usage](https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#health-api-example)",
+        "operationId": "getHealth",
+        "security": [
+          {
+            "basic_auth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/health_response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ent/v1/internal/read_only_mode": {
+      "get": {
+        "summary": "Get the read-only flag's state",
+        "tags": [
+          "Read-Only API"
+        ],
+        "description": "[Get the read-only flag's state](https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#getting-read-only-state)",
+        "operationId": "getReadOnly",
+        "security": [
+          {
+            "basic_auth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/read_only_state"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update the read-only flag's state",
+        "tags": [
+          "Read-Only API"
+        ],
+        "description": "[Update the read-only flag's state](https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#setting-read-only-state)",
+        "operationId": "putReadOnly",
+        "security": [
+          {
+            "basic_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/read_only_state"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/read_only_state"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ent/v1/internal/stats": {
+      "get": {
+        "summary": "Get information about the resource usage of the application, the state of different internal queues, etc.",
+        "tags": [
+          "Stats API"
+        ],
+        "description": "[Get information about the resource usage of the application, the state of different internal queues, etc.](https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#stats-api-example)",
+        "operationId": "getStats",
+        "security": [
+          {
+            "basic_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "$ref": "#/components/parameters/included_stats"
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/stats_response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ent/v1/internal/version": {
+      "get": {
+        "summary": "Get version information for this server",
+        "tags": [
+          "Version API"
+        ],
+        "description": "[Get version information for this server](https://www.elastic.co/guide/en/enterprise-search/current/management-apis.html)",
+        "operationId": "getVersion",
+        "security": [
+          {
+            "basic_auth": [
+
+            ]
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/version"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Health API",
+      "description": "An API for quickly getting information on the health of a deployment and basic statistics around resource usage",
+      "externalDocs": {
+        "url": "https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#health-api"
+      }
+    },
+    {
+      "name": "Version API",
+      "description": "An API for getting version information for this server",
+      "externalDocs": {
+        "url": "https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html"
+      }
+    },
+    {
+      "name": "Stats API",
+      "description": "A dedicated API for getting information about the resource usage of the application, the state of different internal queues, etc.",
+      "externalDocs": {
+        "url": "https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#stats-api"
+      }
+    },
+    {
+      "name": "Read-Only API",
+      "description": "an API endpoint for managing the read-only mode for a deployment",
+      "externalDocs": {
+        "url": "https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html"
+      }
+    }
+  ]
+}

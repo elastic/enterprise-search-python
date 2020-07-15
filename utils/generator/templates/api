@@ -1,0 +1,47 @@
+    def {{ api.name }}(
+        self,
+        {% for param in api.required_params %}
+        {{ param.name }},
+        {% endfor %}
+        {% if api.has_body %}
+        body,
+        {% endif %}
+        {% for param in api.optional_params %}
+        {{ param.name }}=None,
+        {% endfor %}
+        params=None,
+        headers=None,
+    ):
+        # type: (...) -> {{ api.response_class }}
+        """{% if api.description %}
+        {{ api.description|replace("\n", " ")|wordwrap(wrapstring="\n        ") }}
+        {% endif %}
+        {% if api.doc_url %}
+        `<{{ api.doc_url }}>`_
+        {% endif %}
+        {% if api.all_params|list|length %}
+
+        {% for param in api.all_params %}
+        {% filter wordwrap(72, wrapstring="\n            ") %}
+        :arg {{ param.name }}: {{ param.description }}
+        {% endfilter %}
+        {% endfor %}
+        {% endif %}
+        """
+        return {{ api.response_class }}(
+            *self.transport.request(
+                "{{ api.method }}",
+                make_path({% for part in api.path_parts %}
+                    {% if part.startswith("{") %}
+                    {{ part[1:-1] }},
+                    {% else %}
+                    "{{ part }}",
+                    {% endif %}
+                {% endfor %}),
+                {% if api.has_body %}
+                body=body,
+                {% endif %}
+                params=params,
+                headers=headers,
+            )
+        )

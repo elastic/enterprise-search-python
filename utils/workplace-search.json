@@ -1,0 +1,1204 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Workplace Search API",
+    "version": "v1",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "{schemes}://{host}:{port}",
+      "variables": {
+        "schemes": {
+          "enum": [
+            "http",
+            "https"
+          ],
+          "default": "http"
+        },
+        "host": {
+          "default": "localhost",
+          "description": "The hostname running the server"
+        },
+        "port": {
+          "default": "3002"
+        }
+      }
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer_auth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      }
+    },
+    "schemas": {
+      "external_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 800
+      },
+      "errors": {
+        "type": "array",
+        "minItems": 0,
+        "items": {
+          "type": "string"
+        }
+      },
+      "errors_response": {
+        "type": "object",
+        "required": [
+          "errors"
+        ],
+        "properties": {
+          "errors": {
+            "$ref": "#/components/schemas/errors"
+          }
+        }
+      },
+      "meta_page": {
+        "type": "object",
+        "required": [
+          "page"
+        ],
+        "properties": {
+          "page": {
+            "type": "object",
+            "required": [
+              "current",
+              "total_pages",
+              "total_results",
+              "size"
+            ],
+            "properties": {
+              "current": {
+                "type": "integer"
+              },
+              "total_pages": {
+                "type": "integer"
+              },
+              "total_results": {
+                "type": "integer"
+              },
+              "size": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "permission": {
+        "type": "string",
+        "maxItems": 256,
+        "externalDocs": {
+          "url": "https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions.html",
+          "description": "Document level security restricts which documents a user is able to return in search results"
+        }
+      },
+      "permissions": {
+        "type": "array",
+        "maxItems": 1024,
+        "description": "List of permissions",
+        "items": {
+          "$ref": "#/components/schemas/permission"
+        }
+      },
+      "permissions_user": {
+        "type": "object",
+        "required": [
+          "user",
+          "permissions"
+        ],
+        "properties": {
+          "user": {
+            "type": "string"
+          },
+          "permissions": {
+            "$ref": "#/components/schemas/permissions"
+          }
+        }
+      },
+      "document": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/external_id"
+          },
+          "_allow_permissions": {
+            "$ref": "#/components/schemas/permissions"
+          },
+          "_deny_permissions": {
+            "$ref": "#/components/schemas/permissions"
+          }
+        },
+        "additionalProperties": true
+      },
+      "document_bulk_create_response": {
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "errors"
+              ],
+              "properties": {
+                "id": {
+                  "$ref": "#/components/schemas/external_id"
+                },
+                "errors": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            }
+          }
+        }
+      },
+      "document_bulk_delete_response": {
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "success"
+              ],
+              "properties": {
+                "id": {
+                  "$ref": "#/components/schemas/external_id"
+                },
+                "success": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "external_identity": {
+        "type": "object",
+        "required": [
+          "source_user_id",
+          "user"
+        ],
+        "properties": {
+          "source_user_id": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          }
+        }
+      },
+      "list_all_external_identities_response": {
+        "type": "object",
+        "required": [
+          "meta",
+          "results"
+        ],
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/meta_page"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/external_identity"
+            }
+          }
+        }
+      },
+      "delete_external_identities_response": {
+        "type": "string",
+        "enum": [
+          "ok"
+        ]
+      },
+      "list_all_permissions_response": {
+        "type": "object",
+        "required": [
+          "meta",
+          "results"
+        ],
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/meta_page"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/permissions_user"
+            }
+          }
+        }
+      },
+      "document_ids": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 100,
+        "items": {
+          "$ref": "#/components/schemas/external_id"
+        }
+      },
+      "bulk_documents": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 100,
+        "items": {
+          "$ref": "#/components/schemas/document"
+        }
+      }
+    },
+    "parameters": {
+      "content_source_key": {
+        "name": "content_source_key",
+        "schema": {
+          "type": "string"
+        },
+        "in": "path",
+        "required": true,
+        "description": "Unique key for a Custom API source, provided upon creation of a Custom API Source"
+      },
+      "current_page": {
+        "name": "current_page",
+        "in": "query",
+        "schema": {
+          "type": "integer"
+        },
+        "required": false,
+        "x-codegen-param-name": "currentPage",
+        "description": "Which page of results to request"
+      },
+      "page_size": {
+        "name": "page_size",
+        "in": "query",
+        "schema": {
+          "type": "integer"
+        },
+        "required": false,
+        "x-codegen-param-name": "pageSize",
+        "description": "The number of results to return in a page"
+      },
+      "user": {
+        "name": "user",
+        "schema": {
+          "type": "string"
+        },
+        "in": "path",
+        "required": true,
+        "description": "The username in context"
+      }
+    }
+  },
+  "paths": {
+    "/api/ws/v1/sources/{content_source_key}/documents/bulk_create": {
+      "post": {
+        "summary": "Indexes one or more new documents into a custom content source, or updates one or more existing documents",
+        "tags": [
+          "Documents API"
+        ],
+        "description": "[Indexes one or more new documents into a custom content source, or updates one or more existing documents](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#index-and-update)",
+        "operationId": "indexDocuments",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "payload too large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/document_bulk_create_response"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/bulk_documents"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ws/v1/sources/{content_source_key}/documents/bulk_destroy": {
+      "post": {
+        "summary": "Deletes a list of documents from a custom content source",
+        "tags": [
+          "Documents API"
+        ],
+        "description": "[Remove documents from a Custom API Source](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#destroy)",
+        "operationId": "deleteDocuments",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "payload too large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/document_bulk_delete_response"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/document_ids"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ws/v1/sources/{content_source_key}/external_identities": {
+      "get": {
+        "summary": "Retrieves all external identities",
+        "tags": [
+          "External Identities API"
+        ],
+        "description": "[Retrieves all external identities](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#list-external-identities)",
+        "operationId": "listAllExternalIdentities",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          },
+          {
+            "name": "page[current]",
+            "in": "query",
+            "$ref": "#/components/parameters/current_page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "$ref": "#/components/parameters/page_size",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/list_all_external_identities_response"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Adds a new external identity",
+        "tags": [
+          "External Identities API"
+        ],
+        "description": "[Adds a new external identity](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#add-external-identity)",
+        "operationId": "createExternalIdentity",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/external_identity"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/external_identity"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ws/v1/sources/{content_source_key}/external_identities/{user}": {
+      "get": {
+        "summary": "Retrieves an external identity",
+        "tags": [
+          "External Identities API"
+        ],
+        "description": "[Retrieves an external identity](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#show-external-identity)",
+        "operationId": "showExternalIdentity",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          },
+          {
+            "name": "user",
+            "in": "path",
+            "$ref": "#/components/parameters/user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/external_identity"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates an external identity",
+        "tags": [
+          "External Identities API"
+        ],
+        "description": "[Updates an external identity](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#update-external-identity)",
+        "operationId": "updateExternalIdentity",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          },
+          {
+            "name": "user",
+            "in": "path",
+            "$ref": "#/components/parameters/user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/external_identity"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/external_identity"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes an external identity",
+        "tags": [
+          "External Identities API"
+        ],
+        "description": "[Deletes an external identity](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#remove-external-identity)",
+        "operationId": "deleteExternalIdentity",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          },
+          {
+            "name": "user",
+            "in": "path",
+            "$ref": "#/components/parameters/user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/delete_external_identities_response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ws/v1/sources/{content_source_key}/permissions": {
+      "get": {
+        "summary": "Lists all permissions for all users",
+        "tags": [
+          "Permissions API"
+        ],
+        "description": "[List all permissions for all users](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#list)",
+        "operationId": "listAllPermissions",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          },
+          {
+            "name": "page[current]",
+            "in": "query",
+            "required": false,
+            "$ref": "#/components/parameters/current_page",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page[size]",
+            "in": "query",
+            "required": false,
+            "$ref": "#/components/parameters/page_size",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "402": {
+            "description": "payment required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/list_all_permissions_response"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ws/v1/sources/{content_source_key}/permissions/{user}": {
+      "get": {
+        "summary": "Lists all permissions for one user",
+        "tags": [
+          "Permissions API"
+        ],
+        "description": "[List permissions for a user](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#list-one)",
+        "operationId": "getUserPermissions",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          },
+          {
+            "name": "user",
+            "in": "path",
+            "$ref": "#/components/parameters/user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "402": {
+            "description": "payment required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/permissions_user"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Creates a new set of permissions or over-writes all existing permissions",
+        "tags": [
+          "Permissions API"
+        ],
+        "description": "[Create a set of permissions or overwrite existing permissions](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#add-all)",
+        "operationId": "updateUserPermissions",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          },
+          {
+            "name": "user",
+            "in": "path",
+            "$ref": "#/components/parameters/user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "402": {
+            "description": "payment required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/permissions_user"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/permissions"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ws/v1/sources/{content_source_key}/permissions/{user}/add": {
+      "post": {
+        "summary": "Adds one or more new permissions atop existing permissions",
+        "tags": [
+          "Permissions API"
+        ],
+        "description": "[Add one or more permission for a given user. Permissions are added atop the existing](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#add-one)",
+        "operationId": "addUserPermissions",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          },
+          {
+            "name": "user",
+            "in": "path",
+            "$ref": "#/components/parameters/user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "402": {
+            "description": "payment required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/permissions_user"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/permissions"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ws/v1/sources/{content_source_key}/permissions/{user}/remove": {
+      "post": {
+        "summary": "Removes one or more permissions from an existing set of permissions",
+        "tags": [
+          "Permissions API"
+        ],
+        "description": "[Remove one or more permission for a given user](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#remove-one)",
+        "operationId": "removeUserPermissions",
+        "security": [
+          {
+            "bearer_auth": [
+
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "content_source_key",
+            "in": "path",
+            "$ref": "#/components/parameters/content_source_key",
+            "required": true
+          },
+          {
+            "name": "user",
+            "in": "path",
+            "$ref": "#/components/parameters/user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "unauthorized",
+            "content": {
+
+            }
+          },
+          "404": {
+            "description": "not found",
+            "content": {
+
+            }
+          },
+          "402": {
+            "description": "payment required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors_response"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/permissions_user"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/permissions"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Documents API",
+      "description": "Index, update, and destroy documents from a Custom API Source",
+      "externalDocs": {
+        "url": "https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html"
+      }
+    },
+    {
+      "name": "Permissions API",
+      "description": "Add, remove, and list Custom API Source document level permissions for a user",
+      "externalDocs": {
+        "url": "https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions.html"
+      }
+    },
+    {
+      "name": "External Identities API",
+      "description": "Add, remove, and list mappings between External Source Identities and Internal Users",
+      "externalDocs": {
+        "url": "https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html"
+      }
+    }
+  ]
+}
