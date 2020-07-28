@@ -1,15 +1,15 @@
+import os
 import re
 import json
-import sys
 import pathlib
-from typing import Optional, Mapping, List, Set
+from typing import Optional, List
 import jinja2
 
+base_dir = pathlib.Path(__file__).absolute().parent.parent.parent
+schemas_dir = base_dir.parent / "ent-search/swagger/v1"
 templates_dir = str(pathlib.Path(__file__).absolute().parent / "templates")
 loader = jinja2.FileSystemLoader(templates_dir)
-env = jinja2.Environment(
-    loader=loader,
-)
+env = jinja2.Environment(loader=loader,)
 t = env.get_template("component")
 
 
@@ -29,279 +29,252 @@ def openapi_type_to_typing(openapi_type, required=True) -> str:
 
 
 def camel_to_snake(name):
-    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+    name = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+    return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
+
+
+def snake_to_camel(name):
+    if "_" in name:
+        return "".join(x.title() for x in name.split("_"))
+    return name[0].upper() + name[1:]
 
 
 def to_python_param(name):
-    name = re.sub(r"^[^a-z0-9_]*", "", name.lower())
-    name = re.sub(r"[^a-z0-9_]*$", "", name)
-    return re.sub(r"[^a-z0-9_]+", "_", name)
+    return re.sub(r"[^a-z0-9_]+", "_", camel_to_snake(name)).strip("_")
+
+
+class Parameter:
+    def __init__(self, spec):
+        self.spec = spec
+
+    @property
+    def wire_name(self):
+        return self.spec["name"]
+
+    @property
+    def param_name(self) -> str:
+        return to_python_param(self.spec.get("x-codegen-param-name", self.spec["name"]))
+
+    @property
+    def required(self) -> bool:
+        return self.spec.get("required", False)
+
+    @property
+    def in_(self) -> str:
+        return self.spec.get("in", None)
+
+    @property
+    def description(self):
+        return self.spec.get("description", "")
+
+    def __repr__(self):
+        return f"Parameter(param_name={self.param_name!r})"
 
 
 class Component:
-    def __init__(self, openapi_name: str, openapi_type: str, component_namespace: str, properties: Optional[Mapping[str, "Component"]]=None, required_properties=None):
-        self.openapi_name = openapi_name
-        self.openapi_type = openapi_type
-        self.component_namespace = component_namespace
-        self.properties = properties or {}
-        self.required_properties = required_properties or []
-
-        # object and array must have properties
-        if openapi_type == "object":
-            #assert len(self.properties) > 0
-            assert all(x in self.properties for x in self.required_properties)
-        elif openapi_type == "array":
-            assert tuple(self.properties) == ("items",)
+    def __init__(self, id, spec):
+        self.id = id
+        self.spec = spec
 
     @property
-    def class_name(self):
-        if self.openapi_type == "object":
-            return self.openapi_name.title().replace("_", "")
-        return None
+    def properties(self):
+        return
+
+    @property
+    def class_name(self) -> str:
+        return snake_to_camel(self.id)
 
     @property
     def typing_type(self):
-        t = openapi_type_to_typing(self.openapi_type)
+        openapi_type = self.spec["type"]
+        t = openapi_type_to_typing(openapi_type)
         if t:
             return t
-        elif self.openapi_type == "array":
+        elif openapi_type == "array":
             return f"typing.List[{self.properties['items'].typing_type}]"
         else:
             return self.class_name
 
     def __repr__(self):
-        return f"<{self.openapi_name} {self.openapi_type} {self.component_namespace} {self.properties}>"
-
-    @property
-    def has_typing_import(self):
-        # typing.List
-        if self.openapi_type == "array":
-            return True
-        # typing.Optional
-        elif self.openapi_type == "object" and list(self.properties) != self.required_properties:
-            return True
-        # Sub-components
-        elif any(component.has_typing_import for component in self.properties.values()):
-            return True
-        return False
-
-    @property
-    def is_response(self):
-        return "Response" in (self.class_name or ())
-
-    @property
-    def other_imports(self) -> Mapping[str, Set[str]]:
-        imports = {}
-        for key, component in self.properties.items():
-            if not isinstance(component, Component):
-                continue
-            if component.component_namespace != self.component_namespace and component.class_name:
-                imports.setdefault(f".{component.component_namespace}", set()).add(component.class_name)
-        return imports
-
-    def to_python(self) -> List[str]:
-        if self.openapi_type != "object":
-            return []
-        return [x for x in env.get_template("component").render(component=self).split("\n") if x.strip()]
-
-
-class ComponentNamespace:
-    def __init__(self, name):
-        self.name = name
-        self.components = []
-
-    @property
-    def imports(self) -> List[str]:
-        imports = []
-        if any(component.has_typing_import for component in self.components):
-            imports.append("from ..utils import typing")
-        if any(component.is_response for component in self.components):
-            imports.append("from ._base import JSONResponse")
-        from_imports = {}
-        for component in self.components:
-            for key, imp in component.other_imports.items():
-                from_imports[key] = from_imports.setdefault(key, set()).union(imp)
-        for from_, names in sorted(from_imports.items()):
-            imports.append(f"from {from_} import {', '.join(sorted(names))}")
-        return imports
-
-    def to_python(self) -> List[str]:
-        code = []
-        for component in self.components:
-            code.extend(component.to_python())
-        if code:
-            code = self.imports + code
-        return [x for x in code if x.strip()]
-
-
-class APIParameter:
-    def __init__(self, name, openapi_type, required, description, wire_name):
-        self.name = name
-        self.wire_name = wire_name
-        self.openapi_type = openapi_type
-        self.required = required
-        self.description = description
-
-    @property
-    def typing_type(self):
-        if self.openapi_type == "string":
-            t = "str"
-        elif self.openapi_type == "integer":
-            t = "int"
-        elif self.openapi_type == "number":
-            t = "typing.Union[float, int]"
-        elif self.openapi_type == "boolean":
-            t= "bool"
-        elif self.openapi_type == "array":
-            t = "typing.List[%s]"
-        else:
-            raise ValueError("typing_type isn't defined")
-        if not self.required:
-            t = "typing.Optional[%s]" % t
-        return t
+        return f"{self.class_name}()"
 
 
 class API:
-    def __init__(self, name, method, path_parts, description, doc_url, has_body, path_params, query_params, response_class):
-        self.name = name
-        self.method = method
-        self.path_parts = path_parts
-        self.path_params = path_params
-        self.query_params = query_params
-        self.description = description
-        self.doc_url = doc_url
-        self.has_body = has_body
-        self.response_class = response_class
+    def __init__(self, method, path, spec):
+        self.method = method.upper()
+        self.path = path
+        self.spec = spec
+
+    @staticmethod
+    def sorted_key(api):
+        func_parts = api.func_name.split("_")
+        if func_parts[0] in (
+            "get",
+            "put",
+            "update",
+            "delete",
+            "create",
+            "add",
+            "delete",
+            "list",
+        ):
+            if func_parts[1] == "all":
+                return tuple(func_parts[2:] + func_parts[:2])
+            return tuple(func_parts[1:] + [func_parts[:1]])
+        return tuple(func_parts)
 
     @property
-    def required_params(self):
-        assert all(x.required for x in self.path_params)
-        return self.path_params
-
-    @property
-    def optional_params(self):
-        assert not any(x.required for x in self.query_params)
-        return self.query_params
+    def func_name(self) -> str:
+        return camel_to_snake(self.spec["operationId"])
 
     @property
     def all_params(self):
-        return self.required_params + self.optional_params
-
-
-with open(sys.argv[1]) as f:
-    data = json.loads(f.read())
-
-
-components = {}
-component_namespaces: Mapping[str, ComponentNamespace] = {}
-
-
-def load_component(openapi_name, openapi_def, component_namespace=None):
-    if openapi_name == "$ref":
-        return components[re.search("^#/components/schemas/(.+)$", openapi_def).group(1)]
-    if tuple(openapi_def) == ("$ref",):
-        return components[re.search("^#/components/schemas/(.+)$", openapi_def["$ref"]).group(1)]
-    if openapi_name in components:
-        return components[openapi_name]
-
-    assert component_namespace is not None
-
-    openapi_type = openapi_def["type"]
-    properties = {}
-    required_properties = []
-
-    if openapi_type == "object":
-        properties = {pname: load_component(pname, pdef, component_namespace=component_namespace) for pname, pdef in openapi_def.get("properties", {}).items()}
-
-        additional_properties = openapi_def.get("additionalProperties", None)
-        if isinstance(additional_properties, dict):
-            if tuple(additional_properties) == ("$ref",):
-                properties.update(load_component("$ref", additional_properties["$ref"]).properties)
-
-        required_properties = openapi_def.get("required", [])
-
-    elif openapi_type == "array":
-        properties = {"items": load_component("items", openapi_def["items"], component_namespace=component_namespace)}
-
-    comp = Component(
-        openapi_name=openapi_name,
-        openapi_type=openapi_type,
-        component_namespace=component_namespace,
-        properties=properties,
-        required_properties=required_properties
-    )
-    component_namespaces.setdefault(component_namespace, ComponentNamespace(component_namespace)).components.append(comp)
-    return comp
-
-
-for openapi_name, openapi_def in data["components"]["schemas"].items():
-    print(f"Loading component {openapi_name!r}")
-    components[openapi_name] = load_component(openapi_name, openapi_def, component_namespace=openapi_name)
-
-
-apis = {}
-for path, path_def in data["paths"].items():
-    for method, method_def in path_def.items():
-        name = camel_to_snake(method_def["operationId"])
-        #print(f"Loading API {name!r}")
-
-        path_params = []
-        query_params = []
-
-        for param_def in method_def["parameters"]:
-
-            if "$ref" in param_def:
-                merge_def = data
-                for key in param_def["$ref"].lstrip("#/").split("/"):
-                    merge_def = merge_def[key]
-                for key, val in merge_def.items():
-                    param_def.setdefault(key, val)
-
-            param_name = param_def["name"]
-
-            param = APIParameter(
-                name=to_python_param(param_name),
-                openapi_type=param_def["schema"]["type"],
-                required=param_def.get("required", True),
-                description=param_def.get("description", None),
-                wire_name=param_name
-            )
-            if param_def["in"] == "path":
-                path_params.append(param)
-            elif param_def["in"] == "query":
-                query_params.append(param)
-
-        doc_url=None
-        match = re.search(r"\((https://[^\)]+)\)", method_def.get("description", ""))
-        if match:
-            doc_url = match.group(1)
-
-        # Get the 200 response
-        try:
-            resp_ref = method_def["responses"]["200"]["content"]["application/json"]["schema"]["$ref"]
-            response_class = re.search("^#/components/schemas/(.+)$", resp_ref).group(1).title().replace("_", "")
-        except (KeyError, AttributeError):
-            response_class = "JSONResponse"
-
-        apis[name] = API(
-            name=name,
-            method=method.upper(),
-            path_parts=[x for x in path.split("/") if x],
-            path_params=path_params,
-            query_params=query_params,
-            description=method_def.get("summary", ""),
-            doc_url=doc_url,
-            has_body="requestBody" in method_def,
-            response_class=response_class
+        param_specs = self.spec.get("parameters", [])
+        return sorted(
+            [Parameter(spec) for spec in param_specs],
+            key=lambda x: (not x.required, x.in_ == "query"),
         )
 
-        print(env.get_template("api").render(api=apis[name]))
+    @property
+    def required_params(self):
+        return [param for param in self.all_params if param.required]
+
+    @property
+    def optional_params(self):
+        return [param for param in self.all_params if not param.required]
+
+    @property
+    def query_params(self):
+        return [param for param in self.all_params if param.in_ == "query"]
+
+    @property
+    def path_parts(self):
+        return [x for x in self.path.split("/") if x]
+
+    @property
+    def description(self) -> List[str]:
+        return self.spec["summary"]
+
+    @property
+    def docs_url(self) -> Optional[str]:
+        return self.spec.get("externalDocs", {}).get("url", None)
+
+    @property
+    def has_body(self) -> bool:
+        return "requestBody" in self.spec
+
+    @property
+    def response_component(self) -> str:
+        spec_resps = self.spec["responses"]
+        resp = spec_resps.get("default", spec_resps.get("200", ""))
+        ref = None
+        if "$ref" in resp:
+            ref = resp["$ref"]
+        elif "content" in resp:
+            ref = resp["content"]["application/json"]["schema"]["$ref"]
+        if ref:
+            return re.match(
+                r"^#/components/(?:schemas|responses|requestBodies)/(.+)$", ref
+            ).group(1)
+
+    def __repr__(self):
+        return f"API(func_name={self.func_name!r}, method={self.method!r}, path={self.path!r}, resp={self.response_component!r})"
 
 
-for k, v in sorted(component_namespaces.items()):
-    data = v.to_python()
-    if data:
-        with open(f"workplace_search/_components/{k}.py", "w+") as f:
+class OpenAPI:
+    def __init__(self, namespace, components, apis):
+        self.namespace = namespace
+        self.components = components
+        self.apis = apis
+
+    @property
+    def client_class_name(self):
+        return snake_to_camel(self.namespace)
+
+    @classmethod
+    def from_schema(cls, filepath: pathlib.Path):
+        with filepath.open() as f:
+            schema_data = json.loads(f.read())
+
+        def expand_refs(x):
+            if isinstance(x, list):
+                return [expand_refs(i) for i in x]
+            elif isinstance(x, dict):
+                if "$ref" in x:
+                    keys = re.match(
+                        r"^#/components/(schemas|responses|requestBodies|parameters)/(.+)$",
+                        x["$ref"],
+                    ).groups()
+                    base = schema_data["components"][keys[0]][keys[1]].copy()
+                    x.pop("$ref")
+                    base.update(x)
+                    return base
+                elif "schema" in x and tuple(x["schema"]) == ("$ref",):
+                    keys = re.match(
+                        r"^#/components/(schemas|responses|requestBodies|parameters)/(.+)$",
+                        x["schema"]["$ref"],
+                    ).groups()
+                    base = schema_data["components"][keys[0]][keys[1]].copy()
+                    x.pop("schema", None)
+                    base.update(x)
+                    return base
+                else:
+                    return {k: expand_refs(v) for k, v in x.items()}
+            return x
+
+        schema_data = expand_refs(schema_data)
+        namespace = filepath.name.replace(".json", "").replace("-", "_")
+        apis = []
+        components = {}
+        for cat, cat_val in schema_data["components"].items():
+            for name, spec in cat_val.items():
+                components[name] = Component(name, spec)
+        for path_key, path_val in schema_data["paths"].items():
+            path_parameters = []
+            for method_key, method_val in path_val.items():
+                if method_key == "parameters":
+                    path_parameters.extend(method_val)
+                    continue
+                apis.append(API(method=method_key, path=path_key, spec=method_val))
+            for api in apis:
+                if api.path == path_key:
+                    api.spec.setdefault("parameters", []).extend(path_parameters)
+        apis = sorted(apis, key=API.sorted_key)
+        return OpenAPI(namespace, components=components, apis=apis)
+
+    def __repr__(self):
+        return (
+            f"OpenAPI(\n"
+            f"  namespace={self.namespace!r},\n"
+            f"  components={self.components},\n"
+            f"  apis={self.apis}\n"
+            f")"
+        )
+
+
+def main():
+    specs = [OpenAPI.from_schema(base_dir / "utils/generator/schemas/app-search.json")]
+    for filepath in schemas_dir.iterdir():
+        specs.append(OpenAPI.from_schema(filepath))
+
+    for spec in specs:
+        spec_filepath = (
+            base_dir / f"elastic_enterprise_search/client/{spec.namespace}/__init__.py"
+        )
+        with spec_filepath.open(mode="w") as f:
             f.truncate()
-            f.write("\n".join(data))
+            f.write(env.get_template("client").render(spec=spec))
+        os.system(f"black {spec_filepath}")
+
+        # Do a second pass for ',)' and ',}' that Black doesn't remove.
+        # Doesn't cause any problems but looks weird and flake8 doesn't like it.
+        with spec_filepath.open(mode="r") as f:
+            client_code = f.read()
+        client_code = client_code.replace(",)", ")").replace(",}", "}")
+        with spec_filepath.open(mode="w") as f:
+            f.truncate()
+            f.write(client_code)
+
+
+if __name__ == "__main__":
+    main()
