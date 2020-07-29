@@ -25,7 +25,7 @@ SKIP_IN_PATH = (None, "", b"", [], ())
 PY2 = sys.version_info[0] == 2
 
 if PY2:
-    string_types = (basestring,)
+    string_types = (basestring,)  # noqa: F821
 else:
     string_types = (str, bytes)
 
@@ -145,9 +145,15 @@ def make_params(params, extra_params):
     two ways to specify a query param.
     """
     params = params or {}
-    wire_params = {k: quote(escape(v), b",*") for k, v in (extra_params or {}).items()}
+    wire_params = {
+        k: quote(escape(v), b",*")
+        for k, v in (extra_params or {}).items()
+        if v is not None
+    }
     if set(wire_params).intersection(set(params)):
         raise ValueError("Conflict between key-word argument and 'params'")
     for k, v in (params or {}).items():
+        if v is None:
+            continue
         wire_params[k] = quote(escape(v), b",*")
     return wire_params

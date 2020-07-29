@@ -16,6 +16,32 @@
 #  under the License.
 
 from .client import AppSearch, EnterpriseSearch, WorkplaceSearch
-from ._version import __version__
+from .exceptions import (
+    EnterpriseSearchError,
+    TransportError,
+    ConnectionError,
+    TLSError,
+    BadRequestError,
+    UnauthorizedError,
+    ForbiddenError,
+    NotFoundError,
+    ConflictError,
+)
+from .transport import Transport
+from ._version import __version__  # noqa: F401
 
-__all__ = ["AppSearch", "EnterpriseSearch", "WorkplaceSearch"]
+__all__ = [
+    "AppSearch",
+    "EnterpriseSearch",
+    "WorkplaceSearch",
+    "Transport",
+    "EnterpriseSearchError",
+    "TransportError",
+    "ConflictError",
+    "ConnectionError",
+    "TLSError",
+    "BadRequestError",
+    "UnauthorizedError",
+    "NotFoundError",
+    "ForbiddenError",
+]

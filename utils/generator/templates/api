@@ -13,15 +13,14 @@
         # type: (...) -> JSONResponse
         """{% if api.description %}
         {{ api.description|replace("\n", " ")|wordwrap(wrapstring="\n        ") }}
-        {% endif %}{% if api.docs_url %}
+{% endif %}{% if api.docs_url %}
         `<{{ api.docs_url }}>`_
-        {% endif %}{% if api.all_params|list|length %}{% for param in api.all_params %}
+{% endif %}{% if api.all_params|list|length %}{% for param in api.all_params %}
         {% filter wordwrap(72, wrapstring="\n            ") %}:arg {{ param.param_name }}: {{ param.description }}{% endfilter %}{% endfor %}{% endif %}
-        """{% if api.required_params|list|length %}
-        {% if api.required_params|list|length == 1 %}
+        """{% if api.required_params|list|length %}{% if api.required_params|list|length == 1 %}
         if {{ api.required_params[0].param_name }} in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        {% else %}
+{% else %}
         for param in ({% for param in api.required_params %}
         {{ param.param_name }},
         {% endfor %}):

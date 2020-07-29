@@ -15,7 +15,14 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from ..utils import SKIP_IN_PATH, BaseClient, JSONResponse, make_path, make_params
+from ..utils import (  # noqa: F401
+    SKIP_IN_PATH,
+    BaseClient,
+    JSONResponse,
+    make_path,
+    make_params,
+)
+
 
 class {{ spec.client_class_name }}(BaseClient):
 {% for api in spec.apis %}

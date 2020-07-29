@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from ..utils import SKIP_IN_PATH, BaseClient, JSONResponse, make_path, make_params
+from ..utils import (  # noqa: F401
+    SKIP_IN_PATH,
+    BaseClient,
+    JSONResponse,
+    make_path,
+    make_params,
+)
 
 
 class EnterpriseSearch(BaseClient):
@@ -26,7 +32,7 @@ class EnterpriseSearch(BaseClient):
         """
         Get information on the health of a deployment and basic statistics around
         resource usage
-        
+
         """
 
         return JSONResponse(
@@ -44,7 +50,7 @@ class EnterpriseSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Get the read-only flag's state
-        
+
         """
 
         return JSONResponse(
@@ -62,7 +68,7 @@ class EnterpriseSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Update the read-only flag's state
-        
+
         """
 
         return JSONResponse(
@@ -82,7 +88,7 @@ class EnterpriseSearch(BaseClient):
         """
         Get information about the resource usage of the application, the state of
         different internal queues, etc.
-        
+
         :arg include: Comma-separated list of stats to return
         """
 
@@ -102,7 +108,7 @@ class EnterpriseSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Get version information for this server
-        
+
         """
 
         return JSONResponse(

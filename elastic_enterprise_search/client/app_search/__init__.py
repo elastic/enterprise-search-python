@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from ..utils import SKIP_IN_PATH, BaseClient, JSONResponse, make_path, make_params
+from ..utils import (  # noqa: F401
+    SKIP_IN_PATH,
+    BaseClient,
+    JSONResponse,
+    make_path,
+    make_params,
+)
 
 
 class AppSearch(BaseClient):
@@ -36,9 +42,9 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         The API Log displays API request and response data at the Engine level.
-        
+
         `<https://swiftype.com/documentation/app-search/api/logs>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg from_date: Filter date from.
         :arg to_date: Filter date to.
@@ -53,7 +59,6 @@ class AppSearch(BaseClient):
         :arg sort_direction: Would you like to have your results ascending,
             oldest to newest, or descending, newest to oldest?
         """
-
         for param in (
             engine_name,
             from_date,
@@ -90,15 +95,14 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Returns the number of clicks and total number of queries over a period.
-        
+
         `<https://swiftype.com/documentation/app-search/api/analytics/counts>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg filters: Analytics filters
         :arg interval: You can define an interval along with your date range.
             Can be either hour or day.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -126,15 +130,14 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Create a new curation.
-        
+
         `<https://swiftype.com/documentation/app-search/api/curations#create>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg queries: List of affected search queries.
         :arg promoted_doc_ids: List of promoted document ids.
         :arg hidden_doc_ids: List of hidden document ids.
         """
-
         for param in (
             engine_name,
             queries,
@@ -165,13 +168,12 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Delete a curation by id.
-        
+
         `<https://swiftype.com/documentation/app-search/api/curations#destroy>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg curation_id: Curation id.
         """
-
         for param in (
             engine_name,
             curation_id,
@@ -196,13 +198,12 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Retrieve a curation by id.
-        
+
         `<https://swiftype.com/documentation/app-search/api/curations#single>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg curation_id: Curation id.
         """
-
         for param in (
             engine_name,
             curation_id,
@@ -234,16 +235,15 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Update an existing curation.
-        
+
         `<https://swiftype.com/documentation/app-search/api/curations#update>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg curation_id: Curation id.
         :arg queries: List of affected search queries.
         :arg promoted_doc_ids: List of promoted document ids.
         :arg hidden_doc_ids: List of hidden document ids.
         """
-
         for param in (
             engine_name,
             curation_id,
@@ -277,14 +277,13 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Retrieve available curations for the engine.
-        
+
         `<https://swiftype.com/documentation/app-search/api/curations#read>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg current_page: The page to fetch. Defaults to 1.
         :arg page_size: The number of results per page.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -306,12 +305,11 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Delete documents by id.
-        
+
         `<https://swiftype.com/documentation/app-search/api/documents#partial>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -331,12 +329,11 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Retrieves one or more documents by id.
-        
+
         `<https://swiftype.com/documentation/app-search/api/documents#get>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -356,14 +353,13 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         List all available documents with optional pagination support.
-        
+
         `<https://swiftype.com/documentation/app-search/api/documents#list>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg current_page: The page to fetch. Defaults to 1.
         :arg page_size: The number of results per page.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -387,12 +383,11 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Partial update of documents.
-        
+
         `<https://swiftype.com/documentation/app-search/api/documents#partial>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -418,15 +413,14 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Creates a new engine.
-        
+
         `<https://swiftype.com/documentation/app-search/api/engines#create>`_
-        
+
         :arg name: Engine name.
         :arg language: Engine language (null for universal).
         :arg type: Engine type.
         :arg source_engines: Sources engines list.
         """
-
         if name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -454,12 +448,11 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Delete an engine by name.
-        
+
         `<https://swiftype.com/documentation/app-search/api/engines#delete>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -478,12 +471,11 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Retrieves an engine by name.
-        
+
         `<https://swiftype.com/documentation/app-search/api/engines#get>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -502,9 +494,9 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Retrieves all engines with optional pagination support.
-        
+
         `<https://swiftype.com/documentation/app-search/api/engines#list>`_
-        
+
         :arg current_page: The page to fetch. Defaults to 1.
         :arg page_size: The number of results per page.
         """
@@ -527,12 +519,11 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Create or update documents.
-        
+
         `<https://swiftype.com/documentation/app-search/api/documents#create>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -559,9 +550,9 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Send data about clicked results.
-        
+
         `<https://swiftype.com/documentation/app-search/api/clickthrough>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg query_text: Search query text.
         :arg document_id: The id of the document that was clicked on.
@@ -570,7 +561,6 @@ class AppSearch(BaseClient):
         :arg tags: Array of strings representing additional information you wish
             to track with the clickthrough.
         """
-
         for param in (
             engine_name,
             query_text,
@@ -603,12 +593,11 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Add a source engine to an existing meta engine.
-        
+
         `<https://swiftype.com/documentation/app-search/api/meta-engines#add-source-engines>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -628,12 +617,11 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Delete a source engine from a meta engine.
-        
+
         `<https://swiftype.com/documentation/app-search/api/meta-engines#remove-source-engines>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -653,13 +641,12 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Run several search in the same request.
-        
+
         `<https://swiftype.com/documentation/app-search/api/search#multi>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg queries: Search queries.
         """
-
         for param in (
             engine_name,
             queries,
@@ -683,9 +670,9 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Provide relevant query suggestions for incomplete queries.
-        
+
         `<https://swiftype.com/documentation/app-search/api/query-suggestion>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg query: A partial query for which to receive suggestions.
         :arg fields: List of fields to use to generate suggestions. Defaults to
@@ -693,7 +680,6 @@ class AppSearch(BaseClient):
         :arg size: Number of query suggestions to return. Must be between 1 and
             20. Defaults to 5.
         """
-
         for param in (
             engine_name,
             query,
@@ -715,50 +701,17 @@ class AppSearch(BaseClient):
             )
         )
 
-    def reset_search_settings(
-        self, engine_name, params=None, headers=None,
-    ):
-        # type: (...) -> JSONResponse
-        """
-        Reset search settings for the engine.
-        
-        `<https://swiftype.com/documentation/app-search/api/search-settings#reset>`_
-        
-        :arg engine_name: Name of the engine.
-        """
-
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path(
-                    "api",
-                    "as",
-                    "v1",
-                    "engines",
-                    engine_name,
-                    "search_settings",
-                    "reset",
-                ),
-                params=params,
-                headers=headers,
-            )
-        )
-
     def get_schema(
         self, engine_name, params=None, headers=None,
     ):
         # type: (...) -> JSONResponse
         """
         Retrieve current schema for then engine.
-        
+
         `<https://swiftype.com/documentation/app-search/api/schema#read>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -777,12 +730,11 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Update schema for the current engine.
-        
+
         `<https://swiftype.com/documentation/app-search/api/schema#patch>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -802,13 +754,12 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Allows you to search over, facet and filter your data.
-        
+
         `<https://swiftype.com/documentation/app-search/api/search>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg query_text: Search query text.
         """
-
         for param in (
             engine_name,
             query_text,
@@ -833,12 +784,11 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Retrive current search settings for the engine.
-        
+
         `<https://swiftype.com/documentation/app-search/api/search-settings#show>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -853,18 +803,48 @@ class AppSearch(BaseClient):
             )
         )
 
+    def reset_search_settings(
+        self, engine_name, params=None, headers=None,
+    ):
+        # type: (...) -> JSONResponse
+        """
+        Reset search settings for the engine.
+
+        `<https://swiftype.com/documentation/app-search/api/search-settings#reset>`_
+
+        :arg engine_name: Name of the engine.
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        return JSONResponse(
+            *self.transport.request(
+                "POST",
+                make_path(
+                    "api",
+                    "as",
+                    "v1",
+                    "engines",
+                    engine_name,
+                    "search_settings",
+                    "reset",
+                ),
+                params=params,
+                headers=headers,
+            )
+        )
+
     def update_search_settings(
         self, engine_name, body, params=None, headers=None,
     ):
         # type: (...) -> JSONResponse
         """
         Update search settings for the engine.
-        
+
         `<https://swiftype.com/documentation/app-search/api/search-settings#update>`_
-        
+
         :arg engine_name: Name of the engine.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -886,13 +866,12 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Create a new synonym set.
-        
+
         `<https://swiftype.com/documentation/app-search/api/synonyms#create>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg synonyms: List of synonyms words.
         """
-
         for param in (
             engine_name,
             synonyms,
@@ -916,13 +895,12 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Delete a synonym set by id.
-        
+
         `<https://swiftype.com/documentation/app-search/api/synonyms#delete>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg synonym_set_id: Synonym set id.
         """
-
         for param in (
             engine_name,
             synonym_set_id,
@@ -953,13 +931,12 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Retrieve a synonym set by id.
-        
+
         `<https://swiftype.com/documentation/app-search/api/synonyms#list-one>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg synonym_set_id: Synonym set id.
         """
-
         for param in (
             engine_name,
             synonym_set_id,
@@ -990,14 +967,13 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Retrieve available synonym sets for the engine.
-        
+
         `<https://swiftype.com/documentation/app-search/api/synonyms#get>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg current_page: The page to fetch. Defaults to 1.
         :arg page_size: The number of results per page.
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -1025,15 +1001,14 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Returns the number of clicks received by a document in descending order.
-        
+
         `<https://swiftype.com/documentation/app-search/api/analytics/clicks>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg query: Filter clicks over a search query.
         :arg page_size: The number of results per page.
         :arg filters: Analytics filters
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -1057,14 +1032,13 @@ class AppSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Returns queries anlaytics by usage count.
-        
+
         `<https://swiftype.com/documentation/app-search/api/analytics/queries>`_
-        
+
         :arg engine_name: Name of the engine.
         :arg page_size: The number of results per page.
         :arg filters: Analytics filters
         """
-
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 

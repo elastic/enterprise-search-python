@@ -15,7 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from ..utils import SKIP_IN_PATH, BaseClient, JSONResponse, make_path, make_params
+from ..utils import (  # noqa: F401
+    SKIP_IN_PATH,
+    BaseClient,
+    JSONResponse,
+    make_path,
+    make_params,
+)
 
 
 class WorkplaceSearch(BaseClient):
@@ -25,11 +31,10 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Deletes a list of documents from a custom content source
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         """
-
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -62,13 +67,12 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Retrieves all external identities
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg current_page: Which page of results to request
         :arg page_size: The number of results to return in a page
         """
-
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -97,11 +101,10 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Adds a new external identity
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         """
-
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -128,12 +131,11 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Deletes an external identity
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg user: The username in context
         """
-
         for param in (
             content_source_key,
             user,
@@ -164,12 +166,11 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Retrieves an external identity
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg user: The username in context
         """
-
         for param in (
             content_source_key,
             user,
@@ -200,12 +201,11 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Updates an external identity
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg user: The username in context
         """
-
         for param in (
             content_source_key,
             user,
@@ -238,11 +238,10 @@ class WorkplaceSearch(BaseClient):
         """
         Indexes one or more new documents into a custom content source, or updates one
         or more existing documents
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         """
-
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -275,13 +274,12 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Lists all permissions for all users
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg current_page: Which page of results to request
         :arg page_size: The number of results to return in a page
         """
-
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
 
@@ -305,12 +303,11 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Removes one or more permissions from an existing set of permissions
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg user: The username in context
         """
-
         for param in (
             content_source_key,
             user,
@@ -343,7 +340,7 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         search across available sources with various query tuning options
-        
+
         """
 
         return JSONResponse(
@@ -362,12 +359,11 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Adds one or more new permissions atop existing permissions
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg user: The username in context
         """
-
         for param in (
             content_source_key,
             user,
@@ -400,12 +396,11 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Lists all permissions for one user
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg user: The username in context
         """
-
         for param in (
             content_source_key,
             user,
@@ -436,12 +431,11 @@ class WorkplaceSearch(BaseClient):
         # type: (...) -> JSONResponse
         """
         Creates a new set of permissions or over-writes all existing permissions
-        
+
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg user: The username in context
         """
-
         for param in (
             content_source_key,
             user,

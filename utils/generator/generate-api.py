@@ -117,6 +117,7 @@ class API:
             "add",
             "delete",
             "list",
+            "reset",
         ):
             if func_parts[1] == "all":
                 return tuple(func_parts[2:] + func_parts[:2])
