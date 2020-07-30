@@ -1,4 +1,13 @@
 {
+  "openapi": "3.0.2",
+  "info": {
+    "description": "Elastic App Search API",
+    "title": "Elastic App Search API",
+    "version": "1.0"
+  },
+  "externalDocs": {
+    "url": "https://swiftype.com/documentation/app-search"
+  },
   "components": {
     "parameters": {
       "curationId": {
@@ -298,15 +307,6 @@
       }
     }
   },
-  "externalDocs": {
-    "url": "https://swiftype.com/documentation/app-search"
-  },
-  "info": {
-    "description": "Elastic App Search API",
-    "title": "Elastic App Search API",
-    "version": "1.0"
-  },
-  "openapi": "3.0.2",
   "paths": {
     "/api/as/v1/engines": {
       "get": {

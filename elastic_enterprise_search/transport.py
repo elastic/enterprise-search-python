@@ -17,8 +17,35 @@
 
 from platform import python_version
 import requests
+import six
 from six.moves.urllib.parse import urljoin
 from ._version import __version__
+from .exceptions import HTTP_EXCEPTIONS, HTTPError, ConnectionError
+
+
+class BaseResponse(object):
+    """Base class for HTTP responses"""
+
+    def __init__(self, status_code, headers):
+        self.status_code = status_code
+        self.headers = headers
+
+
+class TextResponse(BaseResponse, str):
+    """HTTP responses that are not JSON"""
+
+    def __init__(self, status_code, headers, body):
+        print(status_code, headers, body)
+        BaseResponse.__init__(self, status_code, headers)
+        str.__init__(self, body)
+
+
+class JSONResponse(BaseResponse, dict):
+    """HTTP responses that are JSON"""
+
+    def __init__(self, status_code, headers, body):
+        BaseResponse.__init__(self, status_code, headers)
+        dict.__init__(self, body)
 
 
 class Transport(object):
@@ -53,10 +80,45 @@ class Transport(object):
             request_headers.update(headers)
         else:
             request_headers = self.headers
-        resp = self._session.request(
-            method, url, json=body, headers=request_headers, params=params
-        )
-        return resp.status_code, resp.headers.copy(), resp.json()
+        if isinstance(body, (str, bytes)):
+            request_kwargs = {"data": body}
+        else:
+            request_kwargs = {"json": body}
+
+        # Send our request and reraise any errors
+        # we receive from Requests as ConnectionErrors.
+        try:
+            resp = self._session.request(
+                method, url, headers=request_headers, params=params, **request_kwargs
+            )
+            # Try parsing as JSON, if not use the text.
+            # We can potentially get encoding errors here
+            # but that'd probably mean there's a bad
+            # proxy or something strange like that?
+            try:
+                body = resp.json()
+            except Exception:
+                body = resp.text
+        except (requests.ConnectionError, UnicodeError) as e:
+            return six.raise_from(ConnectionError(error=e), None)
+
+        # We've got a successful response here, now
+        # we either return a response or raise an HTTPError.
+        try:
+            resp.raise_for_status()
+        except requests.HTTPError:
+            error_cls = HTTP_EXCEPTIONS.get(resp.status_code, HTTPError)
+            return six.raise_from(
+                error_cls(
+                    status_code=resp.status_code, headers=resp.headers.copy(), body=body
+                ),
+                None,
+            )
+
+        if isinstance(body, str):
+            return TextResponse(resp.status_code, resp.headers.copy(), body)
+        else:
+            return JSONResponse(resp.status_code, resp.headers.copy(), body)
 
     def copy(self):
         """Returns a copy of the Transport that is disjoint in all

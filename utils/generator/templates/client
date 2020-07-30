@@ -18,7 +18,6 @@
 from ..utils import (  # noqa: F401
     SKIP_IN_PATH,
     BaseClient,
-    JSONResponse,
     make_path,
     make_params,
 )

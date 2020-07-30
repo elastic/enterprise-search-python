@@ -10,41 +10,37 @@
         params=None,
         headers=None,
     ):
-        # type: (...) -> JSONResponse
         """{% if api.description %}
         {{ api.description|replace("\n", " ")|wordwrap(wrapstring="\n        ") }}
 {% endif %}{% if api.docs_url %}
         `<{{ api.docs_url }}>`_
 {% endif %}{% if api.all_params|list|length %}{% for param in api.all_params %}
-        {% filter wordwrap(72, wrapstring="\n            ") %}:arg {{ param.param_name }}: {{ param.description }}{% endfilter %}{% endfor %}{% endif %}
+        {% filter wordwrap(72, wrapstring="\n            ") %}:arg {{ param.param_name }}: {{ param.description }}{% endfilter %}{% endfor %}{% endif %}{% if api.has_body %}
+        :arg body: {{ api.body_description }}{% endif %}
         """{% if api.required_params|list|length %}{% if api.required_params|list|length == 1 %}
         if {{ api.required_params[0].param_name }} in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
-{% else %}
+            raise ValueError("Empty value passed for a required argument"){% else %}
         for param in ({% for param in api.required_params %}
         {{ param.param_name }},
         {% endfor %}):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
-        {% endif %}{% endif %}
-        {% if api.query_params|list|length %}
+        {% endif %}{% endif %}{% if api.query_params|list|length %}
         params = make_params(params, {% raw %}{{% endraw %}{% for param in api.query_params %}
             "{{ param.wire_name}}": {{param.param_name }},
         {% endfor %}{% raw %}}{% endraw %}){% endif %}
-        return JSONResponse(
-            *self.transport.request(
-                "{{ api.method }}",
-                make_path({% for part in api.path_parts %}
-                    {% if part.startswith("{") %}
-                    {{ part[1:-1] }},
-                    {% else %}
-                    "{{ part }}",
-                    {% endif %}
-                {% endfor %}),
-                {% if api.has_body %}
-                body=body,
+        return self.transport.request(
+            "{{ api.method }}",
+            make_path({% for part in api.path_parts %}
+                {% if part.startswith("{") %}
+                {{ part[1:-1] }},
+                {% else %}
+                "{{ part }}",
                 {% endif %}
-                params=params,
-                headers=headers,
-            )
+            {% endfor %}),
+            {% if api.has_body %}
+            body=body,
+            {% endif %}
+            params=params,
+            headers=headers,
         )

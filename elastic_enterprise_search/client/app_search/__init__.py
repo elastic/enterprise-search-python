@@ -18,7 +18,6 @@
 from ..utils import (  # noqa: F401
     SKIP_IN_PATH,
     BaseClient,
-    JSONResponse,
     make_path,
     make_params,
 )
@@ -39,7 +38,6 @@ class AppSearch(BaseClient):
         params=None,
         headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         The API Log displays API request and response data at the Engine level.
 
@@ -80,19 +78,16 @@ class AppSearch(BaseClient):
                 "sort_direction": sort_direction,
             },
         )
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path("api", "as", "v1", "engines", engine_name, "logs", "api"),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path("api", "as", "v1", "engines", engine_name, "logs", "api"),
+            params=params,
+            headers=headers,
         )
 
     def get_count_analytics(
         self, engine_name, filters=None, interval=None, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Returns the number of clicks and total number of queries over a period.
 
@@ -105,17 +100,14 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
         params = make_params(params, {"filters": filters, "interval": interval})
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path(
-                    "api", "as", "v1", "engines", engine_name, "analytics", "counts",
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path(
+                "api", "as", "v1", "engines", engine_name, "analytics", "counts",
+            ),
+            params=params,
+            headers=headers,
         )
 
     def create_curation(
@@ -127,7 +119,6 @@ class AppSearch(BaseClient):
         params=None,
         headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Create a new curation.
 
@@ -153,19 +144,16 @@ class AppSearch(BaseClient):
                 "hidden": hidden_doc_ids,
             },
         )
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path("api", "as", "v1", "engines", engine_name, "curations"),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines", engine_name, "curations"),
+            params=params,
+            headers=headers,
         )
 
     def delete_curation(
         self, engine_name, curation_id, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Delete a curation by id.
 
@@ -181,21 +169,18 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return JSONResponse(
-            *self.transport.request(
-                "DELETE",
-                make_path(
-                    "api", "as", "v1", "engines", engine_name, "curations", curation_id,
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "DELETE",
+            make_path(
+                "api", "as", "v1", "engines", engine_name, "curations", curation_id,
+            ),
+            params=params,
+            headers=headers,
         )
 
     def get_curation(
         self, engine_name, curation_id, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Retrieve a curation by id.
 
@@ -211,15 +196,13 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path(
-                    "api", "as", "v1", "engines", engine_name, "curations", curation_id,
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path(
+                "api", "as", "v1", "engines", engine_name, "curations", curation_id,
+            ),
+            params=params,
+            headers=headers,
         )
 
     def update_curation(
@@ -232,7 +215,6 @@ class AppSearch(BaseClient):
         params=None,
         headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Update an existing curation.
 
@@ -260,21 +242,18 @@ class AppSearch(BaseClient):
                 "hidden": hidden_doc_ids,
             },
         )
-        return JSONResponse(
-            *self.transport.request(
-                "PUT",
-                make_path(
-                    "api", "as", "v1", "engines", engine_name, "curations", curation_id,
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "PUT",
+            make_path(
+                "api", "as", "v1", "engines", engine_name, "curations", curation_id,
+            ),
+            params=params,
+            headers=headers,
         )
 
     def list_curations(
         self, engine_name, current_page=None, page_size=None, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Retrieve available curations for the engine.
 
@@ -286,71 +265,61 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
         params = make_params(
             params, {"page.current": current_page, "page.size": page_size}
         )
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path("api", "as", "v1", "engines", engine_name, "curations"),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path("api", "as", "v1", "engines", engine_name, "curations"),
+            params=params,
+            headers=headers,
         )
 
     def delete_documents(
         self, engine_name, body, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Delete documents by id.
 
         `<https://swiftype.com/documentation/app-search/api/documents#partial>`_
 
         :arg engine_name: Name of the engine.
+        :arg body: List of document ids.
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "DELETE",
-                make_path("api", "as", "v1", "engines", engine_name, "documents"),
-                body=body,
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "DELETE",
+            make_path("api", "as", "v1", "engines", engine_name, "documents"),
+            body=body,
+            params=params,
+            headers=headers,
         )
 
     def get_documents(
         self, engine_name, body, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Retrieves one or more documents by id.
 
         `<https://swiftype.com/documentation/app-search/api/documents#get>`_
 
         :arg engine_name: Name of the engine.
+        :arg body: List of document ids.
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path("api", "as", "v1", "engines", engine_name, "documents"),
-                body=body,
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path("api", "as", "v1", "engines", engine_name, "documents"),
+            body=body,
+            params=params,
+            headers=headers,
         )
 
     def list_documents(
         self, engine_name, current_page=None, page_size=None, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         List all available documents with optional pagination support.
 
@@ -362,43 +331,35 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
         params = make_params(
             params, {"page.current": current_page, "page.size": page_size}
         )
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path(
-                    "api", "as", "v1", "engines", engine_name, "documents", "list",
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path("api", "as", "v1", "engines", engine_name, "documents", "list"),
+            params=params,
+            headers=headers,
         )
 
     def update_documents(
         self, engine_name, body, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Partial update of documents.
 
         `<https://swiftype.com/documentation/app-search/api/documents#partial>`_
 
         :arg engine_name: Name of the engine.
+        :arg body: List of document to update.
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "PATCH",
-                make_path("api", "as", "v1", "engines", engine_name, "documents"),
-                body=body,
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "PATCH",
+            make_path("api", "as", "v1", "engines", engine_name, "documents"),
+            body=body,
+            params=params,
+            headers=headers,
         )
 
     def create_engine(
@@ -410,7 +371,6 @@ class AppSearch(BaseClient):
         params=None,
         headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Creates a new engine.
 
@@ -423,7 +383,6 @@ class AppSearch(BaseClient):
         """
         if name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
         params = make_params(
             params,
             {
@@ -433,19 +392,16 @@ class AppSearch(BaseClient):
                 "source_engines": source_engines,
             },
         )
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path("api", "as", "v1", "engines"),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines"),
+            params=params,
+            headers=headers,
         )
 
     def delete_engine(
         self, engine_name, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Delete an engine by name.
 
@@ -455,20 +411,16 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "DELETE",
-                make_path("api", "as", "v1", "engines", engine_name),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "DELETE",
+            make_path("api", "as", "v1", "engines", engine_name),
+            params=params,
+            headers=headers,
         )
 
     def get_engine(
         self, engine_name, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Retrieves an engine by name.
 
@@ -478,20 +430,16 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path("api", "as", "v1", "engines", engine_name),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path("api", "as", "v1", "engines", engine_name),
+            params=params,
+            headers=headers,
         )
 
     def list_engines(
         self, current_page=None, page_size=None, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Retrieves all engines with optional pagination support.
 
@@ -500,41 +448,35 @@ class AppSearch(BaseClient):
         :arg current_page: The page to fetch. Defaults to 1.
         :arg page_size: The number of results per page.
         """
-
         params = make_params(
             params, {"page.current": current_page, "page.size": page_size}
         )
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path("api", "as", "v1", "engines"),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path("api", "as", "v1", "engines"),
+            params=params,
+            headers=headers,
         )
 
     def index_documents(
         self, engine_name, body, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Create or update documents.
 
         `<https://swiftype.com/documentation/app-search/api/documents#create>`_
 
         :arg engine_name: Name of the engine.
+        :arg body: List of document to index.
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path("api", "as", "v1", "engines", engine_name, "documents"),
-                body=body,
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines", engine_name, "documents"),
+            body=body,
+            params=params,
+            headers=headers,
         )
 
     def log_clickthrough(
@@ -547,7 +489,6 @@ class AppSearch(BaseClient):
         params=None,
         headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Send data about clicked results.
 
@@ -578,67 +519,58 @@ class AppSearch(BaseClient):
                 "tags": tags,
             },
         )
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path("api", "as", "v1", "engines", engine_name, "click"),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines", engine_name, "click"),
+            params=params,
+            headers=headers,
         )
 
     def add_meta_engine_source(
         self, engine_name, body, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Add a source engine to an existing meta engine.
 
         `<https://swiftype.com/documentation/app-search/api/meta-engines#add-source-engines>`_
 
         :arg engine_name: Name of the engine.
+        :arg body: List of engine ids.
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path("api", "as", "v1", "engines", engine_name, "source_engines"),
-                body=body,
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines", engine_name, "source_engines"),
+            body=body,
+            params=params,
+            headers=headers,
         )
 
     def delete_meta_engine_source(
         self, engine_name, body, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Delete a source engine from a meta engine.
 
         `<https://swiftype.com/documentation/app-search/api/meta-engines#remove-source-engines>`_
 
         :arg engine_name: Name of the engine.
+        :arg body: List of engine ids.
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "DELETE",
-                make_path("api", "as", "v1", "engines", engine_name, "source_engines"),
-                body=body,
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "DELETE",
+            make_path("api", "as", "v1", "engines", engine_name, "source_engines"),
+            body=body,
+            params=params,
+            headers=headers,
         )
 
     def multi_search(
         self, engine_name, queries, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Run several search in the same request.
 
@@ -655,19 +587,16 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(params, {"queries": queries})
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path("api", "as", "v1", "engines", engine_name, "multi_search"),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines", engine_name, "multi_search"),
+            params=params,
+            headers=headers,
         )
 
     def query_suggestion(
         self, engine_name, query, fields=None, size=None, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Provide relevant query suggestions for incomplete queries.
 
@@ -690,21 +619,16 @@ class AppSearch(BaseClient):
         params = make_params(
             params, {"query": query, "types.documents.fields": fields, "size": size}
         )
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path(
-                    "api", "as", "v1", "engines", engine_name, "query_suggestion",
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines", engine_name, "query_suggestion"),
+            params=params,
+            headers=headers,
         )
 
     def get_schema(
         self, engine_name, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Retrieve current schema for then engine.
 
@@ -714,44 +638,37 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path("api", "as", "v1", "engines", engine_name, "schema"),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path("api", "as", "v1", "engines", engine_name, "schema"),
+            params=params,
+            headers=headers,
         )
 
     def update_schema(
         self, engine_name, body, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Update schema for the current engine.
 
         `<https://swiftype.com/documentation/app-search/api/schema#patch>`_
 
         :arg engine_name: Name of the engine.
+        :arg body: Schema description.
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path("api", "as", "v1", "engines", engine_name, "schema"),
-                body=body,
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines", engine_name, "schema"),
+            body=body,
+            params=params,
+            headers=headers,
         )
 
     def search(
         self, engine_name, query_text, body, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Allows you to search over, facet and filter your data.
 
@@ -759,6 +676,7 @@ class AppSearch(BaseClient):
 
         :arg engine_name: Name of the engine.
         :arg query_text: Search query text.
+        :arg body: Search request parameters.
         """
         for param in (
             engine_name,
@@ -768,20 +686,17 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(params, {"query": query_text})
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path("api", "as", "v1", "engines", engine_name, "search"),
-                body=body,
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines", engine_name, "search"),
+            body=body,
+            params=params,
+            headers=headers,
         )
 
     def get_search_settings(
         self, engine_name, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Retrive current search settings for the engine.
 
@@ -791,22 +706,16 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path(
-                    "api", "as", "v1", "engines", engine_name, "search_settings",
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path("api", "as", "v1", "engines", engine_name, "search_settings"),
+            params=params,
+            headers=headers,
         )
 
     def reset_search_settings(
         self, engine_name, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Reset search settings for the engine.
 
@@ -816,54 +725,39 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path(
-                    "api",
-                    "as",
-                    "v1",
-                    "engines",
-                    engine_name,
-                    "search_settings",
-                    "reset",
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path(
+                "api", "as", "v1", "engines", engine_name, "search_settings", "reset",
+            ),
+            params=params,
+            headers=headers,
         )
 
     def update_search_settings(
         self, engine_name, body, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Update search settings for the engine.
 
         `<https://swiftype.com/documentation/app-search/api/search-settings#update>`_
 
         :arg engine_name: Name of the engine.
+        :arg body: Search settings.
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
-        return JSONResponse(
-            *self.transport.request(
-                "PUT",
-                make_path(
-                    "api", "as", "v1", "engines", engine_name, "search_settings",
-                ),
-                body=body,
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "PUT",
+            make_path("api", "as", "v1", "engines", engine_name, "search_settings"),
+            body=body,
+            params=params,
+            headers=headers,
         )
 
     def create_synonym_set(
         self, engine_name, synonyms, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Create a new synonym set.
 
@@ -880,19 +774,16 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(params, {"synonyms": synonyms})
-        return JSONResponse(
-            *self.transport.request(
-                "POST",
-                make_path("api", "as", "v1", "engines", engine_name, "synonyms"),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines", engine_name, "synonyms"),
+            params=params,
+            headers=headers,
         )
 
     def delete_synonym_set(
         self, engine_name, synonym_set_id, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Delete a synonym set by id.
 
@@ -908,27 +799,18 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return JSONResponse(
-            *self.transport.request(
-                "DELETE",
-                make_path(
-                    "api",
-                    "as",
-                    "v1",
-                    "engines",
-                    engine_name,
-                    "synonyms",
-                    synonym_set_id,
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "DELETE",
+            make_path(
+                "api", "as", "v1", "engines", engine_name, "synonyms", synonym_set_id,
+            ),
+            params=params,
+            headers=headers,
         )
 
     def get_synonym_set(
         self, engine_name, synonym_set_id, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Retrieve a synonym set by id.
 
@@ -944,27 +826,18 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path(
-                    "api",
-                    "as",
-                    "v1",
-                    "engines",
-                    engine_name,
-                    "synonyms",
-                    synonym_set_id,
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path(
+                "api", "as", "v1", "engines", engine_name, "synonyms", synonym_set_id,
+            ),
+            params=params,
+            headers=headers,
         )
 
     def list_synonym_sets(
         self, engine_name, current_page=None, page_size=None, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Retrieve available synonym sets for the engine.
 
@@ -976,17 +849,14 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
         params = make_params(
             params, {"page.current": current_page, "page.size": page_size}
         )
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path("api", "as", "v1", "engines", engine_name, "synonyms"),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path("api", "as", "v1", "engines", engine_name, "synonyms"),
+            params=params,
+            headers=headers,
         )
 
     def get_top_clicks_analytics(
@@ -998,7 +868,6 @@ class AppSearch(BaseClient):
         params=None,
         headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Returns the number of clicks received by a document in descending order.
 
@@ -1011,25 +880,21 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
         params = make_params(
             params, {"query": query, "page.size": page_size, "filters": filters}
         )
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path(
-                    "api", "as", "v1", "engines", engine_name, "analytics", "clicks",
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path(
+                "api", "as", "v1", "engines", engine_name, "analytics", "clicks",
+            ),
+            params=params,
+            headers=headers,
         )
 
     def get_top_queries_analytics(
         self, engine_name, page_size=None, filters=None, params=None, headers=None,
     ):
-        # type: (...) -> JSONResponse
         """
         Returns queries anlaytics by usage count.
 
@@ -1041,15 +906,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-
         params = make_params(params, {"page.size": page_size, "filters": filters})
-        return JSONResponse(
-            *self.transport.request(
-                "GET",
-                make_path(
-                    "api", "as", "v1", "engines", engine_name, "analytics", "queries",
-                ),
-                params=params,
-                headers=headers,
-            )
+        return self.transport.request(
+            "GET",
+            make_path(
+                "api", "as", "v1", "engines", engine_name, "analytics", "queries",
+            ),
+            params=params,
+            headers=headers,
         )

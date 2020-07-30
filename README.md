@@ -57,6 +57,7 @@ for basic authentication will set the proper
   - [URL Parameters](https://www.elastic.co/guide/en/app-search/current/authentication.html#authentication-url-params)
 - Workplace Search
   - [Custom Source API Key](https://www.elastic.co/guide/en/workplace-search/7.8/workplace-search-custom-sources-api.html#authentication)
+  - [OAuth for Search](https://www.elastic.co/guide/en/workplace-search/current/building-custom-search-workplace-search.html#configuring-search-oauth)
 
 ```python
 from elastic_enterprise_search import EnterpriseSearch

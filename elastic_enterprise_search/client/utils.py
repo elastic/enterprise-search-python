@@ -39,7 +39,7 @@ try:
 except ImportError:
     from urllib import quote
 
-__all__ = ["typing", "escape", "make_path", "PY2", "BaseClient", "JSONResponse"]
+__all__ = ["typing", "escape", "make_path", "make_params", "PY2", "BaseClient"]
 
 
 class BaseClient(object):
@@ -81,13 +81,6 @@ class BaseClient(object):
         # Bearer / Token auth
         else:
             self.transport.headers["authorization"] = "Bearer %s" % auth_token
-
-
-class JSONResponse(dict):
-    def __init__(self, status_code, headers, body):
-        self.status_code = status_code
-        self.headers = headers
-        super(JSONResponse, self).__init__(body)
 
 
 def escape(value):

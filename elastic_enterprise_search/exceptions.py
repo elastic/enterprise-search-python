@@ -19,43 +19,66 @@
 class EnterpriseSearchError(Exception):
     """Generic exception for the 'elastic-enterprise-search' package"""
 
+    def __init__(self, error=None):
+        self.error = error
+
+    def __repr__(self):
+        params = {
+            k: getattr(self, k, None)
+            for k in ("status_code", "error", "body", "headers")
+        }
+        params = ", ".join("%s=%r" % (k, v) for k, v in params.items() if v is not None)
+        return "<%s(%s)>" % (type(self).__name__, params)
+
+    __str__ = __repr__
+
 
 class TransportError(EnterpriseSearchError):
     """Exception for all errors related to the Transport"""
 
 
 class ConnectionError(TransportError):
-    """Exception"""
+    """Exception related to the underlying socket connection"""
 
 
 class TLSError(ConnectionError):
-    pass
+    """Exception related to TLS/SSL"""
 
 
 class HTTPError(TransportError):
     """Error that is raised from a non-2XX HTTP response"""
 
-    def __init__(self, status_code, headers, body):
+    def __init__(self, status_code, headers, body, error=None):
         self.status_code = status_code
         self.headers = headers
         self.body = body
+        super(HTTPError, self).__init__(error=error)
 
 
 class BadRequestError(HTTPError):
-    pass
+    """Exception that's raised for 400 HTTP responses"""
 
 
 class UnauthorizedError(HTTPError):
-    pass
+    """Exception that's raised for 401 HTTP responses"""
 
 
 class ForbiddenError(HTTPError):
-    pass
+    """Exception that's raised for 403 HTTP responses"""
 
 
 class NotFoundError(HTTPError):
-    pass
+    """Exception that's raised for 404 HTTP responses"""
 
 
 class ConflictError(HTTPError):
-    pass
+    """Exception that's raised for 409 HTTP responses"""
+
+
+HTTP_EXCEPTIONS = {
+    400: BadRequestError,
+    401: UnauthorizedError,
+    403: ForbiddenError,
+    404: NotFoundError,
+    409: ConflictError,
+}

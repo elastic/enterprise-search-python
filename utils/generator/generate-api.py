@@ -165,6 +165,12 @@ class API:
         return "requestBody" in self.spec
 
     @property
+    def body_description(self):
+        if self.has_body:
+            return self.spec["requestBody"].get("description", "HTTP request body")
+        return None
+
+    @property
     def response_component(self) -> str:
         spec_resps = self.spec["responses"]
         resp = spec_resps.get("default", spec_resps.get("200", ""))
