@@ -20,17 +20,18 @@ class AppSearch(_AppSearch):
         filters=None,
         facets=None,
     ):
-        """Creates a signed search key to keep your Private API Key secret
+        """Creates a Signed Search Key to keep your Private API Key secret
         and restrict what a user can search over.
 
-        `<https://swiftype.com/documentation/app-search/authentication#signed>`_
+        `<https://www.elastic.co/guide/en/app-search/current/authentication.html#authentication-signed>`_
 
-        :arg api_key:
-        :arg api_key_name:
-        :arg search_fields:
-        :arg result_fields:
-        :arg filters:
-        :arg facets:
+        :arg api_key: Private API Key
+        :arg api_key_name: Name of the Signed Search Key
+        :arg search_fields: Fields to search over.
+        :arg result_fields: Fields to return in the result
+        :arg filters: Adds filters to the search requests
+        :arg facets: Sets the facets that are allowed.
+            To disable aggregations set to '{}' or 'None'.
         """
         options = {
             k: v

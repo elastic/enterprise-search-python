@@ -15,6 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+"""Python Elastic Enterprise Search Client"""
+
 from .client import AppSearch, EnterpriseSearch, WorkplaceSearch
 from .exceptions import (
     EnterpriseSearchError,

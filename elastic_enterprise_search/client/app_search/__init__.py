@@ -41,7 +41,7 @@ class AppSearch(BaseClient):
         """
         The API Log displays API request and response data at the Engine level.
 
-        `<https://swiftype.com/documentation/app-search/api/logs>`_
+        `<https://www.elastic.co/guide/en/app-search/current/api-logs.html>`_
 
         :arg engine_name: Name of the engine.
         :arg from_date: Filter date from.
@@ -91,7 +91,7 @@ class AppSearch(BaseClient):
         """
         Returns the number of clicks and total number of queries over a period.
 
-        `<https://swiftype.com/documentation/app-search/api/analytics/counts>`_
+        `<https://www.elastic.co/guide/en/app-search/current/counts.html>`_
 
         :arg engine_name: Name of the engine.
         :arg filters: Analytics filters
@@ -122,7 +122,7 @@ class AppSearch(BaseClient):
         """
         Create a new curation.
 
-        `<https://swiftype.com/documentation/app-search/api/curations#create>`_
+        `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-create>`_
 
         :arg engine_name: Name of the engine.
         :arg queries: List of affected search queries.
@@ -157,7 +157,7 @@ class AppSearch(BaseClient):
         """
         Delete a curation by id.
 
-        `<https://swiftype.com/documentation/app-search/api/curations#destroy>`_
+        `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-destroy>`_
 
         :arg engine_name: Name of the engine.
         :arg curation_id: Curation id.
@@ -184,7 +184,7 @@ class AppSearch(BaseClient):
         """
         Retrieve a curation by id.
 
-        `<https://swiftype.com/documentation/app-search/api/curations#single>`_
+        `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-read>`_
 
         :arg engine_name: Name of the engine.
         :arg curation_id: Curation id.
@@ -218,7 +218,7 @@ class AppSearch(BaseClient):
         """
         Update an existing curation.
 
-        `<https://swiftype.com/documentation/app-search/api/curations#update>`_
+        `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-update>`_
 
         :arg engine_name: Name of the engine.
         :arg curation_id: Curation id.
@@ -257,7 +257,7 @@ class AppSearch(BaseClient):
         """
         Retrieve available curations for the engine.
 
-        `<https://swiftype.com/documentation/app-search/api/curations#read>`_
+        `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-read>`_
 
         :arg engine_name: Name of the engine.
         :arg current_page: The page to fetch. Defaults to 1.
@@ -281,7 +281,7 @@ class AppSearch(BaseClient):
         """
         Delete documents by id.
 
-        `<https://swiftype.com/documentation/app-search/api/documents#partial>`_
+        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-delete>`_
 
         :arg engine_name: Name of the engine.
         :arg body: List of document ids.
@@ -302,7 +302,7 @@ class AppSearch(BaseClient):
         """
         Retrieves one or more documents by id.
 
-        `<https://swiftype.com/documentation/app-search/api/documents#get>`_
+        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-get>`_
 
         :arg engine_name: Name of the engine.
         :arg body: List of document ids.
@@ -323,7 +323,7 @@ class AppSearch(BaseClient):
         """
         List all available documents with optional pagination support.
 
-        `<https://swiftype.com/documentation/app-search/api/documents#list>`_
+        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-list>`_
 
         :arg engine_name: Name of the engine.
         :arg current_page: The page to fetch. Defaults to 1.
@@ -347,7 +347,7 @@ class AppSearch(BaseClient):
         """
         Partial update of documents.
 
-        `<https://swiftype.com/documentation/app-search/api/documents#partial>`_
+        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-partial>`_
 
         :arg engine_name: Name of the engine.
         :arg body: List of document to update.
@@ -374,7 +374,7 @@ class AppSearch(BaseClient):
         """
         Creates a new engine.
 
-        `<https://swiftype.com/documentation/app-search/api/engines#create>`_
+        `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-create>`_
 
         :arg name: Engine name.
         :arg language: Engine language (null for universal).
@@ -405,7 +405,7 @@ class AppSearch(BaseClient):
         """
         Delete an engine by name.
 
-        `<https://swiftype.com/documentation/app-search/api/engines#delete>`_
+        `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-delete>`_
 
         :arg engine_name: Name of the engine.
         """
@@ -424,7 +424,7 @@ class AppSearch(BaseClient):
         """
         Retrieves an engine by name.
 
-        `<https://swiftype.com/documentation/app-search/api/engines#get>`_
+        `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-get>`_
 
         :arg engine_name: Name of the engine.
         """
@@ -443,7 +443,7 @@ class AppSearch(BaseClient):
         """
         Retrieves all engines with optional pagination support.
 
-        `<https://swiftype.com/documentation/app-search/api/engines#list>`_
+        `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-list>`_
 
         :arg current_page: The page to fetch. Defaults to 1.
         :arg page_size: The number of results per page.
@@ -464,7 +464,7 @@ class AppSearch(BaseClient):
         """
         Create or update documents.
 
-        `<https://swiftype.com/documentation/app-search/api/documents#create>`_
+        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-create>`_
 
         :arg engine_name: Name of the engine.
         :arg body: List of document to index.
@@ -492,7 +492,7 @@ class AppSearch(BaseClient):
         """
         Send data about clicked results.
 
-        `<https://swiftype.com/documentation/app-search/api/clickthrough>`_
+        `<https://www.elastic.co/guide/en/app-search/current/clickthrough.html>`_
 
         :arg engine_name: Name of the engine.
         :arg query_text: Search query text.
@@ -532,7 +532,7 @@ class AppSearch(BaseClient):
         """
         Add a source engine to an existing meta engine.
 
-        `<https://swiftype.com/documentation/app-search/api/meta-engines#add-source-engines>`_
+        `<https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-add-source-engines>`_
 
         :arg engine_name: Name of the engine.
         :arg body: List of engine ids.
@@ -553,7 +553,7 @@ class AppSearch(BaseClient):
         """
         Delete a source engine from a meta engine.
 
-        `<https://swiftype.com/documentation/app-search/api/meta-engines#remove-source-engines>`_
+        `<https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-remove-source-engines>`_
 
         :arg engine_name: Name of the engine.
         :arg body: List of engine ids.
@@ -574,7 +574,7 @@ class AppSearch(BaseClient):
         """
         Run several search in the same request.
 
-        `<https://swiftype.com/documentation/app-search/api/search#multi>`_
+        `<https://www.elastic.co/guide/en/app-search/current/search.html#search-multi>`_
 
         :arg engine_name: Name of the engine.
         :arg queries: Search queries.
@@ -600,7 +600,7 @@ class AppSearch(BaseClient):
         """
         Provide relevant query suggestions for incomplete queries.
 
-        `<https://swiftype.com/documentation/app-search/api/query-suggestion>`_
+        `<https://www.elastic.co/guide/en/app-search/current/query-suggestion.html>`_
 
         :arg engine_name: Name of the engine.
         :arg query: A partial query for which to receive suggestions.
@@ -632,7 +632,7 @@ class AppSearch(BaseClient):
         """
         Retrieve current schema for then engine.
 
-        `<https://swiftype.com/documentation/app-search/api/schema#read>`_
+        `<https://www.elastic.co/guide/en/app-search/current/schema.html#schema-read>`_
 
         :arg engine_name: Name of the engine.
         """
@@ -651,7 +651,7 @@ class AppSearch(BaseClient):
         """
         Update schema for the current engine.
 
-        `<https://swiftype.com/documentation/app-search/api/schema#patch>`_
+        `<https://www.elastic.co/guide/en/app-search/current/schema.html#schema-patch>`_
 
         :arg engine_name: Name of the engine.
         :arg body: Schema description.
@@ -672,7 +672,7 @@ class AppSearch(BaseClient):
         """
         Allows you to search over, facet and filter your data.
 
-        `<https://swiftype.com/documentation/app-search/api/search>`_
+        `<https://www.elastic.co/guide/en/app-search/current/search.html#search-single>`_
 
         :arg engine_name: Name of the engine.
         :arg query_text: Search query text.
@@ -700,7 +700,7 @@ class AppSearch(BaseClient):
         """
         Retrive current search settings for the engine.
 
-        `<https://swiftype.com/documentation/app-search/api/search-settings#show>`_
+        `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-show>`_
 
         :arg engine_name: Name of the engine.
         """
@@ -719,7 +719,7 @@ class AppSearch(BaseClient):
         """
         Reset search settings for the engine.
 
-        `<https://swiftype.com/documentation/app-search/api/search-settings#reset>`_
+        `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-reset>`_
 
         :arg engine_name: Name of the engine.
         """
@@ -740,7 +740,7 @@ class AppSearch(BaseClient):
         """
         Update search settings for the engine.
 
-        `<https://swiftype.com/documentation/app-search/api/search-settings#update>`_
+        `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-update>`_
 
         :arg engine_name: Name of the engine.
         :arg body: Search settings.
@@ -761,7 +761,7 @@ class AppSearch(BaseClient):
         """
         Create a new synonym set.
 
-        `<https://swiftype.com/documentation/app-search/api/synonyms#create>`_
+        `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-create>`_
 
         :arg engine_name: Name of the engine.
         :arg synonyms: List of synonyms words.
@@ -787,7 +787,7 @@ class AppSearch(BaseClient):
         """
         Delete a synonym set by id.
 
-        `<https://swiftype.com/documentation/app-search/api/synonyms#delete>`_
+        `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-delete>`_
 
         :arg engine_name: Name of the engine.
         :arg synonym_set_id: Synonym set id.
@@ -814,7 +814,7 @@ class AppSearch(BaseClient):
         """
         Retrieve a synonym set by id.
 
-        `<https://swiftype.com/documentation/app-search/api/synonyms#list-one>`_
+        `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-list-one>`_
 
         :arg engine_name: Name of the engine.
         :arg synonym_set_id: Synonym set id.
@@ -835,13 +835,43 @@ class AppSearch(BaseClient):
             headers=headers,
         )
 
+    def update_synonym_set(
+        self, engine_name, synonym_set_id, synonyms, params=None, headers=None,
+    ):
+        """
+        Update a synonym set by id.
+
+        `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-update>`_
+
+        :arg engine_name: Name of the engine.
+        :arg synonym_set_id: Synonym set id.
+        :arg synonyms: List of synonyms words.
+        """
+        for param in (
+            engine_name,
+            synonym_set_id,
+            synonyms,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = make_params(params, {"synonyms": synonyms})
+        return self.transport.request(
+            "PUT",
+            make_path(
+                "api", "as", "v1", "engines", engine_name, "synonyms", synonym_set_id,
+            ),
+            params=params,
+            headers=headers,
+        )
+
     def list_synonym_sets(
         self, engine_name, current_page=None, page_size=None, params=None, headers=None,
     ):
         """
         Retrieve available synonym sets for the engine.
 
-        `<https://swiftype.com/documentation/app-search/api/synonyms#get>`_
+        `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-get>`_
 
         :arg engine_name: Name of the engine.
         :arg current_page: The page to fetch. Defaults to 1.
@@ -871,7 +901,7 @@ class AppSearch(BaseClient):
         """
         Returns the number of clicks received by a document in descending order.
 
-        `<https://swiftype.com/documentation/app-search/api/analytics/clicks>`_
+        `<https://www.elastic.co/guide/en/app-search/current/clicks.html>`_
 
         :arg engine_name: Name of the engine.
         :arg query: Filter clicks over a search query.
@@ -898,7 +928,7 @@ class AppSearch(BaseClient):
         """
         Returns queries anlaytics by usage count.
 
-        `<https://swiftype.com/documentation/app-search/api/analytics/queries>`_
+        `<https://www.elastic.co/guide/en/app-search/current/queries.html#queries-top-queries>`_
 
         :arg engine_name: Name of the engine.
         :arg page_size: The number of results per page.

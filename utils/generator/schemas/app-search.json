@@ -3,10 +3,14 @@
   "info": {
     "description": "Elastic App Search API",
     "title": "Elastic App Search API",
-    "version": "1.0"
+    "version": "1.0",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
   },
   "externalDocs": {
-    "url": "https://swiftype.com/documentation/app-search"
+    "url": "https://www.elastic.co/guide/en/app-search/current/index.html"
   },
   "components": {
     "parameters": {
@@ -311,7 +315,7 @@
     "/api/as/v1/engines": {
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/engines#list"
+          "url": "https://www.elastic.co/guide/en/app-search/current/engines.html#engines-list"
         },
         "operationId": "listEngines",
         "parameters": [
@@ -334,7 +338,7 @@
       },
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/engines#create"
+          "url": "https://www.elastic.co/guide/en/app-search/current/engines.html#engines-create"
         },
         "operationId": "createEngine",
         "parameters": [
@@ -391,7 +395,7 @@
     "/api/as/v1/engines/{engine_name}": {
       "delete": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/engines#delete"
+          "url": "https://www.elastic.co/guide/en/app-search/current/engines.html#engines-delete"
         },
         "operationId": "deleteEngine",
         "responses": {
@@ -406,7 +410,7 @@
       },
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/engines#get"
+          "url": "https://www.elastic.co/guide/en/app-search/current/engines.html#engines-get"
         },
         "operationId": "getEngine",
         "responses": {
@@ -428,7 +432,7 @@
     "/api/as/v1/engines/{engine_name}/analytics/clicks": {
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/analytics/clicks"
+          "url": "https://www.elastic.co/guide/en/app-search/current/clicks.html"
         },
         "operationId": "getTopClicksAnalytics",
         "parameters": [
@@ -474,7 +478,7 @@
     "/api/as/v1/engines/{engine_name}/analytics/counts": {
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/analytics/counts"
+          "url": "https://www.elastic.co/guide/en/app-search/current/counts.html"
         },
         "operationId": "getCountAnalytics",
         "parameters": [
@@ -517,7 +521,7 @@
     "/api/as/v1/engines/{engine_name}/analytics/queries": {
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/analytics/queries"
+          "url": "https://www.elastic.co/guide/en/app-search/current/queries.html#queries-top-queries"
         },
         "operationId": "getTopQueriesAnalytics",
         "parameters": [
@@ -560,7 +564,7 @@
       ],
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/clickthrough"
+          "url": "https://www.elastic.co/guide/en/app-search/current/clickthrough.html"
         },
         "operationId": "logClickthrough",
         "parameters": [
@@ -610,7 +614,7 @@
     "/api/as/v1/engines/{engine_name}/curations": {
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/curations#read"
+          "url": "https://www.elastic.co/guide/en/app-search/current/curations.html#curations-read"
         },
         "operationId": "listCurations",
         "parameters": [
@@ -638,7 +642,7 @@
       ],
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/curations#create"
+          "url": "https://www.elastic.co/guide/en/app-search/current/curations.html#curations-create"
         },
         "operationId": "createCuration",
         "parameters": [
@@ -687,7 +691,7 @@
     "/api/as/v1/engines/{engine_name}/curations/{curation_id}": {
       "delete": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/curations#destroy"
+          "url": "https://www.elastic.co/guide/en/app-search/current/curations.html#curations-destroy"
         },
         "operationId": "deleteCuration",
         "responses": {
@@ -702,7 +706,7 @@
       },
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/curations#single"
+          "url": "https://www.elastic.co/guide/en/app-search/current/curations.html#curations-read"
         },
         "operationId": "getCuration",
         "responses": {
@@ -725,7 +729,7 @@
       ],
       "put": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/curations#update"
+          "url": "https://www.elastic.co/guide/en/app-search/current/curations.html#curations-update"
         },
         "operationId": "updateCuration",
         "parameters": [
@@ -774,7 +778,7 @@
     "/api/as/v1/engines/{engine_name}/documents": {
       "delete": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/documents#partial"
+          "url": "https://www.elastic.co/guide/en/app-search/current/documents.html#documents-delete"
         },
         "operationId": "deleteDocuments",
         "requestBody": {
@@ -793,7 +797,7 @@
       },
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/documents#get"
+          "url": "https://www.elastic.co/guide/en/app-search/current/documents.html#documents-get"
         },
         "operationId": "getDocuments",
         "requestBody": {
@@ -817,7 +821,7 @@
       ],
       "patch": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/documents#partial"
+          "url": "https://www.elastic.co/guide/en/app-search/current/documents.html#documents-partial"
         },
         "operationId": "updateDocuments",
         "requestBody": {
@@ -836,7 +840,7 @@
       },
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/documents#create"
+          "url": "https://www.elastic.co/guide/en/app-search/current/documents.html#documents-create"
         },
         "operationId": "indexDocuments",
         "requestBody": {
@@ -857,7 +861,7 @@
     "/api/as/v1/engines/{engine_name}/documents/list": {
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/documents#list"
+          "url": "https://www.elastic.co/guide/en/app-search/current/documents.html#documents-list"
         },
         "operationId": "listDocuments",
         "parameters": [
@@ -887,7 +891,7 @@
     "/api/as/v1/engines/{engine_name}/logs/api": {
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/logs"
+          "url": "https://www.elastic.co/guide/en/app-search/current/api-logs.html"
         },
         "operationId": "getApiLogs",
         "parameters": [
@@ -976,7 +980,7 @@
       ],
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/search#multi"
+          "url": "https://www.elastic.co/guide/en/app-search/current/search.html#search-multi"
         },
         "operationId": "multiSearch",
         "parameters": [
@@ -1009,7 +1013,7 @@
       ],
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/query-suggestion"
+          "url": "https://www.elastic.co/guide/en/app-search/current/query-suggestion.html"
         },
         "operationId": "querySuggestion",
         "parameters": [
@@ -1057,7 +1061,7 @@
     "/api/as/v1/engines/{engine_name}/schema": {
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/schema#read"
+          "url": "https://www.elastic.co/guide/en/app-search/current/schema.html#schema-read"
         },
         "operationId": "getSchema",
         "responses": {
@@ -1077,7 +1081,7 @@
       ],
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/schema#patch"
+          "url": "https://www.elastic.co/guide/en/app-search/current/schema.html#schema-patch"
         },
         "operationId": "updateSchema",
         "requestBody": {
@@ -1103,7 +1107,7 @@
       ],
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/search"
+          "url": "https://www.elastic.co/guide/en/app-search/current/search.html#search-single"
         },
         "operationId": "search",
         "parameters": [
@@ -1128,7 +1132,7 @@
     "/api/as/v1/engines/{engine_name}/search_settings": {
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/search-settings#show"
+          "url": "https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-show"
         },
         "operationId": "getSearchSettings",
         "responses": {
@@ -1148,7 +1152,7 @@
       ],
       "put": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/search-settings#update"
+          "url": "https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-update"
         },
         "operationId": "updateSearchSettings",
         "requestBody": {
@@ -1173,7 +1177,7 @@
       ],
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/search-settings#reset"
+          "url": "https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-reset"
         },
         "operationId": "resetSearchSettings",
         "responses": {
@@ -1190,7 +1194,7 @@
     "/api/as/v1/engines/{engine_name}/source_engines": {
       "delete": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/meta-engines#remove-source-engines"
+          "url": "https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-remove-source-engines"
         },
         "operationId": "deleteMetaEngineSource",
         "requestBody": {
@@ -1214,7 +1218,7 @@
       ],
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/meta-engines#add-source-engines"
+          "url": "https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-add-source-engines"
         },
         "operationId": "addMetaEngineSource",
         "requestBody": {
@@ -1235,7 +1239,7 @@
     "/api/as/v1/engines/{engine_name}/synonyms": {
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/synonyms#get"
+          "url": "https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-get"
         },
         "operationId": "listSynonymSets",
         "parameters": [
@@ -1263,7 +1267,7 @@
       ],
       "post": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/synonyms#create"
+          "url": "https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-create"
         },
         "operationId": "createSynonymSet",
         "parameters": [
@@ -1291,7 +1295,7 @@
     "/api/as/v1/engines/{engine_name}/synonyms/{synonym_set_id}": {
       "delete": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/synonyms#delete"
+          "url": "https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-delete"
         },
         "operationId": "deleteSynonymSet",
         "responses": {
@@ -1306,7 +1310,7 @@
       },
       "get": {
         "externalDocs": {
-          "url": "https://swiftype.com/documentation/app-search/api/synonyms#list-one"
+          "url": "https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-list-one"
         },
         "operationId": "getSynonymSet",
         "responses": {
@@ -1326,7 +1330,33 @@
         {
           "$ref": "#/components/parameters/synonymSetId"
         }
-      ]
+      ],
+      "put": {
+        "externalDocs": {
+          "url": "https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-update"
+        },
+        "operationId": "updateSynonymSet",
+        "parameters": [
+          {
+            "description": "List of synonyms words.",
+            "in": "query",
+            "name": "synonyms",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/synonymList"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "$ref": "#/components/responses/jsonResponse"
+          }
+        },
+        "summary": "Update a synonym set by id.",
+        "tags": [
+          "Synonyms API"
+        ]
+      }
     }
   }
 }
