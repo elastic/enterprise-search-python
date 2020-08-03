@@ -17,6 +17,8 @@
 
 from platform import python_version
 import requests
+from urllib3.util import parse_url
+import certifi
 import six
 from six.moves.urllib.parse import urljoin
 from ._version import __version__
@@ -35,7 +37,6 @@ class TextResponse(BaseResponse, str):
     """HTTP responses that are not JSON"""
 
     def __init__(self, status_code, headers, body):
-        print(status_code, headers, body)
         BaseResponse.__init__(self, status_code, headers)
         str.__init__(self, body)
 
@@ -49,21 +50,67 @@ class JSONResponse(BaseResponse, dict):
 
 
 class Transport(object):
-    def __init__(self, host=None, port=None, use_ssl=None, headers=None):
+    def __init__(
+        self,
+        host=None,
+        port=None,
+        use_ssl=None,
+        verify_certs=None,
+        ca_certs=None,
+        headers=None,
+    ):
         if host is None:
             host = "localhost"
             if port is None:
                 port = 3002
 
-        authority = host
+        # URL formatted host
+        elif "://" in host:
+            url = parse_url(host)
+            host = url.host
+
+            if port is not None and url.port is not None and url.port != port:
+                raise ValueError(
+                    "Conflicting ports specified in both 'host' (%s) and 'port' (%s) parameter"
+                    % (url.port, port)
+                )
+            if url.port is not None:
+                port = url.port
+
+            if (
+                url.scheme is not None
+                and use_ssl is not None
+                and use_ssl != (url.scheme == "https")
+            ):
+                raise ValueError(
+                    "Conflicting schemes specified in both 'host' (%r) and 'use_ssl' (%s)"
+                    % (url.scheme, use_ssl)
+                )
+            elif url.scheme not in ("https", "http"):
+                raise ValueError("Invalid scheme in 'host' (%r)" % url.scheme)
+            use_ssl = use_ssl if use_ssl is not None else url.scheme == "https"
+
+        if use_ssl is None:
+            use_ssl = ca_certs is not None
+        if use_ssl:
+            if ca_certs is None:
+                ca_certs = certifi.where()
+            if verify_certs is None:
+                verify_certs = True
+
+        authority = host.strip("[]")
+        if ":" in authority:  # IPv6
+            authority = "[%s]" % authority
         if port is not None:
-            if ":" in authority:  # IPv6
-                authority = "[%s]:%d" % (authority, port)
-            else:
-                authority = "%s:%d" % (authority, port)
+            authority = "%s:%d" % (authority, port)
         scheme = "https" if use_ssl else "http"
         self._base_url = "%s://%s" % (scheme, authority)
         self._session = requests.Session()
+
+        if ca_certs and verify_certs:
+            self._session.verify = ca_certs or certifi.where()
+        elif not verify_certs:
+            self._session.verify = False
 
         self.headers = {k.lower(): v for k, v in (headers or {}).items()}
         self.headers.setdefault(

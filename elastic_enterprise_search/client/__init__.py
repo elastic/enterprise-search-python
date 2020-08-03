@@ -1,9 +1,29 @@
+#  Licensed to Elasticsearch B.V. under one or more contributor
+#  license agreements. See the NOTICE file distributed with
+#  this work for additional information regarding copyright
+#  ownership. Elasticsearch B.V. licenses this file to you under
+#  the Apache License, Version 2.0 (the "License"); you may
+#  not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+# 	http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing,
+#  software distributed under the License is distributed on an
+#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+#  specific language governing permissions and limitations
+#  under the License.
+
 import jwt
 from .app_search import AppSearch as _AppSearch
 from .enterprise_search import EnterpriseSearch as _EnterpriseSearch
 from .workplace_search import WorkplaceSearch as _WorkplaceSearch
 
 __all__ = ["AppSearch", "EnterpriseSearch", "WorkplaceSearch"]
+
+
+DEFAULT = object()
 
 
 class AppSearch(_AppSearch):
@@ -15,10 +35,10 @@ class AppSearch(_AppSearch):
     def create_signed_search_key(
         api_key,
         api_key_name,
-        search_fields=None,
-        result_fields=None,
-        filters=None,
-        facets=None,
+        search_fields=DEFAULT,
+        result_fields=DEFAULT,
+        filters=DEFAULT,
+        facets=DEFAULT,
     ):
         """Creates a Signed Search Key to keep your Private API Key secret
         and restrict what a user can search over.
@@ -42,7 +62,7 @@ class AppSearch(_AppSearch):
                 ("filters", filters),
                 ("facets", facets),
             )
-            if v is not None
+            if v is not DEFAULT
         }
         return jwt.encode(payload=options, key=api_key, algorithm="HS256")
 

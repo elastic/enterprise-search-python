@@ -19,7 +19,7 @@ import base64
 import sys
 from datetime import date, datetime
 from ..transport import Transport
-from six import b
+from six import ensure_str, ensure_binary, ensure_text
 
 SKIP_IN_PATH = (None, "", b"", [], ())
 PY2 = sys.version_info[0] == 2
@@ -43,9 +43,30 @@ __all__ = ["typing", "escape", "make_path", "make_params", "PY2", "BaseClient"]
 
 
 class BaseClient(object):
-    def __init__(self, _transport=None, transport_class=None, **kwargs):
+    def __init__(
+        self,
+        _transport=None,
+        transport_class=None,
+        host=None,
+        port=None,
+        use_ssl=None,
+        verify_certs=None,
+        ca_certs=None,
+        **kwargs
+    ):
+        kwargs.update(
+            {
+                "host": host,
+                "port": port,
+                "use_ssl": use_ssl,
+                "verify_certs": verify_certs,
+                "ca_certs": ca_certs,
+            }
+        )
         if _transport is not None:
-            if transport_class is not None or kwargs:
+            if transport_class is not None or any(
+                v is not None for v in kwargs.values()
+            ):
                 raise ValueError(
                     "Can't pass both a Transport and parameters to a client"
                 )
@@ -60,14 +81,24 @@ class BaseClient(object):
     def http_auth(self):
         auth_header = self.transport.headers.get("authorization", None)
         if auth_header:
-            return auth_header.replace("Bearer ", "", 1)
+            # We split basic auth into a tuple if we can
+            if auth_header.startswith("Basic "):
+                try:
+                    b64_encoded = ensure_binary(auth_header.partition(" ")[-1])
+                    b64_decoded = ensure_text(base64.b64decode(b64_encoded))
+                    return tuple(b64_decoded.split(":", 1))
+                except Exception as e:
+                    print(e)
+            return auth_header.partition(" ")[-1]
         return None
 
     @http_auth.setter
     def http_auth(self, auth_token):
         # Basic auth with (username, password)
         if isinstance(auth_token, (tuple, list)) and len(auth_token) == 2:
-            basic_auth = base64.b64encode(b(":".join(auth_token))).decode()
+            basic_auth = ensure_str(
+                base64.b64encode((b":".join([ensure_binary(x) for x in auth_token])))
+            )
             self.transport.headers["authorization"] = "Basic %s" % basic_auth
 
         # If not a tuple/list or string raise an error.
@@ -144,7 +175,7 @@ def make_params(params, extra_params):
         if v is not None
     }
     if set(wire_params).intersection(set(params)):
-        raise ValueError("Conflict between key-word argument and 'params'")
+        raise ValueError("Conflict between keyword argument and 'params'")
     for k, v in (params or {}).items():
         if v is None:
             continue
