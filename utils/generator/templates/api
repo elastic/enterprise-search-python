@@ -11,10 +11,10 @@
         headers=None,
     ):
         """{% if api.description %}
-        {{ api.description|replace("\n", " ")|wordwrap(wrapstring="\n        ") }}
-{% endif %}{% if api.docs_url %}
-        `<{{ api.docs_url }}>`_
-{% endif %}{% if api.all_params|list|length %}{% for param in api.all_params %}
+        {{ api.description|replace("\n", " ")|wordwrap(wrapstring="\n        ") }}{% endif %}{% if api.docs_url %}
+
+        `<{{ api.docs_url }}>`_{% endif %}{% if api.all_params|list|length %}
+{% for param in api.all_params %}
         {% filter wordwrap(72, wrapstring="\n            ") %}:arg {{ param.param_name }}: {{ param.description }}{% endfilter %}{% endfor %}{% endif %}{% if api.has_body %}
         :arg body: {{ api.body_description }}{% endif %}
         """{% if api.required_params|list|length %}{% if api.required_params|list|length == 1 %}

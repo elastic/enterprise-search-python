@@ -52,6 +52,35 @@ class WorkplaceSearch(BaseClient):
             headers=headers,
         )
 
+    def index_documents(
+        self, content_source_key, body, params=None, headers=None,
+    ):
+        """
+        Indexes one or more new documents into a custom content source, or updates one
+        or more existing documents
+
+        :arg content_source_key: Unique key for a Custom API source, provided
+            upon creation of a Custom API Source
+        :arg body: HTTP request body
+        """
+        if content_source_key in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+        return self.transport.request(
+            "POST",
+            make_path(
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_key,
+                "documents",
+                "bulk_create",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+        )
+
     def list_all_external_identities(
         self,
         content_source_key,
@@ -202,35 +231,6 @@ class WorkplaceSearch(BaseClient):
             headers=headers,
         )
 
-    def index_documents(
-        self, content_source_key, body, params=None, headers=None,
-    ):
-        """
-        Indexes one or more new documents into a custom content source, or updates one
-        or more existing documents
-
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
-        :arg body: HTTP request body
-        """
-        if content_source_key in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
-            "POST",
-            make_path(
-                "api",
-                "ws",
-                "v1",
-                "sources",
-                content_source_key,
-                "documents",
-                "bulk_create",
-            ),
-            body=body,
-            params=params,
-            headers=headers,
-        )
-
     def list_all_permissions(
         self,
         content_source_key,
@@ -299,7 +299,6 @@ class WorkplaceSearch(BaseClient):
     ):
         """
         search across available sources with various query tuning options
-
         :arg body: HTTP request body
         """
         return self.transport.request(

@@ -317,6 +317,27 @@ class AppSearch(BaseClient):
             headers=headers,
         )
 
+    def index_documents(
+        self, engine_name, body, params=None, headers=None,
+    ):
+        """
+        Create or update documents.
+
+        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-create>`_
+
+        :arg engine_name: Name of the engine.
+        :arg body: List of document to index.
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+        return self.transport.request(
+            "POST",
+            make_path("api", "as", "v1", "engines", engine_name, "documents"),
+            body=body,
+            params=params,
+            headers=headers,
+        )
+
     def list_documents(
         self, engine_name, current_page=None, page_size=None, params=None, headers=None,
     ):
@@ -454,27 +475,6 @@ class AppSearch(BaseClient):
         return self.transport.request(
             "GET",
             make_path("api", "as", "v1", "engines"),
-            params=params,
-            headers=headers,
-        )
-
-    def index_documents(
-        self, engine_name, body, params=None, headers=None,
-    ):
-        """
-        Create or update documents.
-
-        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-create>`_
-
-        :arg engine_name: Name of the engine.
-        :arg body: List of document to index.
-        """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
-            "POST",
-            make_path("api", "as", "v1", "engines", engine_name, "documents"),
-            body=body,
             params=params,
             headers=headers,
         )

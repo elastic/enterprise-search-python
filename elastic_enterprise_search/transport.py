@@ -41,8 +41,16 @@ class TextResponse(BaseResponse, str):
         str.__init__(self, body)
 
 
-class JSONResponse(BaseResponse, dict):
-    """HTTP responses that are JSON"""
+class JSONListResponse(BaseResponse, list):
+    """HTTP responses that are a JSON list"""
+
+    def __init__(self, status_code, headers, body):
+        BaseResponse.__init__(self, status_code, headers)
+        list.__init__(self, body)
+
+
+class JSONDictResponse(BaseResponse, dict):
+    """HTTP responses that are a JSON dict"""
 
     def __init__(self, status_code, headers, body):
         BaseResponse.__init__(self, status_code, headers)
@@ -164,8 +172,10 @@ class Transport(object):
 
         if isinstance(body, str):
             return TextResponse(resp.status_code, resp.headers.copy(), body)
+        elif isinstance(body, list):
+            return JSONListResponse(resp.status_code, resp.headers.copy(), body)
         else:
-            return JSONResponse(resp.status_code, resp.headers.copy(), body)
+            return JSONDictResponse(resp.status_code, resp.headers.copy(), body)
 
     def copy(self):
         """Returns a copy of the Transport that is disjoint in all

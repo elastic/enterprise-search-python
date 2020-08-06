@@ -19,15 +19,16 @@
 class EnterpriseSearchError(Exception):
     """Generic exception for the 'elastic-enterprise-search' package"""
 
-    def __init__(self, error=None):
+    def __init__(self, message=None, error=None):
         self.error = error
+        self.message = message
 
     def __repr__(self):
-        params = {
-            k: getattr(self, k, None)
-            for k in ("status_code", "error", "body", "headers")
-        }
-        params = ", ".join("%s=%r" % (k, v) for k, v in params.items() if v is not None)
+        params = [
+            (k, getattr(self, k, None))
+            for k in ("message", "status_code", "error", "body")
+        ]
+        params = ", ".join("%s=%r" % (k, v) for k, v in params if v is not None)
         return "<%s(%s)>" % (type(self).__name__, params)
 
     __str__ = __repr__
@@ -48,11 +49,11 @@ class TLSError(ConnectionError):
 class HTTPError(TransportError):
     """Error that is raised from a non-2XX HTTP response"""
 
-    def __init__(self, status_code, headers, body, error=None):
+    def __init__(self, status_code, headers, body, error=None, message=None):
         self.status_code = status_code
         self.headers = headers
         self.body = body
-        super(HTTPError, self).__init__(error=error)
+        super(HTTPError, self).__init__(message=message, error=error)
 
 
 class BadRequestError(HTTPError):

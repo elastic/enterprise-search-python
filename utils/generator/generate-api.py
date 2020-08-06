@@ -135,6 +135,7 @@ class API:
             "delete",
             "list",
             "reset",
+            "index",
         ):
             if func_parts[1] == "all":
                 return tuple(func_parts[2:] + func_parts[:2])
@@ -277,7 +278,7 @@ class OpenAPI:
 
 
 def main():
-    specs = [OpenAPI.from_schema(base_dir / "utils/generator/schemas/app-search.json")]
+    specs = []
     for filepath in schemas_dir.iterdir():
         specs.append(OpenAPI.from_schema(filepath))
 

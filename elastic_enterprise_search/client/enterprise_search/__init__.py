@@ -30,7 +30,6 @@ class EnterpriseSearch(BaseClient):
         """
         Get information on the health of a deployment and basic statistics around
         resource usage
-
         """
         return self.transport.request(
             "GET",
@@ -44,7 +43,6 @@ class EnterpriseSearch(BaseClient):
     ):
         """
         Get the read-only flag's state
-
         """
         return self.transport.request(
             "GET",
@@ -58,7 +56,6 @@ class EnterpriseSearch(BaseClient):
     ):
         """
         Update the read-only flag's state
-
         :arg body: HTTP request body
         """
         return self.transport.request(
@@ -91,7 +88,6 @@ class EnterpriseSearch(BaseClient):
     ):
         """
         Get version information for this server
-
         """
         return self.transport.request(
             "GET",

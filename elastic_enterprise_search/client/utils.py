@@ -20,6 +20,7 @@ import sys
 from datetime import date, datetime
 from ..transport import Transport
 from six import ensure_str, ensure_binary, ensure_text
+from dateutil import tz
 
 SKIP_IN_PATH = (None, "", b"", [], ())
 PY2 = sys.version_info[0] == 2
@@ -54,6 +55,7 @@ class BaseClient(object):
         ca_certs=None,
         **kwargs
     ):
+        http_auth = kwargs.pop("http_auth", None)
         kwargs.update(
             {
                 "host": host,
@@ -72,10 +74,20 @@ class BaseClient(object):
                 )
             self.transport = _transport
         else:
-            http_auth = kwargs.pop("http_auth", None)
             self.transport = (transport_class or Transport)(**kwargs)
-            if http_auth:
-                self.http_auth = http_auth
+        if http_auth:
+            self.http_auth = http_auth
+
+    def authenticate(self, http_auth):
+        """Create a new client with different authentication. This is useful
+        when authenticating with a users access token as the HTTP transport
+        is re-used rather than being newly created each time.
+
+        :arg http_auth: Either a (username, password) tuple for 'Basic'
+            auth or a string for 'Bearer' token auth.
+        """
+        transport = self.transport.copy()
+        return type(self)(_transport=transport, http_auth=http_auth)
 
     @property
     def http_auth(self):
@@ -93,16 +105,16 @@ class BaseClient(object):
         return None
 
     @http_auth.setter
-    def http_auth(self, auth_token):
+    def http_auth(self, http_auth):
         # Basic auth with (username, password)
-        if isinstance(auth_token, (tuple, list)) and len(auth_token) == 2:
+        if isinstance(http_auth, (tuple, list)) and len(http_auth) == 2:
             basic_auth = ensure_str(
-                base64.b64encode((b":".join([ensure_binary(x) for x in auth_token])))
+                base64.b64encode((b":".join([ensure_binary(x) for x in http_auth])))
             )
             self.transport.headers["authorization"] = "Basic %s" % basic_auth
 
         # If not a tuple/list or string raise an error.
-        elif not isinstance(auth_token, str):
+        elif not isinstance(http_auth, str):
             raise TypeError(
                 "'http_auth' must either be a tuple of (username, password) "
                 "for 'Basic' authentication or a single string for "
@@ -111,7 +123,7 @@ class BaseClient(object):
 
         # Bearer / Token auth
         else:
-            self.transport.headers["authorization"] = "Bearer %s" % auth_token
+            self.transport.headers["authorization"] = "Bearer %s" % http_auth
 
 
 def escape(value):
@@ -122,11 +134,19 @@ def escape(value):
 
     # make sequences into comma-separated stings
     if isinstance(value, (list, tuple)):
-        value = ",".join(value)
+        value = b",".join([escape(x) for x in value])
 
-    # dates and datetimes into isoformat
-    elif isinstance(value, (date, datetime)):
-        value = value.isoformat()
+    # Convert datetimes timezone info to
+    # UTC and then format to RFC 3339
+    elif isinstance(value, datetime):
+        # If there's timezone information defined then convert to UTC.
+        # If it's a naive datetime assume local time.
+        if value.tzinfo is None:
+            value = value.astimezone(tz.tzlocal())
+        return value.astimezone(tz.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    elif isinstance(value, date):
+        return value.isoformat()
 
     # make bools into true/false strings
     elif isinstance(value, bool):
@@ -136,14 +156,10 @@ def escape(value):
     elif isinstance(value, bytes):
         return value
 
-    # encode strings to utf-8
-    if isinstance(value, string_types):
-        if PY2 and isinstance(value, unicode):  # noqa: F821
-            return value.encode("utf-8")
-        if not PY2 and isinstance(value, str):
-            return value.encode("utf-8")
+    if not isinstance(value, string_types):
+        value = str(value)
 
-    return str(value)
+    return ensure_binary(value)
 
 
 def make_path(*parts):
@@ -153,7 +169,7 @@ def make_path(*parts):
     """
     return "/" + "/".join(
         # preserve ',' and '*' in url for nicer URLs in logs
-        quote(escape(p), b",*")
+        quote(escape(p), b",*[]:-")
         for p in parts
         if p not in SKIP_IN_PATH
     )
@@ -170,7 +186,7 @@ def make_params(params, extra_params):
     """
     params = params or {}
     wire_params = {
-        k: quote(escape(v), b",*")
+        k: quote(escape(v), b",*[]:-")
         for k, v in (extra_params or {}).items()
         if v is not None
     }
@@ -179,5 +195,5 @@ def make_params(params, extra_params):
     for k, v in (params or {}).items():
         if v is None:
             continue
-        wire_params[k] = quote(escape(v), b",*")
+        wire_params[k] = quote(escape(v), b",*[]:-")
     return wire_params
