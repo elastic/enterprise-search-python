@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+from os.path import join, abspath, dirname
 import nox
 
 
@@ -39,10 +40,13 @@ def lint(session):
 
 
 def tests_impl(session):
+    junit_xml = join(
+        abspath(dirname(__file__)), "junit/enterprise-search-python-junit.xml",
+    )
     session.install(".[develop]")
     session.run(
         "pytest",
-        "--junitxml=junit-test.xml",
+        "--junitxml=%s" % junit_xml,
         "--cov=elastic_enterprise_search",
         *(session.posargs or ("tests/",)),
         env={"PYTHONWARNINGS": "always::DeprecationWarning"}
