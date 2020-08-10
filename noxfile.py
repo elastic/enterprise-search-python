@@ -19,13 +19,21 @@ from os.path import join, abspath, dirname
 import nox
 
 
-SOURCE_FILES = ("noxfile.py", "elastic_enterprise_search/", "utils/", "tests/")
+SOURCE_FILES = (
+    "noxfile.py",
+    "setup.py",
+    "src/elastic_enterprise_search/",
+    "utils/",
+    "tests/",
+)
 
 
 @nox.session()
 def blacken(session):
     session.install("black")
-    session.run("black", "--target-version=py27", *SOURCE_FILES)
+    session.run(
+        "black", "--target-version=py27", "--target-version=py37", *SOURCE_FILES
+    )
     session.run("python", "utils/license-headers.py", "fix", *SOURCE_FILES)
 
     lint(session)
@@ -34,7 +42,13 @@ def blacken(session):
 @nox.session
 def lint(session):
     session.install("flake8", "black", "mypy")
-    session.run("black", "--check", "--target-version=py27", *SOURCE_FILES)
+    session.run(
+        "black",
+        "--check",
+        "--target-version=py27",
+        "--target-version=py37",
+        *SOURCE_FILES
+    )
     session.run("flake8", "--ignore=E501,W503", *SOURCE_FILES)
     session.run("python", "utils/license-headers.py", "check", *SOURCE_FILES)
 
