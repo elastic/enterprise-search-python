@@ -29,7 +29,14 @@ def test_make_params():
             "c": ["d", 2],
             "e": datetime.date(year=2020, month=1, day=1),
             "f": datetime.datetime(
-                year=2020, month=2, day=3, hour=4, minute=5, second=6, microsecond=7
+                year=2020,
+                month=2,
+                day=3,
+                hour=4,
+                minute=5,
+                second=6,
+                microsecond=7,
+                tzinfo=tz.gettz("HST"),
             ),
             "g": True,
         },
@@ -38,7 +45,7 @@ def test_make_params():
         "b": "z",
         "c": "d,2",
         "e": "2020-01-01",
-        "f": "2020-02-03T04:05:06Z",
+        "f": "2020-02-03T14:05:06Z",
         "g": "true",
     }
 
@@ -52,11 +59,18 @@ def test_make_path():
             ["d", 2],
             datetime.date(year=2020, month=1, day=1),
             datetime.datetime(
-                year=2020, month=2, day=3, hour=4, minute=5, second=6, microsecond=7
+                year=2020,
+                month=2,
+                day=3,
+                hour=4,
+                minute=5,
+                second=6,
+                microsecond=7,
+                tzinfo=tz.gettz("HST"),
             ),
             True,
         )
-        == "/a/1/z/d,2/2020-01-01/2020-02-03T04:05:06Z/true"
+        == "/a/1/z/d,2/2020-01-01/2020-02-03T14:05:06Z/true"
     )
 
 

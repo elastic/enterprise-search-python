@@ -1,0 +1,9 @@
+include LICENSE
+include MANIFEST.in
+include README.md
+include setup.py
+
+prune docs/_build
+prune tests
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
