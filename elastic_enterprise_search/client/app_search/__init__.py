@@ -68,13 +68,13 @@ class AppSearch(BaseClient):
         params = make_params(
             params,
             {
-                "filters.date.from": from_date,
-                "filters.date.to": to_date,
-                "page.current": current_page,
-                "page.size": page_size,
+                "filters[date][from]": from_date,
+                "filters[date][to]": to_date,
+                "page[current]": current_page,
+                "page[size]": page_size,
                 "query": query,
-                "filters.status": http_status_filter,
-                "filters.method": http_method_filter,
+                "filters[status]": http_status_filter,
+                "filters[method]": http_method_filter,
                 "sort_direction": sort_direction,
             },
         )
@@ -266,7 +266,7 @@ class AppSearch(BaseClient):
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
-            params, {"page.current": current_page, "page.size": page_size}
+            params, {"page[current]": current_page, "page[size]": page_size}
         )
         return self.transport.request(
             "GET",
@@ -353,7 +353,7 @@ class AppSearch(BaseClient):
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
-            params, {"page.current": current_page, "page.size": page_size}
+            params, {"page[current]": current_page, "page[size]": page_size}
         )
         return self.transport.request(
             "GET",
@@ -385,7 +385,7 @@ class AppSearch(BaseClient):
 
     def create_engine(
         self,
-        name,
+        engine_name,
         language=None,
         type=None,
         source_engines=None,
@@ -397,17 +397,17 @@ class AppSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-create>`_
 
-        :arg name: Engine name.
+        :arg engine_name: Engine name.
         :arg language: Engine language (null for universal).
         :arg type: Engine type.
         :arg source_engines: Sources engines list.
         """
-        if name in SKIP_IN_PATH:
+        if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params,
             {
-                "name": name,
+                "name": engine_name,
                 "language": language,
                 "type": type,
                 "source_engines": source_engines,
@@ -470,7 +470,7 @@ class AppSearch(BaseClient):
         :arg page_size: The number of results per page.
         """
         params = make_params(
-            params, {"page.current": current_page, "page.size": page_size}
+            params, {"page[current]": current_page, "page[size]": page_size}
         )
         return self.transport.request(
             "GET",
@@ -617,7 +617,7 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(
-            params, {"query": query, "types.documents.fields": fields, "size": size}
+            params, {"query": query, "types[documents][fields]": fields, "size": size}
         )
         return self.transport.request(
             "POST",
@@ -667,7 +667,7 @@ class AppSearch(BaseClient):
         )
 
     def search(
-        self, engine_name, query_text, body, params=None, headers=None,
+        self, engine_name, body, params=None, headers=None,
     ):
         """
         Allows you to search over, facet and filter your data.
@@ -675,17 +675,10 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/search.html#search-single>`_
 
         :arg engine_name: Name of the engine.
-        :arg query_text: Search query text.
         :arg body: Search request parameters.
         """
-        for param in (
-            engine_name,
-            query_text,
-        ):
-            if param in SKIP_IN_PATH:
-                raise ValueError("Empty value passed for a required argument")
-
-        params = make_params(params, {"query": query_text})
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
         return self.transport.request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "search"),
@@ -880,7 +873,7 @@ class AppSearch(BaseClient):
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
-            params, {"page.current": current_page, "page.size": page_size}
+            params, {"page[current]": current_page, "page[size]": page_size}
         )
         return self.transport.request(
             "GET",
@@ -893,6 +886,7 @@ class AppSearch(BaseClient):
         self,
         engine_name,
         query=None,
+        current_page=None,
         page_size=None,
         filters=None,
         params=None,
@@ -905,13 +899,20 @@ class AppSearch(BaseClient):
 
         :arg engine_name: Name of the engine.
         :arg query: Filter clicks over a search query.
+        :arg current_page: The page to fetch. Defaults to 1.
         :arg page_size: The number of results per page.
         :arg filters: Analytics filters
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
-            params, {"query": query, "page.size": page_size, "filters": filters}
+            params,
+            {
+                "query": query,
+                "page[current]": current_page,
+                "page[size]": page_size,
+                "filters": filters,
+            },
         )
         return self.transport.request(
             "GET",
@@ -923,20 +924,34 @@ class AppSearch(BaseClient):
         )
 
     def get_top_queries_analytics(
-        self, engine_name, page_size=None, filters=None, params=None, headers=None,
+        self,
+        engine_name,
+        current_page=None,
+        page_size=None,
+        filters=None,
+        params=None,
+        headers=None,
     ):
         """
-        Returns queries anlaytics by usage count.
+        Returns queries analytics by usage count.
 
         `<https://www.elastic.co/guide/en/app-search/current/queries.html#queries-top-queries>`_
 
         :arg engine_name: Name of the engine.
+        :arg current_page: The page to fetch. Defaults to 1.
         :arg page_size: The number of results per page.
         :arg filters: Analytics filters
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(params, {"page.size": page_size, "filters": filters})
+        params = make_params(
+            params,
+            {
+                "page[current]": current_page,
+                "page[size]": page_size,
+                "filters": filters,
+            },
+        )
         return self.transport.request(
             "GET",
             make_path(
