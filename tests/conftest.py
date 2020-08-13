@@ -16,9 +16,29 @@
 #  under the License.
 
 import pytest
-from elastic_enterprise_search import EnterpriseSearch, AppSearch, WorkplaceSearch
+from elastic_enterprise_search import (
+    Connection,
+    EnterpriseSearch,
+    AppSearch,
+    WorkplaceSearch,
+)
 
 
 @pytest.fixture(params=[EnterpriseSearch, AppSearch, WorkplaceSearch])
 def client_class(request):
     return request.param
+
+
+class DummyConnection(Connection):
+    def __init__(self, **kwargs):
+        self.exception = kwargs.pop("exception", None)
+        self.status, self.data = kwargs.pop("status", 200), kwargs.pop("data", "{}")
+        self.headers = kwargs.pop("headers", {})
+        self.calls = []
+        super(DummyConnection, self).__init__(**kwargs)
+
+    def perform_request(self, *args, **kwargs):
+        self.calls.append((args, kwargs))
+        if self.exception:
+            raise self.exception
+        return self.status, self.headers, self.data

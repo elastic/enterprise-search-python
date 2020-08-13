@@ -20,7 +20,7 @@ import re
 from setuptools import setup, find_packages
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-with open(os.path.join(base_dir, "src/elastic_enterprise_search/_version.py")) as f:
+with open(os.path.join(base_dir, "elastic_enterprise_search/_version.py")) as f:
     version = re.search(r"__version__\s+=\s+\"([^\"]+)\"", f.read()).group(1)
 
 with open(os.path.join(base_dir, "README.md")) as f:
@@ -41,11 +41,19 @@ setup(
         "Source Code": "https://github.com/elastic/enterprise-search-python",
         "Issue Tracker": "https://github.com/elastic/enterprise-search-python/issues",
     },
-    packages=find_packages("src"),
-    package_dir={"": "src"},
-    install_requires=["requests", "PyJWT", "python-dateutil", "six"],
+    packages=find_packages(".", exclude=["tests"]),
+    install_requires=[
+        "urllib3>=1.21.1",
+        "PyJWT",
+        "python-dateutil",
+        "six>=1.12",
+        "certifi",
+    ],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*",
-    extras_require={"develop": ["pytest", "pytest-cov"]},
+    extras_require={
+        "requests": ["requests>=2.4.0, <3.0.0"],
+        "develop": ["pytest", "pytest-cov", "pytest-mock", "mock", "requests"],
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: Apache Software License",

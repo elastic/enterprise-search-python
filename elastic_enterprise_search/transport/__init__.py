@@ -15,17 +15,23 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from .base import BaseClient
-from ..utils import (  # noqa: F401
-    make_path,
-    make_params,
-    SKIP_IN_PATH,
+from .transport import Transport, Response
+from .connection import Connection, Urllib3HttpConnection, RequestsHttpConnection
+from .connection_pool import (
+    ConnectionPool,
+    ConnectionSelector,
+    DummyConnectionPool,
+    EmptyConnectionPool,
 )
 
-
-class {{ spec.client_class_name }}(BaseClient):
-{% for api in spec.apis %}
-{% with api=api %}
-{% include "api" %}
-{% endwith %}
-{% endfor %}
+__all__ = [
+    "Response",
+    "Transport",
+    "Connection",
+    "Urllib3HttpConnection",
+    "RequestsHttpConnection",
+    "ConnectionPool",
+    "ConnectionSelector",
+    "EmptyConnectionPool",
+    "DummyConnectionPool",
+]

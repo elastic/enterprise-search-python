@@ -24,8 +24,8 @@ def test_sub_clients():
     assert isinstance(client.workplace_search, WorkplaceSearch)
 
     # Requests Session is shared for pooling
-    assert client.transport._session is client.app_search.transport._session
-    assert client.transport._session is client.workplace_search.transport._session
+    assert client.transport is client.app_search.transport
+    assert client.transport is client.workplace_search.transport
 
     # Authenticating doesn't modify other clients
     client.http_auth = ("user", "pass")
@@ -36,12 +36,6 @@ def test_sub_clients():
     assert client.app_search.http_auth == "token-app-search"
     assert client.workplace_search.http_auth == "token-workplace-search"
 
-    assert client.transport.headers["authorization"] == "Basic dXNlcjpwYXNz"
-    assert (
-        client.app_search.transport.headers["authorization"]
-        == "Bearer token-app-search"
-    )
-    assert (
-        client.workplace_search.transport.headers["authorization"]
-        == "Bearer token-workplace-search"
-    )
+    assert client._auth_header == "Basic dXNlcjpwYXNz"
+    assert client.app_search._auth_header == "Bearer token-app-search"
+    assert client.workplace_search._auth_header == "Bearer token-workplace-search"

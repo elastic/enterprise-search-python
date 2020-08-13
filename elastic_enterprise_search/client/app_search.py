@@ -15,11 +15,11 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+from .base import BaseClient
 from ..utils import (  # noqa: F401
-    SKIP_IN_PATH,
-    BaseClient,
     make_path,
     make_params,
+    SKIP_IN_PATH,
 )
 
 
@@ -37,25 +37,30 @@ class AppSearch(BaseClient):
         sort_direction=None,
         params=None,
         headers=None,
+        http_auth=None,
     ):
         """
-        The API Log displays API request and response data at the Engine level.
+        The API Log displays API request and response data at the Engine level
 
         `<https://www.elastic.co/guide/en/app-search/current/api-logs.html>`_
 
-        :arg engine_name: Name of the engine.
-        :arg from_date: Filter date from.
-        :arg to_date: Filter date to.
-        :arg current_page: The page to fetch. Defaults to 1.
-        :arg page_size: The number of results per page.
+        :arg engine_name: Name of the engine
+        :arg from_date: Filter date from
+        :arg to_date: Filter date to
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
         :arg query: Use this to specify a particular endpoint, like analytics,
-            search, curations and so on.
+            search, curations and so on
         :arg http_status_filter: Filter based on a particular status code: 400,
-            401, 403, 429, 200.
+            401, 403, 429, 200
         :arg http_method_filter: Filter based on a particular HTTP method: GET,
-            POST, PUT, PATCH, DELETE.
+            POST, PUT, PATCH, DELETE
         :arg sort_direction: Would you like to have your results ascending,
             oldest to newest, or descending, newest to oldest?
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -78,36 +83,48 @@ class AppSearch(BaseClient):
                 "sort_direction": sort_direction,
             },
         )
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "logs", "api"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_count_analytics(
-        self, engine_name, filters=None, interval=None, params=None, headers=None,
+        self,
+        engine_name,
+        filters=None,
+        interval=None,
+        params=None,
+        headers=None,
+        http_auth=None,
     ):
         """
-        Returns the number of clicks and total number of queries over a period.
+        Returns the number of clicks and total number of queries over a period
 
         `<https://www.elastic.co/guide/en/app-search/current/counts.html>`_
 
-        :arg engine_name: Name of the engine.
+        :arg engine_name: Name of the engine
         :arg filters: Analytics filters
         :arg interval: You can define an interval along with your date range.
-            Can be either hour or day.
+            Can be either hour or day
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(params, {"filters": filters, "interval": interval})
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path(
                 "api", "as", "v1", "engines", engine_name, "analytics", "counts",
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def create_curation(
@@ -118,16 +135,21 @@ class AppSearch(BaseClient):
         hidden_doc_ids=None,
         params=None,
         headers=None,
+        http_auth=None,
     ):
         """
-        Create a new curation.
+        Create a new curation
 
         `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-create>`_
 
-        :arg engine_name: Name of the engine.
-        :arg queries: List of affected search queries.
-        :arg promoted_doc_ids: List of promoted document ids.
-        :arg hidden_doc_ids: List of hidden document ids.
+        :arg engine_name: Name of the engine
+        :arg queries: List of affected search queries
+        :arg promoted_doc_ids: List of promoted document IDs
+        :arg hidden_doc_ids: List of hidden document IDs
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -144,23 +166,28 @@ class AppSearch(BaseClient):
                 "hidden": hidden_doc_ids,
             },
         )
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "curations"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def delete_curation(
-        self, engine_name, curation_id, params=None, headers=None,
+        self, engine_name, curation_id, params=None, headers=None, http_auth=None,
     ):
         """
-        Delete a curation by id.
+        Delete a curation by ID
 
         `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-destroy>`_
 
-        :arg engine_name: Name of the engine.
-        :arg curation_id: Curation id.
+        :arg engine_name: Name of the engine
+        :arg curation_id: Curation ID
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -169,25 +196,30 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "DELETE",
             make_path(
                 "api", "as", "v1", "engines", engine_name, "curations", curation_id,
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_curation(
-        self, engine_name, curation_id, params=None, headers=None,
+        self, engine_name, curation_id, params=None, headers=None, http_auth=None,
     ):
         """
-        Retrieve a curation by id.
+        Retrieve a curation by ID
 
         `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-read>`_
 
-        :arg engine_name: Name of the engine.
-        :arg curation_id: Curation id.
+        :arg engine_name: Name of the engine
+        :arg curation_id: Curation ID
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -196,16 +228,17 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path(
                 "api", "as", "v1", "engines", engine_name, "curations", curation_id,
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
-    def update_curation(
+    def put_curation(
         self,
         engine_name,
         curation_id,
@@ -214,17 +247,22 @@ class AppSearch(BaseClient):
         hidden_doc_ids=None,
         params=None,
         headers=None,
+        http_auth=None,
     ):
         """
-        Update an existing curation.
+        Update an existing curation
 
         `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-update>`_
 
-        :arg engine_name: Name of the engine.
-        :arg curation_id: Curation id.
-        :arg queries: List of affected search queries.
-        :arg promoted_doc_ids: List of promoted document ids.
-        :arg hidden_doc_ids: List of hidden document ids.
+        :arg engine_name: Name of the engine
+        :arg curation_id: Curation ID
+        :arg queries: List of affected search queries
+        :arg promoted_doc_ids: List of promoted document IDs
+        :arg hidden_doc_ids: List of hidden document IDs
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -242,145 +280,188 @@ class AppSearch(BaseClient):
                 "hidden": hidden_doc_ids,
             },
         )
-        return self.transport.request(
+        return self._perform_request(
             "PUT",
             make_path(
                 "api", "as", "v1", "engines", engine_name, "curations", curation_id,
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def list_curations(
-        self, engine_name, current_page=None, page_size=None, params=None, headers=None,
+        self,
+        engine_name,
+        current_page=None,
+        page_size=None,
+        params=None,
+        headers=None,
+        http_auth=None,
     ):
         """
-        Retrieve available curations for the engine.
+        Retrieve available curations for the engine
 
         `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-read>`_
 
-        :arg engine_name: Name of the engine.
-        :arg current_page: The page to fetch. Defaults to 1.
-        :arg page_size: The number of results per page.
+        :arg engine_name: Name of the engine
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "curations"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def delete_documents(
-        self, engine_name, body, params=None, headers=None,
+        self, engine_name, body, params=None, headers=None, http_auth=None,
     ):
         """
-        Delete documents by id.
+        Delete documents by ID
 
         `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-delete>`_
 
-        :arg engine_name: Name of the engine.
-        :arg body: List of document ids.
+        :arg engine_name: Name of the engine
+        :arg body: List of document IDs
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "DELETE",
             make_path("api", "as", "v1", "engines", engine_name, "documents"),
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_documents(
-        self, engine_name, body, params=None, headers=None,
+        self, engine_name, body, params=None, headers=None, http_auth=None,
     ):
         """
-        Retrieves one or more documents by id.
+        Retrieves one or more documents by ID
 
         `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-get>`_
 
-        :arg engine_name: Name of the engine.
-        :arg body: List of document ids.
+        :arg engine_name: Name of the engine
+        :arg body: List of document IDs
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "documents"),
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def index_documents(
-        self, engine_name, body, params=None, headers=None,
+        self, engine_name, body, params=None, headers=None, http_auth=None,
     ):
         """
-        Create or update documents.
+        Create or update documents
 
         `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-create>`_
 
-        :arg engine_name: Name of the engine.
-        :arg body: List of document to index.
+        :arg engine_name: Name of the engine
+        :arg body: List of document to index
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "documents"),
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def list_documents(
-        self, engine_name, current_page=None, page_size=None, params=None, headers=None,
+        self,
+        engine_name,
+        current_page=None,
+        page_size=None,
+        params=None,
+        headers=None,
+        http_auth=None,
     ):
         """
-        List all available documents with optional pagination support.
+        List all available documents with optional pagination support
 
         `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-list>`_
 
-        :arg engine_name: Name of the engine.
-        :arg current_page: The page to fetch. Defaults to 1.
-        :arg page_size: The number of results per page.
+        :arg engine_name: Name of the engine
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "documents", "list"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
-    def update_documents(
-        self, engine_name, body, params=None, headers=None,
+    def put_documents(
+        self, engine_name, body, params=None, headers=None, http_auth=None,
     ):
         """
-        Partial update of documents.
+        Partial update of documents
 
         `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-partial>`_
 
-        :arg engine_name: Name of the engine.
-        :arg body: List of document to update.
+        :arg engine_name: Name of the engine
+        :arg body: List of documents to update
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "PATCH",
             make_path("api", "as", "v1", "engines", engine_name, "documents"),
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def create_engine(
@@ -391,16 +472,21 @@ class AppSearch(BaseClient):
         source_engines=None,
         params=None,
         headers=None,
+        http_auth=None,
     ):
         """
-        Creates a new engine.
+        Creates a new engine
 
         `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-create>`_
 
-        :arg engine_name: Engine name.
-        :arg language: Engine language (null for universal).
-        :arg type: Engine type.
-        :arg source_engines: Sources engines list.
+        :arg engine_name: Engine name
+        :arg language: Engine language (null for universal)
+        :arg type: Engine type
+        :arg source_engines: Sources engines list
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
@@ -413,70 +499,91 @@ class AppSearch(BaseClient):
                 "source_engines": source_engines,
             },
         )
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "as", "v1", "engines"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def delete_engine(
-        self, engine_name, params=None, headers=None,
+        self, engine_name, params=None, headers=None, http_auth=None,
     ):
         """
-        Delete an engine by name.
+        Delete an engine by name
 
         `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-delete>`_
 
-        :arg engine_name: Name of the engine.
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "DELETE",
             make_path("api", "as", "v1", "engines", engine_name),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_engine(
-        self, engine_name, params=None, headers=None,
+        self, engine_name, params=None, headers=None, http_auth=None,
     ):
         """
-        Retrieves an engine by name.
+        Retrieves an engine by name
 
         `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-get>`_
 
-        :arg engine_name: Name of the engine.
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def list_engines(
-        self, current_page=None, page_size=None, params=None, headers=None,
+        self,
+        current_page=None,
+        page_size=None,
+        params=None,
+        headers=None,
+        http_auth=None,
     ):
         """
-        Retrieves all engines with optional pagination support.
+        Retrieves all engines with optional pagination support
 
         `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-list>`_
 
-        :arg current_page: The page to fetch. Defaults to 1.
-        :arg page_size: The number of results per page.
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path("api", "as", "v1", "engines"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def log_clickthrough(
@@ -488,19 +595,24 @@ class AppSearch(BaseClient):
         tags=None,
         params=None,
         headers=None,
+        http_auth=None,
     ):
         """
-        Send data about clicked results.
+        Send data about clicked results
 
         `<https://www.elastic.co/guide/en/app-search/current/clickthrough.html>`_
 
-        :arg engine_name: Name of the engine.
-        :arg query_text: Search query text.
-        :arg document_id: The id of the document that was clicked on.
-        :arg request_id: The request id returned in the meta tag of a search API
-            response.
+        :arg engine_name: Name of the engine
+        :arg query_text: Search query text
+        :arg document_id: The ID of the document that was clicked on
+        :arg request_id: The request ID returned in the meta tag of a search API
+            response
         :arg tags: Array of strings representing additional information you wish
-            to track with the clickthrough.
+            to track with the clickthrough
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -519,65 +631,80 @@ class AppSearch(BaseClient):
                 "tags": tags,
             },
         )
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "click"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def add_meta_engine_source(
-        self, engine_name, body, params=None, headers=None,
+        self, engine_name, body, params=None, headers=None, http_auth=None,
     ):
         """
-        Add a source engine to an existing meta engine.
+        Add a source engine to an existing meta engine
 
         `<https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-add-source-engines>`_
 
-        :arg engine_name: Name of the engine.
-        :arg body: List of engine ids.
+        :arg engine_name: Name of the engine
+        :arg body: List of engine IDs
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "source_engines"),
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def delete_meta_engine_source(
-        self, engine_name, body, params=None, headers=None,
+        self, engine_name, body, params=None, headers=None, http_auth=None,
     ):
         """
-        Delete a source engine from a meta engine.
+        Delete a source engine from a meta engine
 
         `<https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-remove-source-engines>`_
 
-        :arg engine_name: Name of the engine.
-        :arg body: List of engine ids.
+        :arg engine_name: Name of the engine
+        :arg body: List of engine IDs
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "DELETE",
             make_path("api", "as", "v1", "engines", engine_name, "source_engines"),
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def multi_search(
-        self, engine_name, queries, params=None, headers=None,
+        self, engine_name, queries, params=None, headers=None, http_auth=None,
     ):
         """
-        Run several search in the same request.
+        Run several search in the same request
 
         `<https://www.elastic.co/guide/en/app-search/current/search.html#search-multi>`_
 
-        :arg engine_name: Name of the engine.
-        :arg queries: Search queries.
+        :arg engine_name: Name of the engine
+        :arg queries: Search queries
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -587,27 +714,39 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(params, {"queries": queries})
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "multi_search"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def query_suggestion(
-        self, engine_name, query, fields=None, size=None, params=None, headers=None,
+        self,
+        engine_name,
+        query,
+        fields=None,
+        size=None,
+        params=None,
+        headers=None,
+        http_auth=None,
     ):
         """
-        Provide relevant query suggestions for incomplete queries.
+        Provide relevant query suggestions for incomplete queries
 
         `<https://www.elastic.co/guide/en/app-search/current/query-suggestion.html>`_
 
-        :arg engine_name: Name of the engine.
-        :arg query: A partial query for which to receive suggestions.
+        :arg engine_name: Name of the engine
+        :arg query: A partial query for which to receive suggestions
         :arg fields: List of fields to use to generate suggestions. Defaults to
-            all text fields.
+            all text fields
         :arg size: Number of query suggestions to return. Must be between 1 and
-            20. Defaults to 5.
+            20. Defaults to 5
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -619,145 +758,180 @@ class AppSearch(BaseClient):
         params = make_params(
             params, {"query": query, "types[documents][fields]": fields, "size": size}
         )
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "query_suggestion"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_schema(
-        self, engine_name, params=None, headers=None,
+        self, engine_name, params=None, headers=None, http_auth=None,
     ):
         """
-        Retrieve current schema for then engine.
+        Retrieve current schema for then engine
 
         `<https://www.elastic.co/guide/en/app-search/current/schema.html#schema-read>`_
 
-        :arg engine_name: Name of the engine.
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "schema"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
-    def update_schema(
-        self, engine_name, body, params=None, headers=None,
+    def put_schema(
+        self, engine_name, body, params=None, headers=None, http_auth=None,
     ):
         """
-        Update schema for the current engine.
+        Update schema for the current engine
 
         `<https://www.elastic.co/guide/en/app-search/current/schema.html#schema-patch>`_
 
-        :arg engine_name: Name of the engine.
-        :arg body: Schema description.
+        :arg engine_name: Name of the engine
+        :arg body: Schema description
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "schema"),
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def search(
-        self, engine_name, body, params=None, headers=None,
+        self, engine_name, body, params=None, headers=None, http_auth=None,
     ):
         """
-        Allows you to search over, facet and filter your data.
+        Allows you to search over, facet and filter your data
 
         `<https://www.elastic.co/guide/en/app-search/current/search.html#search-single>`_
 
-        :arg engine_name: Name of the engine.
-        :arg body: Search request parameters.
+        :arg engine_name: Name of the engine
+        :arg body: Search request parameters
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "search"),
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_search_settings(
-        self, engine_name, params=None, headers=None,
+        self, engine_name, params=None, headers=None, http_auth=None,
     ):
         """
-        Retrive current search settings for the engine.
+        Retrive current search settings for the engine
 
         `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-show>`_
 
-        :arg engine_name: Name of the engine.
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "search_settings"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
-    def reset_search_settings(
-        self, engine_name, params=None, headers=None,
+    def put_search_settings(
+        self, engine_name, body, params=None, headers=None, http_auth=None,
     ):
         """
-        Reset search settings for the engine.
+        Update search settings for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-reset>`_
+        `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-update>`_
 
-        :arg engine_name: Name of the engine.
+        :arg engine_name: Name of the engine
+        :arg body: Search settings
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
+            "PUT",
+            make_path("api", "as", "v1", "engines", engine_name, "search_settings"),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+        )
+
+    def reset_search_settings(
+        self, engine_name, params=None, headers=None, http_auth=None,
+    ):
+        """
+        Reset search settings for the engine
+
+        `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-reset>`_
+
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+        return self._perform_request(
             "POST",
             make_path(
                 "api", "as", "v1", "engines", engine_name, "search_settings", "reset",
             ),
             params=params,
             headers=headers,
-        )
-
-    def update_search_settings(
-        self, engine_name, body, params=None, headers=None,
-    ):
-        """
-        Update search settings for the engine.
-
-        `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-update>`_
-
-        :arg engine_name: Name of the engine.
-        :arg body: Search settings.
-        """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
-            "PUT",
-            make_path("api", "as", "v1", "engines", engine_name, "search_settings"),
-            body=body,
-            params=params,
-            headers=headers,
+            http_auth=http_auth,
         )
 
     def create_synonym_set(
-        self, engine_name, synonyms, params=None, headers=None,
+        self, engine_name, synonyms, params=None, headers=None, http_auth=None,
     ):
         """
-        Create a new synonym set.
+        Create a new synonym set
 
         `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-create>`_
 
-        :arg engine_name: Name of the engine.
-        :arg synonyms: List of synonyms words.
+        :arg engine_name: Name of the engine
+        :arg synonyms: List of synonyms words
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -767,23 +941,28 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(params, {"synonyms": synonyms})
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "synonyms"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def delete_synonym_set(
-        self, engine_name, synonym_set_id, params=None, headers=None,
+        self, engine_name, synonym_set_id, params=None, headers=None, http_auth=None,
     ):
         """
-        Delete a synonym set by id.
+        Delete a synonym set by ID
 
         `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-delete>`_
 
-        :arg engine_name: Name of the engine.
-        :arg synonym_set_id: Synonym set id.
+        :arg engine_name: Name of the engine
+        :arg synonym_set_id: Synonym set ID
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -792,25 +971,30 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "DELETE",
             make_path(
                 "api", "as", "v1", "engines", engine_name, "synonyms", synonym_set_id,
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_synonym_set(
-        self, engine_name, synonym_set_id, params=None, headers=None,
+        self, engine_name, synonym_set_id, params=None, headers=None, http_auth=None,
     ):
         """
-        Retrieve a synonym set by id.
+        Retrieve a synonym set by ID
 
         `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-list-one>`_
 
-        :arg engine_name: Name of the engine.
-        :arg synonym_set_id: Synonym set id.
+        :arg engine_name: Name of the engine
+        :arg synonym_set_id: Synonym set ID
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -819,26 +1003,37 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path(
                 "api", "as", "v1", "engines", engine_name, "synonyms", synonym_set_id,
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
-    def update_synonym_set(
-        self, engine_name, synonym_set_id, synonyms, params=None, headers=None,
+    def put_synonym_set(
+        self,
+        engine_name,
+        synonym_set_id,
+        synonyms,
+        params=None,
+        headers=None,
+        http_auth=None,
     ):
         """
-        Update a synonym set by id.
+        Update a synonym set by ID
 
         `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-update>`_
 
-        :arg engine_name: Name of the engine.
-        :arg synonym_set_id: Synonym set id.
-        :arg synonyms: List of synonyms words.
+        :arg engine_name: Name of the engine
+        :arg synonym_set_id: Synonym set ID
+        :arg synonyms: List of synonyms words
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         for param in (
             engine_name,
@@ -849,37 +1044,49 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(params, {"synonyms": synonyms})
-        return self.transport.request(
+        return self._perform_request(
             "PUT",
             make_path(
                 "api", "as", "v1", "engines", engine_name, "synonyms", synonym_set_id,
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def list_synonym_sets(
-        self, engine_name, current_page=None, page_size=None, params=None, headers=None,
+        self,
+        engine_name,
+        current_page=None,
+        page_size=None,
+        params=None,
+        headers=None,
+        http_auth=None,
     ):
         """
-        Retrieve available synonym sets for the engine.
+        Retrieve available synonym sets for the engine
 
         `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-get>`_
 
-        :arg engine_name: Name of the engine.
-        :arg current_page: The page to fetch. Defaults to 1.
-        :arg page_size: The number of results per page.
+        :arg engine_name: Name of the engine
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "synonyms"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_top_clicks_analytics(
@@ -891,17 +1098,22 @@ class AppSearch(BaseClient):
         filters=None,
         params=None,
         headers=None,
+        http_auth=None,
     ):
         """
-        Returns the number of clicks received by a document in descending order.
+        Returns the number of clicks received by a document in descending order
 
         `<https://www.elastic.co/guide/en/app-search/current/clicks.html>`_
 
-        :arg engine_name: Name of the engine.
-        :arg query: Filter clicks over a search query.
-        :arg current_page: The page to fetch. Defaults to 1.
-        :arg page_size: The number of results per page.
+        :arg engine_name: Name of the engine
+        :arg query: Filter clicks over a search query
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
         :arg filters: Analytics filters
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
@@ -914,13 +1126,14 @@ class AppSearch(BaseClient):
                 "filters": filters,
             },
         )
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path(
                 "api", "as", "v1", "engines", engine_name, "analytics", "clicks",
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_top_queries_analytics(
@@ -931,16 +1144,21 @@ class AppSearch(BaseClient):
         filters=None,
         params=None,
         headers=None,
+        http_auth=None,
     ):
         """
-        Returns queries analytics by usage count.
+        Returns queries analytics by usage count
 
         `<https://www.elastic.co/guide/en/app-search/current/queries.html#queries-top-queries>`_
 
-        :arg engine_name: Name of the engine.
-        :arg current_page: The page to fetch. Defaults to 1.
-        :arg page_size: The number of results per page.
+        :arg engine_name: Name of the engine
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
         :arg filters: Analytics filters
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
@@ -952,11 +1170,12 @@ class AppSearch(BaseClient):
                 "filters": filters,
             },
         )
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path(
                 "api", "as", "v1", "engines", engine_name, "analytics", "queries",
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )

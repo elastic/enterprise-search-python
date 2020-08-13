@@ -17,31 +17,53 @@
 #  under the License.
 
 import pytest
+from tests.conftest import DummyConnection
 
 
 def test_http_auth_none(client_class):
-    client = client_class()
-    assert "authorization" not in client.transport.headers
+    client = client_class(connection_class=DummyConnection)
     assert client.http_auth is None
+    client._perform_request("GET", "/")
 
-    client = client_class(http_auth=None)
-    assert "authorization" not in client.transport.headers
+    calls = client.transport.get_connection().calls
+    assert calls == [
+        (("GET", "/", None, None), {"headers": {}, "ignore": (), "timeout": None})
+    ]
+
+    client = client_class(http_auth=None, connection_class=DummyConnection)
     assert client.http_auth is None
+    client._perform_request("GET", "/")
+
+    calls = client.transport.get_connection().calls
+    assert calls == [
+        (("GET", "/", None, None), {"headers": {}, "ignore": (), "timeout": None})
+    ]
 
 
 @pytest.mark.parametrize(
     "http_auth", ["this-is-a-token", ("user", "password"), (u"üser", u"pӓssword")]
 )
 def test_http_auth_set_and_get(client_class, http_auth):
-    client = client_class(http_auth=http_auth)
-
-    assert "authorization" in client.transport.headers
+    client = client_class(http_auth=http_auth, connection_class=DummyConnection)
     assert client.http_auth == http_auth
+    client._perform_request("GET", "/")
+
+    calls = client.transport.get_connection().calls
+    assert len(calls) == 1
+    assert calls[0][1]["headers"]["authorization"] == client._auth_header
 
 
-def test_bad_basic_auth(client_class):
-    client = client_class(headers={"authorization": "Basic thisaintproper"})
-    assert client.http_auth == "thisaintproper"
+def test_http_auth_per_request_override(client_class):
+    client = client_class(http_auth="bad-token", connection_class=DummyConnection)
+    assert client.http_auth == "bad-token"
+    client._perform_request("GET", "/", http_auth=("user", "pass"))
+
+    calls = client.transport.get_connection().calls
+    assert len(calls) == 1
+    assert calls[0][1]["headers"]["authorization"] == "Basic dXNlcjpwYXNz"
+
+    # Client.http_auth doesn't get overwritten
+    assert client.http_auth == "bad-token"
 
 
 def test_http_auth_object(client_class):

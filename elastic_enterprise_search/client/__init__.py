@@ -16,6 +16,7 @@
 #  under the License.
 
 import jwt
+from six import ensure_str
 from .app_search import AppSearch as _AppSearch
 from .enterprise_search import EnterpriseSearch as _EnterpriseSearch
 from .workplace_search import WorkplaceSearch as _WorkplaceSearch
@@ -28,6 +29,7 @@ DEFAULT = object()
 
 class AppSearch(_AppSearch):
     """Client for Elastic App Search service
+
     `<https://www.elastic.co/guide/en/app-search/current/api-reference.html>`_
     """
 
@@ -45,8 +47,8 @@ class AppSearch(_AppSearch):
 
         `<https://www.elastic.co/guide/en/app-search/current/authentication.html#authentication-signed>`_
 
-        :arg api_key: Private API Key
-        :arg api_key_name: Name of the Signed Search Key
+        :arg api_key: API key to use for signing
+        :arg api_key_name: Name of the API key used for signing
         :arg search_fields: Fields to search over.
         :arg result_fields: Fields to return in the result
         :arg filters: Adds filters to the search requests
@@ -64,11 +66,12 @@ class AppSearch(_AppSearch):
             )
             if v is not DEFAULT
         }
-        return jwt.encode(payload=options, key=api_key, algorithm="HS256")
+        return ensure_str(jwt.encode(payload=options, key=api_key, algorithm="HS256"))
 
 
 class WorkplaceSearch(_WorkplaceSearch):
     """Client for Workplace Search
+
     `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-api-overview.html>`_
     """
 
@@ -76,10 +79,24 @@ class WorkplaceSearch(_WorkplaceSearch):
 class EnterpriseSearch(_EnterpriseSearch):
     """Client for Enterprise Search"""
 
-    def __init__(self, transport_class=None, **kwargs):
+    def __init__(self, hosts=None, transport_class=None, **kwargs):
+        """
+        :arg hosts: List of nodes, or a single node, we should connect to.
+            Node should be a dictionary ({"host": "localhost", "port": 3002}),
+            the entire dictionary will be passed to the :class:`~elastic_enterprise_search.Connection`
+            class as kwargs, or a string in the format of ``host[:port]`` which will be
+            translated to a dictionary automatically.  If no value is given the
+            :class:`~elastic_enterprise_search.Connection` class defaults will be used.
+
+        :arg transport_class: :class:`~elastic_enterprise_search.Transport` subclass to use.
+
+        :arg kwargs: Any additional arguments will be passed on to the
+            :class:`~elastic_enterprise_search.Transport` class and, subsequently, to the
+            :class:`~elastic_enterprise_search.Connection` instances.
+        """
         super(EnterpriseSearch, self).__init__(
-            transport_class=transport_class, **kwargs
+            hosts=hosts, transport_class=transport_class, **kwargs
         )
 
-        self.app_search = AppSearch(_transport=self.transport.copy())
-        self.workplace_search = WorkplaceSearch(_transport=self.transport.copy())
+        self.app_search = AppSearch(_transport=self.transport)
+        self.workplace_search = WorkplaceSearch(_transport=self.transport)

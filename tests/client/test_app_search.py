@@ -28,6 +28,7 @@ def test_create_signed_search_key():
         filters={"status": "available"},
         facets=None,
     )
+    assert isinstance(signed_key, str)
     assert jwt.decode(signed_key, private_key, algorithms="HS256") == {
         "api_key_name": "api-key-name",
         "facets": None,
