@@ -1,0 +1,18 @@
+### {{ spec.client_class_name }} API
+
+<details>
+  <summary>Expand for all APIs</summary>
+{% for api in spec.apis %}
+{% if api.docs_url %}##### [`{{ spec.client_class_name }}.{{ api.func_name }}()`]({{ api.docs_url }}){% else %}##### `{{ spec.client_class_name }}.{{ api.func_name }}()`{% endif %}
+
+{{ api.description|replace("\n", " ")|wordwrap(wrapstring="\n") }}
+
+{% if api.all_params|list|length or api.has_body %}Parameters:{% for param in api.all_params %}
+{% filter wordwrap(72, wrapstring="\n  ") %}- `{{ param.param_name }}`: {{ param.description }}{% endfilter %}{% endfor %}{% if api.has_body %}
+- `body`: {{ api.body_description }}{% endif %}{% endif %}
+- `params`: Additional query params to send with the request
+- `headers`: Additional headers to send with the request
+- `http_auth`: Access token or HTTP basic auth username
+  and password to send with the request
+{% endfor %}
+</details>

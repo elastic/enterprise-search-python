@@ -306,11 +306,12 @@ def main():
 
     for spec in specs:
         spec_filepath = (
-            base_dir / f"src/elastic_enterprise_search/client/{spec.namespace}.py"
+            base_dir / f"elastic_enterprise_search/client/{spec.namespace}.py"
         )
         with spec_filepath.open(mode="w") as f:
             f.truncate()
             f.write(env.get_template("client").render(spec=spec))
+        print(env.get_template("readme").render(spec=spec))
         os.system(f"black {spec_filepath}")
 
         # Do a second pass for ',)' and ',}' that Black doesn't remove.
