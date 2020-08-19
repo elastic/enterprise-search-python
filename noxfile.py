@@ -22,7 +22,7 @@ import nox
 SOURCE_FILES = (
     "noxfile.py",
     "setup.py",
-    "src/elastic_enterprise_search/",
+    "elastic_enterprise_search/",
     "utils/",
     "tests/",
 )
@@ -65,6 +65,7 @@ def tests_impl(session):
         *(session.posargs or ("tests/",)),
         env={"PYTHONWARNINGS": "always::DeprecationWarning"}
     )
+    session.run("coverage", "report", "-m")
 
 
 @nox.session(python=["2.7", "3.5", "3.6", "3.7", "3.8", "3.9"])

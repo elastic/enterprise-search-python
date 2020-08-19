@@ -15,17 +15,10 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from .base import BaseClient
-from ..utils import (  # noqa: F401
-    make_path,
-    make_params,
-    SKIP_IN_PATH,
-)
+import elastic_enterprise_search
 
 
-class {{ spec.client_class_name }}(BaseClient):
-{% for api in spec.apis %}
-{% with api=api %}
-{% include "api" %}
-{% endwith %}
-{% endfor %}
+def test_all_is_sorted():
+    assert elastic_enterprise_search.__all__ == sorted(
+        elastic_enterprise_search.__all__
+    )

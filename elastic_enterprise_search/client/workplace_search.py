@@ -15,17 +15,17 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+from .base import BaseClient
 from ..utils import (  # noqa: F401
-    SKIP_IN_PATH,
-    BaseClient,
     make_path,
     make_params,
+    SKIP_IN_PATH,
 )
 
 
 class WorkplaceSearch(BaseClient):
     def delete_documents(
-        self, content_source_key, body, params=None, headers=None,
+        self, content_source_key, body, params=None, headers=None, http_auth=None,
     ):
         """
         Deletes a list of documents from a custom content source
@@ -33,10 +33,18 @@ class WorkplaceSearch(BaseClient):
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.BadRequest:
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.NotFound:
+        :raises elastic_enterprise_search.PayloadTooLarge:
         """
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path(
                 "api",
@@ -50,10 +58,11 @@ class WorkplaceSearch(BaseClient):
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def index_documents(
-        self, content_source_key, body, params=None, headers=None,
+        self, content_source_key, body, params=None, headers=None, http_auth=None,
     ):
         """
         Indexes one or more new documents into a custom content source, or updates one
@@ -62,10 +71,18 @@ class WorkplaceSearch(BaseClient):
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.BadRequest:
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.NotFound:
+        :raises elastic_enterprise_search.PayloadTooLarge:
         """
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path(
                 "api",
@@ -79,15 +96,17 @@ class WorkplaceSearch(BaseClient):
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
-    def list_all_external_identities(
+    def list_external_identities(
         self,
         content_source_key,
         current_page=None,
         page_size=None,
         params=None,
         headers=None,
+        http_auth=None,
     ):
         """
         Retrieves all external identities
@@ -96,23 +115,30 @@ class WorkplaceSearch(BaseClient):
             upon creation of a Custom API Source
         :arg current_page: Which page of results to request
         :arg page_size: The number of results to return in a page
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.NotFound:
         """
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path(
                 "api", "ws", "v1", "sources", content_source_key, "external_identities",
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def create_external_identity(
-        self, content_source_key, body, params=None, headers=None,
+        self, content_source_key, body, params=None, headers=None, http_auth=None,
     ):
         """
         Adds a new external identity
@@ -120,10 +146,17 @@ class WorkplaceSearch(BaseClient):
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.BadRequest:
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.NotFound:
         """
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path(
                 "api", "ws", "v1", "sources", content_source_key, "external_identities",
@@ -131,10 +164,11 @@ class WorkplaceSearch(BaseClient):
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def delete_external_identity(
-        self, content_source_key, user, params=None, headers=None,
+        self, content_source_key, user, params=None, headers=None, http_auth=None,
     ):
         """
         Deletes an external identity
@@ -142,6 +176,12 @@ class WorkplaceSearch(BaseClient):
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg user: The username in context
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.NotFound:
         """
         for param in (
             content_source_key,
@@ -150,7 +190,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "DELETE",
             make_path(
                 "api",
@@ -163,10 +203,11 @@ class WorkplaceSearch(BaseClient):
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_external_identity(
-        self, content_source_key, user, params=None, headers=None,
+        self, content_source_key, user, params=None, headers=None, http_auth=None,
     ):
         """
         Retrieves an external identity
@@ -174,6 +215,12 @@ class WorkplaceSearch(BaseClient):
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg user: The username in context
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.NotFound:
         """
         for param in (
             content_source_key,
@@ -182,7 +229,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path(
                 "api",
@@ -195,10 +242,11 @@ class WorkplaceSearch(BaseClient):
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def put_external_identity(
-        self, content_source_key, user, body, params=None, headers=None,
+        self, content_source_key, user, body, params=None, headers=None, http_auth=None,
     ):
         """
         Updates an external identity
@@ -207,6 +255,13 @@ class WorkplaceSearch(BaseClient):
             upon creation of a Custom API Source
         :arg user: The username in context
         :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.BadRequest:
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.NotFound:
         """
         for param in (
             content_source_key,
@@ -215,7 +270,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "PUT",
             make_path(
                 "api",
@@ -229,15 +284,17 @@ class WorkplaceSearch(BaseClient):
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
-    def list_all_permissions(
+    def list_permissions(
         self,
         content_source_key,
         current_page=None,
         page_size=None,
         params=None,
         headers=None,
+        http_auth=None,
     ):
         """
         Lists all permissions for all users
@@ -246,21 +303,30 @@ class WorkplaceSearch(BaseClient):
             upon creation of a Custom API Source
         :arg current_page: Which page of results to request
         :arg page_size: The number of results to return in a page
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.BadRequest:
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.PaymentRequired:
+        :raises elastic_enterprise_search.NotFound:
         """
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path("api", "ws", "v1", "sources", content_source_key, "permissions"),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def remove_user_permissions(
-        self, content_source_key, user, body, params=None, headers=None,
+        self, content_source_key, user, body, params=None, headers=None, http_auth=None,
     ):
         """
         Removes one or more permissions from an existing set of permissions
@@ -269,6 +335,14 @@ class WorkplaceSearch(BaseClient):
             upon creation of a Custom API Source
         :arg user: The username in context
         :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.BadRequest:
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.PaymentRequired:
+        :raises elastic_enterprise_search.NotFound:
         """
         for param in (
             content_source_key,
@@ -277,7 +351,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path(
                 "api",
@@ -292,25 +366,34 @@ class WorkplaceSearch(BaseClient):
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def search(
-        self, body, params=None, headers=None,
+        self, body, params=None, headers=None, http_auth=None,
     ):
         """
         search across available sources with various query tuning options
+
         :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.BadRequest:
+        :raises elastic_enterprise_search.Unauthorized:
         """
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path("api", "ws", "v1", "search"),
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def add_user_permissions(
-        self, content_source_key, user, body, params=None, headers=None,
+        self, content_source_key, user, body, params=None, headers=None, http_auth=None,
     ):
         """
         Adds one or more new permissions atop existing permissions
@@ -319,6 +402,14 @@ class WorkplaceSearch(BaseClient):
             upon creation of a Custom API Source
         :arg user: The username in context
         :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.BadRequest:
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.PaymentRequired:
+        :raises elastic_enterprise_search.NotFound:
         """
         for param in (
             content_source_key,
@@ -327,7 +418,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "POST",
             make_path(
                 "api",
@@ -342,10 +433,11 @@ class WorkplaceSearch(BaseClient):
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def get_user_permissions(
-        self, content_source_key, user, params=None, headers=None,
+        self, content_source_key, user, params=None, headers=None, http_auth=None,
     ):
         """
         Lists all permissions for one user
@@ -353,6 +445,13 @@ class WorkplaceSearch(BaseClient):
         :arg content_source_key: Unique key for a Custom API source, provided
             upon creation of a Custom API Source
         :arg user: The username in context
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.PaymentRequired:
+        :raises elastic_enterprise_search.NotFound:
         """
         for param in (
             content_source_key,
@@ -361,17 +460,18 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "GET",
             make_path(
                 "api", "ws", "v1", "sources", content_source_key, "permissions", user,
             ),
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )
 
     def put_user_permissions(
-        self, content_source_key, user, body, params=None, headers=None,
+        self, content_source_key, user, body, params=None, headers=None, http_auth=None,
     ):
         """
         Creates a new set of permissions or over-writes all existing permissions
@@ -380,6 +480,14 @@ class WorkplaceSearch(BaseClient):
             upon creation of a Custom API Source
         :arg user: The username in context
         :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :raises elastic_enterprise_search.BadRequest:
+        :raises elastic_enterprise_search.Unauthorized:
+        :raises elastic_enterprise_search.PaymentRequired:
+        :raises elastic_enterprise_search.NotFound:
         """
         for param in (
             content_source_key,
@@ -388,7 +496,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self.transport.request(
+        return self._perform_request(
             "PUT",
             make_path(
                 "api", "ws", "v1", "sources", content_source_key, "permissions", user,
@@ -396,4 +504,5 @@ class WorkplaceSearch(BaseClient):
             body=body,
             params=params,
             headers=headers,
+            http_auth=http_auth,
         )

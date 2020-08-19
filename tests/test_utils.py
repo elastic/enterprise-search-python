@@ -17,7 +17,7 @@
 
 import datetime
 from dateutil import tz
-from elastic_enterprise_search.client import utils
+from elastic_enterprise_search import utils
 
 
 def test_make_params():
@@ -68,9 +68,9 @@ def test_make_path():
                 microsecond=7,
                 tzinfo=tz.gettz("HST"),
             ),
-            True,
+            False,
         )
-        == "/a/1/z/d,2/2020-01-01/2020-02-03T14:05:06Z/true"
+        == "/a/1/z/d,2/2020-01-01/2020-02-03T14:05:06Z/false"
     )
 
 

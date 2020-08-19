@@ -30,6 +30,17 @@ env = jinja2.Environment(loader=loader,)
 t = env.get_template("component")
 
 
+http_status_errors = {
+    400: "elastic_enterprise_search.BadRequest",
+    401: "elastic_enterprise_search.Unauthorized",
+    402: "elastic_enterprise_search.PaymentRequired",
+    403: "elastic_enterprise_search.Forbidden",
+    404: "elastic_enterprise_search.NotFound",
+    409: "elastic_enterprise_search.Conflict",
+    413: "elastic_enterprise_search.PayloadTooLarge",
+}
+
+
 def openapi_type_to_typing(openapi_type, required=True) -> str:
     t = None
     if openapi_type == "string":
@@ -179,6 +190,17 @@ class API:
         return self.spec.get("externalDocs", {}).get("url", None)
 
     @property
+    def raises(self) -> List[str]:
+        errors = {}
+        for http_status in self.spec.get("responses", {}).keys():
+            if http_status == "default":
+                continue
+            http_status = int(http_status)
+            if http_status >= 300:  # Don't raise on 2XX
+                errors[http_status] = http_status_errors[http_status]
+        return [v for k, v in sorted(errors.items())]
+
+    @property
     def has_body(self) -> bool:
         return "requestBody" in self.spec
 
@@ -284,7 +306,7 @@ def main():
 
     for spec in specs:
         spec_filepath = (
-            base_dir / f"elastic_enterprise_search/client/{spec.namespace}/__init__.py"
+            base_dir / f"src/elastic_enterprise_search/client/{spec.namespace}.py"
         )
         with spec_filepath.open(mode="w") as f:
             f.truncate()
