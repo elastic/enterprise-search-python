@@ -23,8 +23,15 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(base_dir, "elastic_enterprise_search/_version.py")) as f:
     version = re.search(r"__version__\s+=\s+\"([^\"]+)\"", f.read()).group(1)
 
+# Remove all raw HTML from README for long description
 with open(os.path.join(base_dir, "README.md")) as f:
-    long_description = f.read()
+    lines = f.read().split("\n")
+    last_html_index = 0
+    for i, line in enumerate(lines):
+        if line == "</p>":
+            last_html_index = i + 1
+    long_description = "\n".join(lines[last_html_index:])
+
 
 setup(
     name="elastic-enterprise-search",
@@ -49,7 +56,7 @@ setup(
         "six>=1.12",
         "certifi",
     ],
-    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*",
+    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*",
     extras_require={
         "requests": ["requests>=2.4.0, <3.0.0"],
         "develop": ["pytest", "pytest-cov", "pytest-mock", "mock", "requests"],
@@ -63,7 +70,6 @@ setup(
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
