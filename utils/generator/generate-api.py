@@ -187,7 +187,12 @@ class API:
 
     @property
     def docs_url(self) -> Optional[str]:
-        return self.spec.get("externalDocs", {}).get("url", None)
+        url = self.spec.get("externalDocs", {}).get("url", None)
+        if url is None:
+            match = re.match(r"\[[^]]+?\]\(([^)]+)\)", self.spec.get("description", ""))
+            if match:
+                url = match.group(1)
+        return url
 
     @property
     def raises(self) -> List[str]:

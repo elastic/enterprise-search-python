@@ -574,7 +574,7 @@ Parameters:
 <details>
   <summary>Expand for all APIs</summary>
 
-##### `WorkplaceSearch.delete_documents()`
+##### [`WorkplaceSearch.delete_documents()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#destroy)
 
 Deletes a list of documents from a custom content source
 
@@ -587,7 +587,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.index_documents()`
+##### [`WorkplaceSearch.index_documents()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#index-and-update)
 
 Indexes one or more new documents into a custom content source, or updates one
 or more existing documents
@@ -601,7 +601,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.list_external_identities()`
+##### [`WorkplaceSearch.list_external_identities()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#list-external-identities)
 
 Retrieves all external identities
 
@@ -615,7 +615,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.create_external_identity()`
+##### [`WorkplaceSearch.create_external_identity()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#add-external-identity)
 
 Adds a new external identity
 
@@ -628,7 +628,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.delete_external_identity()`
+##### [`WorkplaceSearch.delete_external_identity()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#remove-external-identity)
 
 Deletes an external identity
 
@@ -641,7 +641,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.get_external_identity()`
+##### [`WorkplaceSearch.get_external_identity()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#show-external-identity)
 
 Retrieves an external identity
 
@@ -654,7 +654,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.put_external_identity()`
+##### [`WorkplaceSearch.put_external_identity()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#update-external-identity)
 
 Updates an external identity
 
@@ -668,7 +668,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.list_permissions()`
+##### [`WorkplaceSearch.list_permissions()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#list)
 
 Lists all permissions for all users
 
@@ -682,7 +682,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.remove_user_permissions()`
+##### [`WorkplaceSearch.remove_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#remove-one)
 
 Removes one or more permissions from an existing set of permissions
 
@@ -696,7 +696,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.search()`
+##### [`WorkplaceSearch.search()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-search-api.html)
 
 search across available sources with various query tuning options
 
@@ -707,7 +707,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.add_user_permissions()`
+##### [`WorkplaceSearch.add_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#add-one)
 
 Adds one or more new permissions atop existing permissions
 
@@ -721,7 +721,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.get_user_permissions()`
+##### [`WorkplaceSearch.get_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#list-one)
 
 Lists all permissions for one user
 
@@ -734,7 +734,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `WorkplaceSearch.put_user_permissions()`
+##### [`WorkplaceSearch.put_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#add-all)
 
 Creates a new set of permissions or over-writes all existing permissions
 
@@ -755,7 +755,7 @@ Parameters:
 <details>
   <summary>Expand for all APIs</summary>
 
-##### `EnterpriseSearch.get_health()`
+##### [`EnterpriseSearch.get_health()`](https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#health-api-example)
 
 Get information on the health of a deployment and basic statistics around
 resource usage
@@ -766,7 +766,7 @@ resource usage
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `EnterpriseSearch.get_read_only()`
+##### [`EnterpriseSearch.get_read_only()`](https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#getting-read-only-state)
 
 Get the read-only flag's state
 
@@ -776,7 +776,7 @@ Get the read-only flag's state
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `EnterpriseSearch.put_read_only()`
+##### [`EnterpriseSearch.put_read_only()`](https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#setting-read-only-state)
 
 Update the read-only flag's state
 
@@ -787,7 +787,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `EnterpriseSearch.get_stats()`
+##### [`EnterpriseSearch.get_stats()`](https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#stats-api-example)
 
 Get information about the resource usage of the application, the state of
 different internal queues, etc.
@@ -799,7 +799,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### `EnterpriseSearch.get_version()`
+##### [`EnterpriseSearch.get_version()`](https://www.elastic.co/guide/en/enterprise-search/current/management-apis.html)
 
 Get version information for this server
 

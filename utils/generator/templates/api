@@ -14,8 +14,8 @@
         """{% if api.description %}
         {{ api.description|replace("\n", " ")|wordwrap(wrapstring="\n        ") }}{% endif %}{% if api.docs_url %}
 
-        `<{{ api.docs_url }}>`_{% endif %}{% if api.all_params|list|length or api.has_body %}
-{% for param in api.all_params %}
+        `<{{ api.docs_url }}>`_
+{% endif %}{% if api.all_params|list|length or api.has_body %}{% for param in api.all_params %}
         {% filter wordwrap(72, wrapstring="\n            ") %}:arg {{ param.param_name }}: {{ param.description }}{% endfilter %}{% endfor %}{% if api.has_body %}
         :arg body: {{ api.body_description }}{% endif %}{% endif %}
         :arg params: Additional query params to send with the request
