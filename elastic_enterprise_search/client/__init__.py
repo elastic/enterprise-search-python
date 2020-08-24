@@ -77,7 +77,10 @@ class WorkplaceSearch(_WorkplaceSearch):
 
 
 class EnterpriseSearch(_EnterpriseSearch):
-    """Client for Enterprise Search"""
+    """Client for Enterprise Search
+
+    `<https://www.elastic.co/guide/en/enterprise-search/current/management-apis.html>`_
+    """
 
     def __init__(self, hosts=None, transport_class=None, **kwargs):
         """
@@ -88,7 +91,7 @@ class EnterpriseSearch(_EnterpriseSearch):
             translated to a dictionary automatically.  If no value is given the
             :class:`~elastic_enterprise_search.Connection` class defaults will be used.
 
-        :arg transport_class: :class:`~elastic_enterprise_search.Transport` subclass to use.
+        :arg transport_class: :class:`~elastic_enterprise_search.Transport` sub-class to use.
 
         :arg kwargs: Any additional arguments will be passed on to the
             :class:`~elastic_enterprise_search.Transport` class and, subsequently, to the

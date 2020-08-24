@@ -40,7 +40,7 @@ Here's how you can get started:
 
 # Connecting to an instance on Elastic Cloud w/ username and password
 >>> ent = EnterpriseSearch(
-    host="https://<...>.ent-search.us-central1.gcp.cloud.es.io",
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
     http_auth=("elastic", "<password>"),
 )
 >>> ent.get_version()
@@ -52,7 +52,7 @@ Here's how you can get started:
 
 # Connecting to an instance on Elastic Cloud w/ an App Search private key
 >>> app_search = AppSearch(
-    host="https://<...>.ent-search.us-central1.gcp.cloud.es.io",
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
     http_auth="private-<private key>",
 )
 >>> app_search.index_documents(
@@ -84,6 +84,8 @@ for basic authentication will set the proper
   - [Custom Source API Key](https://www.elastic.co/guide/en/workplace-search/7.8/workplace-search-custom-sources-api.html#authentication)
   - [OAuth for Search](https://www.elastic.co/guide/en/workplace-search/current/building-custom-search-workplace-search.html#configuring-search-oauth)
 
+#### Authenticating with Enterprise Search
+
 ```python
 from elastic_enterprise_search import EnterpriseSearch
 
@@ -96,24 +98,45 @@ ent.http_auth = ("enterprise_search", "<password>")
 # Custom API Content Source access token
 ent.workplace_search.http_auth = "<content source access token>"
 
-# Authenticating with App Search
-ent.app_search.http_auth = "<any App Search auth key>"
-
-# Creating a Signed Search Key with App Search
-signed_key = ent.app_search.create_signed_search_key(
-    api_key="<private api key>",
-    api_key_name="<api key name>",
-    search_fields={
-        "body": {}
-    }   
-)
-ent.app_search.http_auth = signed_key
-
 # You can also use an authentication method for a single
 # request. This is useful for per-user authentication like OAuth:
 ent.workplace_search.search(
     body={"query": "That one document"},
     http_auth="oauth-access-token"
+)
+```
+
+#### App Search Signed Search Keys
+
+```python
+from elastic_enterprise_search import AppSearch
+
+# Create an AppSearch client authenticated with a search key.
+server_side = AppSearch(
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
+    http_auth="search-..."
+)
+
+# Creating a Signed Search Key on the server side...
+signed_search_key = server_side.create_signed_search_key(
+    api_key=server_side.http_auth,
+    api_key_name="<api key name>",
+    search_fields={
+        "body": {}
+    }   
+)
+
+# ...then a different client can then
+# use the Signed Search key for searches:
+client_side = AppSearch(
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
+    http_auth=signed_search_key
+)
+resp = client_side.search(
+    engine_name="",
+    body={
+        ...
+    }
 )
 ```
 
