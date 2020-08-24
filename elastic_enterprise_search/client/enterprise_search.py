@@ -30,6 +30,9 @@ class EnterpriseSearch(BaseClient):
         """
         Get information on the health of a deployment and basic statistics around
         resource usage
+
+        `<https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#health-api-example>`_
+
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -49,6 +52,9 @@ class EnterpriseSearch(BaseClient):
     ):
         """
         Get the read-only flag's state
+
+        `<https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#getting-read-only-state>`_
+
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -68,6 +74,8 @@ class EnterpriseSearch(BaseClient):
     ):
         """
         Update the read-only flag's state
+
+        `<https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#setting-read-only-state>`_
 
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
@@ -92,6 +100,8 @@ class EnterpriseSearch(BaseClient):
         Get information about the resource usage of the application, the state of
         different internal queues, etc.
 
+        `<https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#stats-api-example>`_
+
         :arg include: Comma-separated list of stats to return
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -113,6 +123,9 @@ class EnterpriseSearch(BaseClient):
     ):
         """
         Get version information for this server
+
+        `<https://www.elastic.co/guide/en/enterprise-search/current/management-apis.html>`_
+
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
