@@ -96,7 +96,7 @@ def test_body_bytes_get_passed_untouched():
 def test_body_surrogates_replaced_encoded_into_bytes():
     t = Transport([{}], connection_class=DummyConnection)
 
-    t.perform_request("GET", "/", body="你好\uda6a")
+    t.perform_request("GET", "/", body=u"你好\uda6a")
     assert 1 == len(t.get_connection().calls)
     assert (
         "GET",

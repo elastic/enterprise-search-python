@@ -68,6 +68,6 @@ def tests_impl(session):
     session.run("coverage", "report", "-m")
 
 
-@nox.session(python=["2.7", "3.5", "3.6", "3.7", "3.8", "3.9"])
+@nox.session(python=["2.7", "3.6", "3.7", "3.8", "3.9"])
 def test(session):
     tests_impl(session)

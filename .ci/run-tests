@@ -8,6 +8,7 @@ source $script_path/functions/imports.sh
 
 # Enterprise Search requires a licensed Elasticsearch instance
 export TEST_SUITE=xpack
+export RUNSCRIPTS=enterprise-search
 
 set -euo pipefail
 
