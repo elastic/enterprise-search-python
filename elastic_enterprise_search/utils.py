@@ -73,7 +73,7 @@ def escape(value):
     if not isinstance(value, string_types):
         value = str(value)
 
-    return ensure_binary(value)
+    return ensure_binary(value, encoding="utf-8", errors="surrogatepass")
 
 
 def make_path(*parts):
