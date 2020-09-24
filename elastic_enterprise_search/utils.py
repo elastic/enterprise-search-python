@@ -15,11 +15,13 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import re
 import sys
 from datetime import date, datetime
 from six import ensure_binary
 from six.moves.urllib_parse import urlencode, urlparse, unquote, quote
-from dateutil import tz
+from dateutil import tz, parser
+from elastic_transport.utils import DEFAULT as DEFAULT
 
 __all__ = [
     "urlparse",
@@ -31,6 +33,7 @@ __all__ = [
     "make_params",
     "PY2",
     "SKIP_IN_PATH",
+    "DEFAULT",
 ]
 
 SKIP_IN_PATH = (None, "", b"", [], ())
@@ -40,11 +43,6 @@ if PY2:
     string_types = (basestring,)  # noqa: F821
 else:
     string_types = (str, bytes)
-
-try:
-    import typing
-except ImportError:
-    typing = None
 
 
 def escape(value):
@@ -100,7 +98,7 @@ def make_params(params, extra_params):
     """
     params = params or {}
     wire_params = {
-        k: quote(escape(v), b",*[]:-")
+        k: quote(escape(v), b",*[]:/-")
         for k, v in (extra_params or {}).items()
         if v is not None
     }
@@ -109,16 +107,35 @@ def make_params(params, extra_params):
     for k, v in (params or {}).items():
         if v is None:
             continue
-        wire_params[k] = quote(escape(v), b",*[]:-")
+        wire_params[k] = quote(escape(v), b",*[]:/-")
     return wire_params
 
 
 def format_datetime(value):
-    """Convert datetimes timezone info to
-    UTC and then format to RFC 3339
-    """
-    # If there's timezone information defined then convert to UTC.
-    # If it's a naive datetime assume local time.
+    """Format a datetime object to RFC 3339"""
+    # When given a timezone unaware datetime, use local timezone.
     if value.tzinfo is None:
         value = value.astimezone(tz.tzlocal())
-    return value.astimezone(tz.UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    utcoffset = value.utcoffset()
+    offset_secs = utcoffset.total_seconds()
+    # Use 'Z' for UTC, otherwise use '[+-]XX:XX' for tz offset
+    if offset_secs == 0:
+        timezone = "Z"
+    else:
+        offset_sign = "+" if offset_secs >= 0 else "-"
+        offset_secs = int(abs(offset_secs))
+        hours = offset_secs // 3600
+        minutes = (offset_secs % 3600) // 60
+        timezone = "{}{:02}:{:02}".format(offset_sign, hours, minutes)
+    return value.strftime("%Y-%m-%dT%H:%M:%S") + timezone
+
+
+def parse_datetime(value):
+    """Convert a string value RFC 3339 into a datetime with tzinfo"""
+    if not re.match(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}[T ]Z|[+\-][0-9]{2}:[0-9]{2}$", value):
+        raise ValueError(
+            "Datetime must match format '(YYYY)-(MM)-(DD)T(HH):(MM):(SS)(TZ)' was '%s'"
+            % value
+        )
+    return parser.isoparse(value)
