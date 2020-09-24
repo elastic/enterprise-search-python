@@ -17,6 +17,7 @@
 - [Installation](https://github.com/elastic/enterprise-search-python#installation)
 - [Getting Started](https://github.com/elastic/enterprise-search-python#getting-started)
   - [Authentication](https://github.com/elastic/enterprise-search-python#authentication)
+  - [App Search Signed Search Keys](https://github.com/elastic/enterprise-search-python#app-search-signed-search-keys)
 - [API Reference](https://github.com/elastic/enterprise-search-python#api-reference)
 - [License](https://github.com/elastic/enterprise-search-python#license)
 
@@ -133,7 +134,7 @@ client_side = AppSearch(
     http_auth=signed_search_key
 )
 resp = client_side.search(
-    engine_name="",
+    engine_name="example-engine",
     body={
         ...
     }
@@ -836,4 +837,18 @@ Get version information for this server
 
 ## License
 
-Apache-2.0
+```
+Copyright 2020 Elasticsearch B.V
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```

@@ -36,6 +36,8 @@ def test_sub_clients():
     assert client.app_search.http_auth == "token-app-search"
     assert client.workplace_search.http_auth == "token-workplace-search"
 
-    assert client._auth_header == "Basic dXNlcjpwYXNz"
-    assert client.app_search._auth_header == "Bearer token-app-search"
-    assert client.workplace_search._auth_header == "Bearer token-workplace-search"
+    assert client._authorization_header == "Basic dXNlcjpwYXNz"
+    assert client.app_search._authorization_header == "Bearer token-app-search"
+    assert (
+        client.workplace_search._authorization_header == "Bearer token-workplace-search"
+    )

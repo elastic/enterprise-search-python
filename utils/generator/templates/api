@@ -9,7 +9,9 @@
         {% endfor %}
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """{% if api.description %}
         {{ api.description|replace("\n", " ")|wordwrap(wrapstring="\n        ") }}{% endif %}{% if api.docs_url %}
@@ -21,7 +23,9 @@
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request{% if api.raises %}{% for error in api.raises %}
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error{% if api.raises %}{% for error in api.raises %}
         :raises {{ error }}:{%endfor %}{% endif %}
         """{% if api.required_params|list|length %}{% if api.required_params|list|length == 1 %}
         if {{ api.required_params[0].param_name }} in SKIP_IN_PATH:
@@ -35,7 +39,7 @@
         params = make_params(params, {% raw %}{{% endraw %}{% for param in api.query_params %}
             "{{ param.wire_name}}": {{param.param_name }},
         {% endfor %}{% raw %}}{% endraw %}){% endif %}
-        return self._perform_request(
+        return self.perform_request(
             "{{ api.method }}",
             make_path({% for part in api.path_parts %}
                 {% if part.startswith("{") %}
@@ -50,4 +54,6 @@
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )

@@ -17,7 +17,11 @@
 
 import base64
 from six import ensure_str, ensure_binary, ensure_text
-from ..transport import Transport
+from .._version import __version__
+from ..serializer import JSONSerializer
+from ..utils import DEFAULT
+from elastic_transport import Transport
+from elastic_transport.utils import normalize_headers, create_user_agent
 
 
 __all__ = ["BaseClient"]
@@ -33,21 +37,30 @@ class BaseClient(object):
         **kwargs
     ):
         if _transport is not None:
-            if transport_class is not None or any(
-                v is not None for v in kwargs.values()
-            ):
+            if transport_class is not None or kwargs:
                 raise ValueError(
                     "Can't pass both a Transport and parameters to a client"
                 )
             self.transport = _transport
         else:
+            # Default port is 3002 without TLS
+            kwargs["default_hosts"] = [
+                {"use_ssl": False, "host": "localhost", "port": 3002}
+            ]
+            # Override the default JSON serializer with one
+            # that handles datetimes wrt. RFC 3339
+            kwargs.setdefault("serializers", {"application/json": JSONSerializer()})
             self.transport = (transport_class or Transport)(hosts, **kwargs)
+
+        self._user_agent_header = create_user_agent(
+            name="enterprise-search-python", version=__version__
+        )
 
         # Clients hold on to their own 'Authorization' HTTP header
         # because Enterprise, Workplace, and App Search all have
         # their own authentication schemes and can be authenticated
         # separately while sharing a Transport layer.
-        self._auth_header = None
+        self._authorization_header = None
         if http_auth is not None:
             self.http_auth = http_auth
 
@@ -56,7 +69,7 @@ class BaseClient(object):
 
     @property
     def http_auth(self):
-        auth_header = self._auth_header
+        auth_header = self._authorization_header
         if auth_header:
             # We split basic auth into a tuple if we can
             if auth_header.startswith("Basic "):
@@ -71,10 +84,15 @@ class BaseClient(object):
 
     @http_auth.setter
     def http_auth(self, http_auth):
-        self._auth_header = self._parse_http_auth(http_auth)
+        self._authorization_header = self._parse_http_auth(http_auth)
 
     @staticmethod
     def _parse_http_auth(http_auth):
+        if http_auth is None:
+            return None
+        elif http_auth is DEFAULT:  # pragma: nocover
+            raise ValueError("Cannot set http_auth to 'DEFAULT' sentinel")
+
         # Basic auth with (username, password)
         if isinstance(http_auth, (tuple, list)) and len(http_auth) == 2:
             basic_auth = ensure_str(
@@ -94,24 +112,38 @@ class BaseClient(object):
         else:
             return "Bearer %s" % http_auth
 
-    def _perform_request(
-        self, method, path, headers=None, params=None, body=None, http_auth=None
+    def perform_request(
+        self,
+        method,
+        path,
+        headers=None,
+        params=None,
+        body=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """Adds client authentication to request headers
         before handing it to the Transport layer.
         """
-        request_headers = (headers or {}).copy()
-        if self._auth_header or http_auth:
-            if http_auth:
+        headers = normalize_headers(headers)
+        headers.setdefault("user-agent", self._user_agent_header)
+        if self._authorization_header is not None or http_auth is not DEFAULT:
+            if http_auth is not DEFAULT:
                 auth_header = self._parse_http_auth(http_auth)
             else:
-                auth_header = self._auth_header
-            for key, val in request_headers.items():
-                request_headers[key.lower()] = val
-            request_headers.setdefault("authorization", auth_header)
+                auth_header = self._authorization_header
+            if auth_header is not None:
+                headers.setdefault("authorization", auth_header)
 
         return self.transport.perform_request(
-            method, path, headers=request_headers, params=params, body=body
+            method,
+            path,
+            headers=headers,
+            params=params,
+            body=body,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def __enter__(self):

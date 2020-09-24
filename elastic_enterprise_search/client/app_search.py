@@ -19,6 +19,7 @@ from .base import BaseClient
 from ..utils import (  # noqa: F401
     make_path,
     make_params,
+    DEFAULT,
     SKIP_IN_PATH,
 )
 
@@ -37,7 +38,9 @@ class AppSearch(BaseClient):
         sort_direction=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         The API Log displays API request and response data at the Engine level
@@ -61,6 +64,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -83,12 +88,14 @@ class AppSearch(BaseClient):
                 "sort_direction": sort_direction,
             },
         )
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "logs", "api"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_count_analytics(
@@ -98,7 +105,9 @@ class AppSearch(BaseClient):
         interval=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Returns the number of clicks and total number of queries over a period
@@ -113,18 +122,28 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(params, {"filters": filters, "interval": interval})
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path(
-                "api", "as", "v1", "engines", engine_name, "analytics", "counts",
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "analytics",
+                "counts",
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def create_curation(
@@ -135,7 +154,9 @@ class AppSearch(BaseClient):
         hidden_doc_ids=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Create a new curation
@@ -150,6 +171,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -166,16 +189,25 @@ class AppSearch(BaseClient):
                 "hidden": hidden_doc_ids,
             },
         )
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "curations"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def delete_curation(
-        self, engine_name, curation_id, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        curation_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Delete a curation by ID
@@ -188,6 +220,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -196,18 +230,33 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "DELETE",
             make_path(
-                "api", "as", "v1", "engines", engine_name, "curations", curation_id,
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "curations",
+                curation_id,
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_curation(
-        self, engine_name, curation_id, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        curation_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrieve a curation by ID
@@ -220,6 +269,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -228,14 +279,22 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path(
-                "api", "as", "v1", "engines", engine_name, "curations", curation_id,
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "curations",
+                curation_id,
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def put_curation(
@@ -247,7 +306,9 @@ class AppSearch(BaseClient):
         hidden_doc_ids=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Update an existing curation
@@ -263,6 +324,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -280,14 +343,22 @@ class AppSearch(BaseClient):
                 "hidden": hidden_doc_ids,
             },
         )
-        return self._perform_request(
+        return self.perform_request(
             "PUT",
             make_path(
-                "api", "as", "v1", "engines", engine_name, "curations", curation_id,
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "curations",
+                curation_id,
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def list_curations(
@@ -297,7 +368,9 @@ class AppSearch(BaseClient):
         page_size=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrieve available curations for the engine
@@ -311,22 +384,33 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "curations"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def delete_documents(
-        self, engine_name, body, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Delete documents by ID
@@ -339,20 +423,31 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "DELETE",
             make_path("api", "as", "v1", "engines", engine_name, "documents"),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_documents(
-        self, engine_name, body, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrieves one or more documents by ID
@@ -365,20 +460,31 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "documents"),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def index_documents(
-        self, engine_name, body, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Create or update documents
@@ -391,16 +497,20 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "documents"),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def list_documents(
@@ -410,7 +520,9 @@ class AppSearch(BaseClient):
         page_size=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         List all available documents with optional pagination support
@@ -424,22 +536,33 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "documents", "list"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def put_documents(
-        self, engine_name, body, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Partial update of documents
@@ -452,16 +575,20 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "PATCH",
             make_path("api", "as", "v1", "engines", engine_name, "documents"),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def create_engine(
@@ -472,7 +599,9 @@ class AppSearch(BaseClient):
         source_engines=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Creates a new engine
@@ -487,6 +616,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
@@ -499,16 +630,24 @@ class AppSearch(BaseClient):
                 "source_engines": source_engines,
             },
         )
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "as", "v1", "engines"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def delete_engine(
-        self, engine_name, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Delete an engine by name
@@ -520,19 +659,29 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "DELETE",
             make_path("api", "as", "v1", "engines", engine_name),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_engine(
-        self, engine_name, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrieves an engine by name
@@ -544,15 +693,19 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def list_engines(
@@ -561,7 +714,9 @@ class AppSearch(BaseClient):
         page_size=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrieves all engines with optional pagination support
@@ -574,16 +729,20 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path("api", "as", "v1", "engines"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def log_clickthrough(
@@ -595,7 +754,9 @@ class AppSearch(BaseClient):
         tags=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Send data about clicked results
@@ -613,6 +774,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -631,16 +794,25 @@ class AppSearch(BaseClient):
                 "tags": tags,
             },
         )
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "click"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def add_meta_engine_source(
-        self, engine_name, body, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Add a source engine to an existing meta engine
@@ -653,20 +825,31 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "source_engines"),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def delete_meta_engine_source(
-        self, engine_name, body, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Delete a source engine from a meta engine
@@ -679,20 +862,31 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "DELETE",
             make_path("api", "as", "v1", "engines", engine_name, "source_engines"),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def multi_search(
-        self, engine_name, queries, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        queries,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Run several search in the same request
@@ -705,6 +899,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -714,12 +910,14 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(params, {"queries": queries})
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "multi_search"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def query_suggestion(
@@ -730,7 +928,9 @@ class AppSearch(BaseClient):
         size=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Provide relevant query suggestions for incomplete queries
@@ -747,6 +947,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -758,16 +960,24 @@ class AppSearch(BaseClient):
         params = make_params(
             params, {"query": query, "types[documents][fields]": fields, "size": size}
         )
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "query_suggestion"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_schema(
-        self, engine_name, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrieve current schema for then engine
@@ -779,19 +989,30 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "schema"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def put_schema(
-        self, engine_name, body, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Update schema for the current engine
@@ -804,20 +1025,31 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "schema"),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def search(
-        self, engine_name, body, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Allows you to search over, facet and filter your data
@@ -830,20 +1062,30 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "search"),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_search_settings(
-        self, engine_name, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrive current search settings for the engine
@@ -855,19 +1097,30 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "search_settings"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def put_search_settings(
-        self, engine_name, body, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Update search settings for the engine
@@ -880,20 +1133,30 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "PUT",
             make_path("api", "as", "v1", "engines", engine_name, "search_settings"),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def reset_search_settings(
-        self, engine_name, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Reset search settings for the engine
@@ -905,21 +1168,38 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path(
-                "api", "as", "v1", "engines", engine_name, "search_settings", "reset",
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "search_settings",
+                "reset",
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def create_synonym_set(
-        self, engine_name, synonyms, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        synonyms,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Create a new synonym set
@@ -932,6 +1212,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -941,16 +1223,25 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(params, {"synonyms": synonyms})
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "as", "v1", "engines", engine_name, "synonyms"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def delete_synonym_set(
-        self, engine_name, synonym_set_id, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        synonym_set_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Delete a synonym set by ID
@@ -963,6 +1254,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -971,18 +1264,33 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "DELETE",
             make_path(
-                "api", "as", "v1", "engines", engine_name, "synonyms", synonym_set_id,
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "synonyms",
+                synonym_set_id,
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_synonym_set(
-        self, engine_name, synonym_set_id, params=None, headers=None, http_auth=None,
+        self,
+        engine_name,
+        synonym_set_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrieve a synonym set by ID
@@ -995,6 +1303,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -1003,14 +1313,22 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path(
-                "api", "as", "v1", "engines", engine_name, "synonyms", synonym_set_id,
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "synonyms",
+                synonym_set_id,
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def put_synonym_set(
@@ -1020,7 +1338,9 @@ class AppSearch(BaseClient):
         synonyms,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Update a synonym set by ID
@@ -1034,6 +1354,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         for param in (
             engine_name,
@@ -1044,14 +1366,22 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(params, {"synonyms": synonyms})
-        return self._perform_request(
+        return self.perform_request(
             "PUT",
             make_path(
-                "api", "as", "v1", "engines", engine_name, "synonyms", synonym_set_id,
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "synonyms",
+                synonym_set_id,
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def list_synonym_sets(
@@ -1061,7 +1391,9 @@ class AppSearch(BaseClient):
         page_size=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrieve available synonym sets for the engine
@@ -1075,18 +1407,22 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path("api", "as", "v1", "engines", engine_name, "synonyms"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_top_clicks_analytics(
@@ -1098,7 +1434,9 @@ class AppSearch(BaseClient):
         filters=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Returns the number of clicks received by a document in descending order
@@ -1114,6 +1452,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
@@ -1126,14 +1466,22 @@ class AppSearch(BaseClient):
                 "filters": filters,
             },
         )
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path(
-                "api", "as", "v1", "engines", engine_name, "analytics", "clicks",
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "analytics",
+                "clicks",
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_top_queries_analytics(
@@ -1144,7 +1492,9 @@ class AppSearch(BaseClient):
         filters=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Returns queries analytics by usage count
@@ -1159,6 +1509,8 @@ class AppSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
@@ -1170,12 +1522,20 @@ class AppSearch(BaseClient):
                 "filters": filters,
             },
         )
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path(
-                "api", "as", "v1", "engines", engine_name, "analytics", "queries",
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "analytics",
+                "queries",
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )

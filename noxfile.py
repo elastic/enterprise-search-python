@@ -55,8 +55,10 @@ def lint(session):
 
 def tests_impl(session):
     junit_xml = join(
-        abspath(dirname(__file__)), "junit/enterprise-search-python-junit.xml",
+        abspath(dirname(__file__)),
+        "junit/enterprise-search-python-junit.xml",
     )
+    session.install("--pre", "elastic-transport")
     session.install(".[develop]")
     session.run(
         "pytest",

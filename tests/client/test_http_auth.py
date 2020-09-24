@@ -18,25 +18,40 @@
 
 import pytest
 from tests.conftest import DummyConnection
+from elastic_enterprise_search.utils import DEFAULT
 
 
 def test_http_auth_none(client_class):
     client = client_class(connection_class=DummyConnection)
     assert client.http_auth is None
-    client._perform_request("GET", "/")
+    client.perform_request("GET", "/")
 
     calls = client.transport.get_connection().calls
     assert calls == [
-        (("GET", "/", None, None), {"headers": {}, "ignore": (), "timeout": None})
+        (
+            ("GET", "/", None, None),
+            {
+                "headers": {"user-agent": client._user_agent_header},
+                "ignore_status": (),
+                "request_timeout": DEFAULT,
+            },
+        )
     ]
 
     client = client_class(http_auth=None, connection_class=DummyConnection)
     assert client.http_auth is None
-    client._perform_request("GET", "/")
+    client.perform_request("GET", "/")
 
     calls = client.transport.get_connection().calls
     assert calls == [
-        (("GET", "/", None, None), {"headers": {}, "ignore": (), "timeout": None})
+        (
+            ("GET", "/", None, None),
+            {
+                "headers": {"user-agent": client._user_agent_header},
+                "ignore_status": (),
+                "request_timeout": DEFAULT,
+            },
+        )
     ]
 
 
@@ -46,17 +61,17 @@ def test_http_auth_none(client_class):
 def test_http_auth_set_and_get(client_class, http_auth):
     client = client_class(http_auth=http_auth, connection_class=DummyConnection)
     assert client.http_auth == http_auth
-    client._perform_request("GET", "/")
+    client.perform_request("GET", "/")
 
     calls = client.transport.get_connection().calls
     assert len(calls) == 1
-    assert calls[0][1]["headers"]["authorization"] == client._auth_header
+    assert calls[0][1]["headers"]["authorization"] == client._authorization_header
 
 
 def test_http_auth_per_request_override(client_class):
     client = client_class(http_auth="bad-token", connection_class=DummyConnection)
     assert client.http_auth == "bad-token"
-    client._perform_request("GET", "/", http_auth=("user", "pass"))
+    client.perform_request("GET", "/", http_auth=("user", "pass"))
 
     calls = client.transport.get_connection().calls
     assert len(calls) == 1
