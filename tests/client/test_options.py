@@ -14,3 +14,25 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
+
+import pytest
+from tests.conftest import DummyConnection
+from elastic_enterprise_search import EnterpriseSearch
+
+
+@pytest.mark.parametrize("request_timeout", [3, 5.0])
+def test_request_timeout(request_timeout):
+    client = EnterpriseSearch(connection_class=DummyConnection)
+    client.get_version(request_timeout=request_timeout)
+
+    calls = client.transport.get_connection().calls
+    assert calls == [
+        (
+            ("GET", "/api/ent/v1/internal/version", None, None),
+            {
+                "headers": {"user-agent": client._user_agent_header},
+                "ignore_status": (),
+                "request_timeout": request_timeout,
+            },
+        )
+    ]

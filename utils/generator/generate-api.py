@@ -26,18 +26,20 @@ base_dir = pathlib.Path(__file__).absolute().parent.parent.parent
 schemas_dir = base_dir.parent / "ent-search/swagger/v1"
 templates_dir = str(pathlib.Path(__file__).absolute().parent / "templates")
 loader = jinja2.FileSystemLoader(templates_dir)
-env = jinja2.Environment(loader=loader,)
+env = jinja2.Environment(
+    loader=loader,
+)
 t = env.get_template("component")
 
 
 http_status_errors = {
-    400: "elastic_enterprise_search.BadRequest",
-    401: "elastic_enterprise_search.Unauthorized",
-    402: "elastic_enterprise_search.PaymentRequired",
-    403: "elastic_enterprise_search.Forbidden",
-    404: "elastic_enterprise_search.NotFound",
-    409: "elastic_enterprise_search.Conflict",
-    413: "elastic_enterprise_search.PayloadTooLarge",
+    400: "elastic_enterprise_search.BadRequestError",
+    401: "elastic_enterprise_search.UnauthorizedError",
+    402: "elastic_enterprise_search.PaymentRequiredError",
+    403: "elastic_enterprise_search.ForbiddenError",
+    404: "elastic_enterprise_search.NotFoundError",
+    409: "elastic_enterprise_search.ConflictError",
+    413: "elastic_enterprise_search.PayloadTooLargeError",
 }
 
 
@@ -57,7 +59,7 @@ def openapi_type_to_typing(openapi_type, required=True) -> str:
 
 
 def camel_to_snake(name):
-    name = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+    name = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name.replace("-", "_"))
     return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
 
 
@@ -150,7 +152,7 @@ class API:
         ):
             if func_parts[1] == "all":
                 return tuple(func_parts[2:] + func_parts[:2])
-            return tuple(func_parts[1:] + [func_parts[:1]])
+            return tuple(func_parts[1:] + func_parts[:1])
         return tuple(func_parts)
 
     @property
@@ -201,7 +203,9 @@ class API:
             if http_status == "default":
                 continue
             http_status = int(http_status)
-            if http_status >= 300:  # Don't raise on 2XX
+            if (
+                http_status >= 300 and http_status in http_status_errors
+            ):  # Don't raise on 2XX
                 errors[http_status] = http_status_errors[http_status]
         return [v for k, v in sorted(errors.items())]
 
@@ -252,22 +256,20 @@ class OpenAPI:
             if isinstance(x, list):
                 return [expand_refs(i) for i in x]
             elif isinstance(x, dict):
-                if "$ref" in x:
-                    keys = re.match(
-                        r"^#/components/(schemas|responses|requestBodies|parameters)/(.+)$",
-                        x["$ref"],
-                    ).groups()
-                    base = schema_data["components"][keys[0]][keys[1]].copy()
-                    x.pop("$ref")
-                    base.update(x)
-                    return base
-                elif "schema" in x and tuple(x["schema"]) == ("$ref",):
-                    keys = re.match(
-                        r"^#/components/(schemas|responses|requestBodies|parameters)/(.+)$",
-                        x["schema"]["$ref"],
-                    ).groups()
-                    base = schema_data["components"][keys[0]][keys[1]].copy()
-                    x.pop("schema", None)
+                if "$ref" in x or ("schema" in x and tuple(x["schema"]) == ("$ref",)):
+                    keys = (
+                        re.match(
+                            r"^#/(.*)$",
+                            x["$ref"] if "$ref" in x else x["schema"]["$ref"],
+                        )
+                        .group(1)
+                        .split("/")
+                    )
+                    base = schema_data
+                    for key in keys:
+                        base = base[key]
+                    base = base.copy()
+                    x.pop("$ref" if "$ref" in x else "schema")
                     base.update(x)
                     return base
                 else:
@@ -278,7 +280,7 @@ class OpenAPI:
         namespace = filepath.name.replace(".json", "").replace("-", "_")
         apis = []
         components = {}
-        for cat, cat_val in schema_data["components"].items():
+        for cat, cat_val in schema_data.get("components", {}).items():
             for name, spec in cat_val.items():
                 components[name] = Component(name, spec)
         for path_key, path_val in schema_data["paths"].items():

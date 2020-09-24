@@ -86,16 +86,16 @@ class EnterpriseSearch(_EnterpriseSearch):
         """
         :arg hosts: List of nodes, or a single node, we should connect to.
             Node should be a dictionary ({"host": "localhost", "port": 3002}),
-            the entire dictionary will be passed to the :class:`~elastic_enterprise_search.Connection`
+            the entire dictionary will be passed to the :class:`~elastic_transport.Connection`
             class as kwargs, or a string in the format of ``host[:port]`` which will be
             translated to a dictionary automatically.  If no value is given the
-            :class:`~elastic_enterprise_search.Connection` class defaults will be used.
+            :class:`~elastic_transport.Connection` class defaults will be used.
 
-        :arg transport_class: :class:`~elastic_enterprise_search.Transport` sub-class to use.
+        :arg transport_class: :class:`~elastic_transport.Transport` sub-class to use.
 
         :arg kwargs: Any additional arguments will be passed on to the
-            :class:`~elastic_enterprise_search.Transport` class and, subsequently, to the
-            :class:`~elastic_enterprise_search.Connection` instances.
+            :class:`~elastic_transport.Transport` class and, subsequently, to the
+            :class:`~elastic_transport.Connection` instances.
         """
         super(EnterpriseSearch, self).__init__(
             hosts=hosts, transport_class=transport_class, **kwargs

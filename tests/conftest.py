@@ -16,8 +16,8 @@
 #  under the License.
 
 import pytest
+from elastic_transport import Connection
 from elastic_enterprise_search import (
-    Connection,
     EnterpriseSearch,
     AppSearch,
     WorkplaceSearch,

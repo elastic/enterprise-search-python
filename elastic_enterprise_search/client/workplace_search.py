@@ -19,13 +19,21 @@ from .base import BaseClient
 from ..utils import (  # noqa: F401
     make_path,
     make_params,
+    DEFAULT,
     SKIP_IN_PATH,
 )
 
 
 class WorkplaceSearch(BaseClient):
     def delete_documents(
-        self, content_source_key, body, params=None, headers=None, http_auth=None,
+        self,
+        content_source_key,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Deletes a list of documents from a custom content source
@@ -39,14 +47,16 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.BadRequest:
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.NotFound:
-        :raises elastic_enterprise_search.PayloadTooLarge:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        :raises elastic_enterprise_search.PayloadTooLargeError:
         """
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path(
                 "api",
@@ -61,10 +71,19 @@ class WorkplaceSearch(BaseClient):
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def index_documents(
-        self, content_source_key, body, params=None, headers=None, http_auth=None,
+        self,
+        content_source_key,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Indexes one or more new documents into a custom content source, or updates one
@@ -79,14 +98,16 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.BadRequest:
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.NotFound:
-        :raises elastic_enterprise_search.PayloadTooLarge:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        :raises elastic_enterprise_search.PayloadTooLargeError:
         """
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path(
                 "api",
@@ -101,6 +122,8 @@ class WorkplaceSearch(BaseClient):
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def list_external_identities(
@@ -110,7 +133,9 @@ class WorkplaceSearch(BaseClient):
         page_size=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrieves all external identities
@@ -125,26 +150,42 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.NotFound:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
         """
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path(
-                "api", "ws", "v1", "sources", content_source_key, "external_identities",
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_key,
+                "external_identities",
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def create_external_identity(
-        self, content_source_key, body, params=None, headers=None, http_auth=None,
+        self,
+        content_source_key,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Adds a new external identity
@@ -158,25 +199,41 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.BadRequest:
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.NotFound:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
         """
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path(
-                "api", "ws", "v1", "sources", content_source_key, "external_identities",
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_key,
+                "external_identities",
             ),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def delete_external_identity(
-        self, content_source_key, user, params=None, headers=None, http_auth=None,
+        self,
+        content_source_key,
+        user,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Deletes an external identity
@@ -190,8 +247,10 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.NotFound:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
             content_source_key,
@@ -200,7 +259,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "DELETE",
             make_path(
                 "api",
@@ -214,10 +273,19 @@ class WorkplaceSearch(BaseClient):
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_external_identity(
-        self, content_source_key, user, params=None, headers=None, http_auth=None,
+        self,
+        content_source_key,
+        user,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Retrieves an external identity
@@ -231,8 +299,10 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.NotFound:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
             content_source_key,
@@ -241,7 +311,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path(
                 "api",
@@ -255,10 +325,20 @@ class WorkplaceSearch(BaseClient):
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def put_external_identity(
-        self, content_source_key, user, body, params=None, headers=None, http_auth=None,
+        self,
+        content_source_key,
+        user,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Updates an external identity
@@ -273,9 +353,11 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.BadRequest:
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.NotFound:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
             content_source_key,
@@ -284,7 +366,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "PUT",
             make_path(
                 "api",
@@ -299,6 +381,8 @@ class WorkplaceSearch(BaseClient):
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def list_permissions(
@@ -308,7 +392,9 @@ class WorkplaceSearch(BaseClient):
         page_size=None,
         params=None,
         headers=None,
-        http_auth=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Lists all permissions for all users
@@ -323,26 +409,38 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.BadRequest:
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.PaymentRequired:
-        :raises elastic_enterprise_search.NotFound:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.PaymentRequiredError:
+        :raises elastic_enterprise_search.NotFoundError:
         """
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params, {"page[current]": current_page, "page[size]": page_size}
         )
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path("api", "ws", "v1", "sources", content_source_key, "permissions"),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def remove_user_permissions(
-        self, content_source_key, user, body, params=None, headers=None, http_auth=None,
+        self,
+        content_source_key,
+        user,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Removes one or more permissions from an existing set of permissions
@@ -357,10 +455,12 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.BadRequest:
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.PaymentRequired:
-        :raises elastic_enterprise_search.NotFound:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.PaymentRequiredError:
+        :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
             content_source_key,
@@ -369,7 +469,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path(
                 "api",
@@ -385,10 +485,18 @@ class WorkplaceSearch(BaseClient):
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def search(
-        self, body, params=None, headers=None, http_auth=None,
+        self,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         search across available sources with various query tuning options
@@ -400,20 +508,32 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.BadRequest:
-        :raises elastic_enterprise_search.Unauthorized:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
         """
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path("api", "ws", "v1", "search"),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def add_user_permissions(
-        self, content_source_key, user, body, params=None, headers=None, http_auth=None,
+        self,
+        content_source_key,
+        user,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Adds one or more new permissions atop existing permissions
@@ -428,10 +548,12 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.BadRequest:
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.PaymentRequired:
-        :raises elastic_enterprise_search.NotFound:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.PaymentRequiredError:
+        :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
             content_source_key,
@@ -440,7 +562,7 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "POST",
             make_path(
                 "api",
@@ -456,10 +578,19 @@ class WorkplaceSearch(BaseClient):
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def get_user_permissions(
-        self, content_source_key, user, params=None, headers=None, http_auth=None,
+        self,
+        content_source_key,
+        user,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Lists all permissions for one user
@@ -473,9 +604,11 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.PaymentRequired:
-        :raises elastic_enterprise_search.NotFound:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.PaymentRequiredError:
+        :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
             content_source_key,
@@ -484,18 +617,34 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "GET",
             make_path(
-                "api", "ws", "v1", "sources", content_source_key, "permissions", user,
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_key,
+                "permissions",
+                user,
             ),
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
 
     def put_user_permissions(
-        self, content_source_key, user, body, params=None, headers=None, http_auth=None,
+        self,
+        content_source_key,
+        user,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
     ):
         """
         Creates a new set of permissions or over-writes all existing permissions
@@ -510,10 +659,12 @@ class WorkplaceSearch(BaseClient):
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
             and password to send with the request
-        :raises elastic_enterprise_search.BadRequest:
-        :raises elastic_enterprise_search.Unauthorized:
-        :raises elastic_enterprise_search.PaymentRequired:
-        :raises elastic_enterprise_search.NotFound:
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.PaymentRequiredError:
+        :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
             content_source_key,
@@ -522,13 +673,21 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        return self._perform_request(
+        return self.perform_request(
             "PUT",
             make_path(
-                "api", "ws", "v1", "sources", content_source_key, "permissions", user,
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_key,
+                "permissions",
+                user,
             ),
             body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
         )
