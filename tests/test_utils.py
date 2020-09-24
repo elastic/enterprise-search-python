@@ -45,7 +45,7 @@ def test_make_params():
         "b": "z",
         "c": "d,2",
         "e": "2020-01-01",
-        "f": "2020-02-03T14:05:06Z",
+        "f": "2020-02-03T04:05:06-10:00",
         "g": "true",
     }
 
@@ -70,7 +70,7 @@ def test_make_path():
             ),
             False,
         )
-        == "/a/1/z/d,2/2020-01-01/2020-02-03T14:05:06Z/false"
+        == "/a/1/z/d,2/2020-01-01/2020-02-03T04:05:06-10:00/false"
     )
 
 
@@ -80,5 +80,4 @@ def test_datetime_with_timezone():
     dt = datetime.datetime(
         year=2020, month=1, day=1, hour=10, minute=0, second=0, tzinfo=tz.gettz("HST")
     )
-
-    assert utils.make_params({}, {"dt": dt}) == {"dt": "2020-01-01T20:00:00Z"}
+    assert utils.make_params({}, {"dt": dt}) == {"dt": "2020-01-01T10:00:00-10:00"}
