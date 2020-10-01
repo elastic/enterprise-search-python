@@ -16,13 +16,14 @@
 #  under the License.
 
 import base64
-from six import ensure_str, ensure_binary, ensure_text
+
+from elastic_transport import Transport
+from elastic_transport.utils import create_user_agent, normalize_headers
+from six import ensure_binary, ensure_str, ensure_text
+
 from .._version import __version__
 from ..serializer import JSONSerializer
 from ..utils import DEFAULT
-from elastic_transport import Transport
-from elastic_transport.utils import normalize_headers, create_user_agent
-
 
 __all__ = ["BaseClient"]
 
@@ -37,9 +38,12 @@ class BaseClient(object):
         **kwargs
     ):
         if _transport is not None:
-            if transport_class is not None or kwargs:
+            if (
+                any(x is not None for x in (hosts, http_auth, transport_class))
+                or kwargs
+            ):
                 raise ValueError(
-                    "Can't pass both a Transport and parameters to a client"
+                    "Can't pass both a Transport via '_transport' and other parameters a client constructor"
                 )
             self.transport = _transport
         else:
@@ -77,7 +81,7 @@ class BaseClient(object):
                     b64_encoded = ensure_binary(auth_header.partition(" ")[-1])
                     b64_decoded = ensure_text(base64.b64decode(b64_encoded))
                     return tuple(b64_decoded.split(":", 1))
-                except Exception:
+                except Exception:  # pragma: nocover
                     pass
             return auth_header.partition(" ")[-1]
         return None

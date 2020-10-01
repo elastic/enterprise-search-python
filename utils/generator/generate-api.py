@@ -15,11 +15,12 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import os
-import re
 import json
+import os
 import pathlib
-from typing import Optional, List
+import re
+from typing import List, Optional
+
 import jinja2
 
 base_dir = pathlib.Path(__file__).absolute().parent.parent.parent

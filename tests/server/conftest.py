@@ -17,6 +17,7 @@
 
 import pytest
 import urllib3
+
 from elastic_enterprise_search import EnterpriseSearch
 
 

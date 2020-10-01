@@ -17,6 +17,7 @@
 
 import jwt
 from six import ensure_str
+
 from .app_search import AppSearch as _AppSearch
 from .enterprise_search import EnterpriseSearch as _EnterpriseSearch
 from .workplace_search import WorkplaceSearch as _WorkplaceSearch

@@ -17,11 +17,8 @@
 
 import pytest
 from elastic_transport import Connection
-from elastic_enterprise_search import (
-    EnterpriseSearch,
-    AppSearch,
-    WorkplaceSearch,
-)
+
+from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSearch
 
 
 @pytest.fixture(params=[EnterpriseSearch, AppSearch, WorkplaceSearch])

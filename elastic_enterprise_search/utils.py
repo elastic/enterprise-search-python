@@ -18,10 +18,11 @@
 import re
 import sys
 from datetime import date, datetime
-from six import ensure_binary
-from six.moves.urllib_parse import urlencode, urlparse, unquote, quote
-from dateutil import tz, parser
+
+from dateutil import parser, tz
 from elastic_transport.utils import DEFAULT as DEFAULT
+from six import ensure_binary
+from six.moves.urllib_parse import quote, unquote, urlencode, urlparse
 
 __all__ = [
     "urlparse",
@@ -115,7 +116,7 @@ def format_datetime(value):
     """Format a datetime object to RFC 3339"""
     # When given a timezone unaware datetime, use local timezone.
     if value.tzinfo is None:
-        value = value.astimezone(tz.tzlocal())
+        value = value.replace(tzinfo=tz.tzlocal())
 
     utcoffset = value.utcoffset()
     offset_secs = utcoffset.total_seconds()
@@ -133,7 +134,10 @@ def format_datetime(value):
 
 def parse_datetime(value):
     """Convert a string value RFC 3339 into a datetime with tzinfo"""
-    if not re.match(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}[T ]Z|[+\-][0-9]{2}:[0-9]{2}$", value):
+    if not re.match(
+        r"^[0-9]{4}-[0-9]{2}-[0-9]{2}[T ][0-9]{2}:[0-9]{2}:[0-9]{2}(?:Z|[+\-][0-9]{2}:[0-9]{2})$",
+        value,
+    ):
         raise ValueError(
             "Datetime must match format '(YYYY)-(MM)-(DD)T(HH):(MM):(SS)(TZ)' was '%s'"
             % value

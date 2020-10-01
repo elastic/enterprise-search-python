@@ -17,19 +17,30 @@
 
 import datetime
 
-from elastic_transport import JSONSerializer as _JSONSerializer
+from dateutil import tz
 
-from .utils import format_datetime
+from elastic_enterprise_search import JSONSerializer
 
 
-class JSONSerializer(_JSONSerializer):
-    """Same as elastic_transport.JSONSerializer except also formats
-    datetime objects to RFC 3339. If a datetime is received without
-    explicit timezone information then the timezone will be assumed
-    to be the local timezone.
-    """
-
-    def default(self, data):
-        if isinstance(data, datetime.datetime):
-            return format_datetime(data)
-        return super(JSONSerializer, self).default(data)
+def test_serializer_formatting():
+    serializer = JSONSerializer()
+    assert (
+        serializer.dumps(
+            {
+                "d": datetime.datetime(
+                    year=2020,
+                    month=12,
+                    day=11,
+                    hour=10,
+                    minute=9,
+                    second=8,
+                    tzinfo=tz.UTC,
+                ),
+            }
+        )
+        == '{"d":"2020-12-11T10:09:08Z"}'
+    )
+    assert (
+        serializer.dumps({"t": datetime.date(year=2020, month=1, day=29)})
+        == '{"t":"2020-01-29"}'
+    )
