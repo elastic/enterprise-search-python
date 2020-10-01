@@ -16,8 +16,22 @@
 #  under the License.
 
 import pytest
-from tests.conftest import DummyConnection
+from elastic_transport import Transport
+
 from elastic_enterprise_search import EnterpriseSearch
+from tests.conftest import DummyConnection
+
+
+@pytest.mark.parametrize(
+    "option", ["hosts", "http_auth", "transport_class", "connection_class"]
+)
+def test_transport_constructor(client_class, option):
+    with pytest.raises(ValueError) as e:
+        client_class(_transport=Transport(), **{option: True})
+    assert str(e.value) == (
+        "Can't pass both a Transport via '_transport' "
+        "and other parameters a client constructor"
+    )
 
 
 @pytest.mark.parametrize("request_timeout", [3, 5.0])

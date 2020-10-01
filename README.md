@@ -82,7 +82,7 @@ for basic authentication will set the proper
   - [Signed Search Key](https://www.elastic.co/guide/en/app-search/current/authentication.html#authentication-signed)
   - [URL Parameters](https://www.elastic.co/guide/en/app-search/current/authentication.html#authentication-url-params)
 - Workplace Search
-  - [Custom Source API Key](https://www.elastic.co/guide/en/workplace-search/7.8/workplace-search-custom-sources-api.html#authentication)
+  - [Custom Source API Key](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#authentication)
   - [OAuth for Search](https://www.elastic.co/guide/en/workplace-search/current/building-custom-search-workplace-search.html#configuring-search-oauth)
 
 #### Authenticating with Enterprise Search
@@ -140,6 +140,32 @@ resp = client_side.search(
     }
 )
 ```
+
+### Working with Datetimes
+
+Python [`datetime.datetime`](https://docs.python.org/3/library/datetime.html#datetime.datetime)
+objects are automatically serialized according to [RFC 3339](https://tools.ietf.org/html/rfc3339)
+which requires a timezone to be included. We highly recommend using datetimes that
+are timezone-aware. When creating a datetime object, use the `tzinfo` or `tz` parameter
+along with [`python-dateutil`](https://dateutil.readthedocs.io) to ensure proper
+timezones on serialized `datetime` objects.
+
+To get the current day and time in UTC you can do the following:
+
+```python
+import datetime
+from dateutil import tz
+
+now = datetime.datetime.now(tz=tz.UTC)
+```
+
+⚠️ **Datetimes without timezone information will be serialized as if they were within
+the locally configured timezone.** This is in line with HTTP and RFC 3339 specs
+which state that datetimes without timezone information should be assumed to be local time.
+
+⚠️ [**Do not use `datetime.datetime.utcnow()` or `utcfromtimestamp()`!**](https://blog.ganssle.io/articles/2019/11/utcnow.html)
+These APIs don't add timezone information to the resulting datetime which causes the
+serializer to return incorrect results.
 
 ## API Reference
 
@@ -784,7 +810,7 @@ Parameters:
 Get information on the health of a deployment and basic statistics around
 resource usage
 
-
+Parameters:
 - `params`: Additional query params to send with the request
 - `headers`: Additional headers to send with the request
 - `http_auth`: Access token or HTTP basic auth username
@@ -794,7 +820,7 @@ resource usage
 
 Get the read-only flag's state
 
-
+Parameters:
 - `params`: Additional query params to send with the request
 - `headers`: Additional headers to send with the request
 - `http_auth`: Access token or HTTP basic auth username
@@ -827,7 +853,7 @@ Parameters:
 
 Get version information for this server
 
-
+Parameters:
 - `params`: Additional query params to send with the request
 - `headers`: Additional headers to send with the request
 - `http_auth`: Access token or HTTP basic auth username
@@ -837,18 +863,5 @@ Get version information for this server
 
 ## License
 
-```
-Copyright 2020 Elasticsearch B.V
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
+`enterprise-search-python` is available under the Apache-2.0 license.
+For more details see [LICENSE](https://github.com/elastic/enterprise-search-python/blob/maaster/LICENSE).

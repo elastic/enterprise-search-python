@@ -15,7 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from elastic_enterprise_search import EnterpriseSearch, AppSearch, WorkplaceSearch
+from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSearch
 
 
 def test_sub_clients():

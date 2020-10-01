@@ -16,6 +16,7 @@
 #  under the License.
 
 import jwt
+
 from elastic_enterprise_search import AppSearch
 
 

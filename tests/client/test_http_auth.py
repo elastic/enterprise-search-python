@@ -17,8 +17,9 @@
 #  under the License.
 
 import pytest
-from tests.conftest import DummyConnection
+
 from elastic_enterprise_search.utils import DEFAULT
+from tests.conftest import DummyConnection
 
 
 def test_http_auth_none(client_class):
@@ -96,3 +97,27 @@ def test_http_auth_object(client_class):
         "'http_auth' must either be a tuple of (username, password) "
         "for 'Basic' authentication or a single string for 'Bearer'/token authentication"
     )
+
+
+def test_http_auth_disable_with_none(client_class):
+    client = client_class(http_auth="api-token", connection_class=DummyConnection)
+    assert client.http_auth == "api-token"
+    client.perform_request("GET", "/")
+
+    calls = client.transport.get_connection().calls
+    assert len(calls) == 1
+    assert calls[0][1]["headers"]["authorization"] == client._authorization_header
+
+    client.perform_request("GET", "/", http_auth=None)
+
+    calls = client.transport.get_connection().calls
+    assert len(calls) == 2
+    assert "authorization" not in calls[-1][1]["headers"]
+
+    client.http_auth = None
+    assert client.http_auth is None
+    client.perform_request("GET", "/")
+
+    calls = client.transport.get_connection().calls
+    assert len(calls) == 3
+    assert "authorization" not in calls[-1][1]["headers"]

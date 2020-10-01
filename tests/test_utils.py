@@ -16,8 +16,34 @@
 #  under the License.
 
 import datetime
+
+import pytest
 from dateutil import tz
-from elastic_enterprise_search import utils
+
+from elastic_enterprise_search import parse_datetime, utils
+
+
+def test_format_datetime_tz_naive():
+    dt = datetime.datetime.now()
+    assert dt.tzinfo is None
+
+    # Should serialize the same as local timezone
+    dt2 = dt.replace(tzinfo=tz.tzlocal())
+
+    assert utils.format_datetime(dt) == utils.format_datetime(dt2)
+
+    # This is the dicey one, utcnow() is very broken and not recommended.
+    dt = datetime.datetime.utcnow()
+    assert dt.tzinfo is None
+
+    dt2 = datetime.datetime.now(tz=tz.UTC)
+
+    # The two are only equal if the local timezone is UTC
+    # otherwise they are different :(
+    if tz.tzlocal() == tz.UTC:
+        assert utils.format_datetime(dt) == utils.format_datetime(dt2)
+    else:
+        assert utils.format_datetime(dt) != utils.format_datetime(dt2)
 
 
 def test_make_params():
@@ -25,7 +51,7 @@ def test_make_params():
         {},
         {
             "a": 1,
-            "b": "z",
+            "b": u"z",
             "c": ["d", 2],
             "e": datetime.date(year=2020, month=1, day=1),
             "f": datetime.datetime(
@@ -39,6 +65,7 @@ def test_make_params():
                 tzinfo=tz.gettz("HST"),
             ),
             "g": True,
+            "h": b"hello-world",
         },
     ) == {
         "a": "1",
@@ -47,6 +74,25 @@ def test_make_params():
         "e": "2020-01-01",
         "f": "2020-02-03T04:05:06-10:00",
         "g": "true",
+        "h": "hello-world",
+    }
+
+
+def test_make_params_conflict():
+    with pytest.raises(ValueError) as e:
+        utils.make_params({"k": "v1"}, {"k": "v2"})
+    assert str(e.value) == "Conflict between keyword argument and 'params'"
+
+
+def test_make_params_encode_and_none():
+    params = utils.make_params(
+        {"k1": ("!@#$%^&*", "(){}[]./"), "k2": None},
+        {"k2": None, "k3": ",.*", "k4": 10},
+    )
+    assert params == {
+        "k1": "%21%40%23%24%25%5E%26*,%28%29%7B%7D[]./",
+        "k3": ",.*",
+        "k4": "10",
     }
 
 
@@ -81,3 +127,70 @@ def test_datetime_with_timezone():
         year=2020, month=1, day=1, hour=10, minute=0, second=0, tzinfo=tz.gettz("HST")
     )
     assert utils.make_params({}, {"dt": dt}) == {"dt": "2020-01-01T10:00:00-10:00"}
+
+    dt = datetime.datetime(
+        year=2020, month=1, day=1, hour=10, minute=0, second=0, tzinfo=tz.UTC
+    )
+    assert utils.make_params({}, {"dt": dt}) == {"dt": "2020-01-01T10:00:00Z"}
+
+
+@pytest.mark.parametrize(
+    ["value", "dt"],
+    [
+        (
+            "2020-01-02T03:04:05Z",
+            datetime.datetime(
+                year=2020, month=1, day=2, hour=3, minute=4, second=5, tzinfo=tz.UTC
+            ),
+        ),
+        (
+            "2020-01-02T11:12:59+00:00",
+            datetime.datetime(
+                year=2020, month=1, day=2, hour=11, minute=12, second=59, tzinfo=tz.UTC
+            ),
+        ),
+        (
+            # An odd case of '-00:00' but we handle it anyways.
+            "2020-01-02T11:12:59-00:00",
+            datetime.datetime(
+                year=2020, month=1, day=2, hour=11, minute=12, second=59, tzinfo=tz.UTC
+            ),
+        ),
+        (
+            "2020-01-02 11:12:59-10:00",
+            datetime.datetime(
+                year=2020,
+                month=1,
+                day=2,
+                hour=11,
+                minute=12,
+                second=59,
+                tzinfo=tz.gettz("HST"),
+            ),
+        ),
+        (
+            # 'Asia/Kolkata' is Indian Standard Time which is UTC+5:30 and doesn't have DST
+            "2020-01-02T11:12:59+05:30",
+            datetime.datetime(
+                year=2020,
+                month=1,
+                day=2,
+                hour=11,
+                minute=12,
+                second=59,
+                tzinfo=tz.gettz("Asia/Kolkata"),
+            ),
+        ),
+    ],
+)
+def test_parse_datetime(value, dt):
+    assert parse_datetime(value) == dt
+
+
+def test_parse_datetime_bad_format():
+    with pytest.raises(ValueError) as e:
+        parse_datetime("2020-03-10T10:10:10")
+    assert (
+        str(e.value)
+        == "Datetime must match format '(YYYY)-(MM)-(DD)T(HH):(MM):(SS)(TZ)' was '2020-03-10T10:10:10'"
+    )
