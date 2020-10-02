@@ -25,16 +25,17 @@ from six import ensure_binary
 from six.moves.urllib_parse import quote, unquote, urlencode, urlparse
 
 __all__ = [
-    "urlparse",
-    "urlencode",
-    "unquote",
-    "string_types",
-    "escape",
-    "make_path",
-    "make_params",
+    "DEFAULT",
     "PY2",
     "SKIP_IN_PATH",
-    "DEFAULT",
+    "escape",
+    "make_params",
+    "make_path",
+    "parse_datetime",
+    "string_types",
+    "unquote",
+    "urlencode",
+    "urlparse",
 ]
 
 SKIP_IN_PATH = (None, "", b"", [], ())

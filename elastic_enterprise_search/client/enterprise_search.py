@@ -44,7 +44,13 @@ class EnterpriseSearch(BaseClient):
         """
         return self.perform_request(
             "GET",
-            make_path("api", "ent", "v1", "internal", "health"),
+            make_path(
+                "api",
+                "ent",
+                "v1",
+                "internal",
+                "health",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -75,7 +81,13 @@ class EnterpriseSearch(BaseClient):
         """
         return self.perform_request(
             "GET",
-            make_path("api", "ent", "v1", "internal", "read_only_mode"),
+            make_path(
+                "api",
+                "ent",
+                "v1",
+                "internal",
+                "read_only_mode",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -108,7 +120,13 @@ class EnterpriseSearch(BaseClient):
         """
         return self.perform_request(
             "PUT",
-            make_path("api", "ent", "v1", "internal", "read_only_mode"),
+            make_path(
+                "api",
+                "ent",
+                "v1",
+                "internal",
+                "read_only_mode",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -141,10 +159,21 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
-        params = make_params(params, {"include": include})
+        params = make_params(
+            params,
+            {
+                "include": include,
+            },
+        )
         return self.perform_request(
             "GET",
-            make_path("api", "ent", "v1", "internal", "stats"),
+            make_path(
+                "api",
+                "ent",
+                "v1",
+                "internal",
+                "stats",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -175,7 +204,13 @@ class EnterpriseSearch(BaseClient):
         """
         return self.perform_request(
             "GET",
-            make_path("api", "ent", "v1", "internal", "version"),
+            make_path(
+                "api",
+                "ent",
+                "v1",
+                "internal",
+                "version",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,

@@ -149,6 +149,7 @@ class API:
             "delete",
             "list",
             "reset",
+            "remove",
             "index",
         ):
             if func_parts[1] == "all":

@@ -153,7 +153,11 @@ class WorkplaceSearch(BaseClient):
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
-            params, {"page[current]": current_page, "page[size]": page_size}
+            params,
+            {
+                "page[current]": current_page,
+                "page[size]": page_size,
+            },
         )
         return self.perform_request(
             "GET",
@@ -414,58 +418,14 @@ class WorkplaceSearch(BaseClient):
         if content_source_key in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
-            params, {"page[current]": current_page, "page[size]": page_size}
+            params,
+            {
+                "page[current]": current_page,
+                "page[size]": page_size,
+            },
         )
         return self.perform_request(
             "GET",
-            make_path("api", "ws", "v1", "sources", content_source_key, "permissions"),
-            params=params,
-            headers=headers,
-            http_auth=http_auth,
-            request_timeout=request_timeout,
-            ignore_status=ignore_status,
-        )
-
-    def remove_user_permissions(
-        self,
-        content_source_key,
-        user,
-        body,
-        params=None,
-        headers=None,
-        http_auth=DEFAULT,
-        request_timeout=DEFAULT,
-        ignore_status=(),
-    ):
-        """
-        Removes one or more permissions from an existing set of permissions
-
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#remove-one>`_
-
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
-        :arg user: The username in context
-        :arg body: HTTP request body
-        :arg params: Additional query params to send with the request
-        :arg headers: Additional headers to send with the request
-        :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request
-        :arg request_timeout: Timeout in seconds
-        :arg ignore_status: HTTP status codes to not raise an error
-        :raises elastic_enterprise_search.BadRequestError:
-        :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.PaymentRequiredError:
-        :raises elastic_enterprise_search.NotFoundError:
-        """
-        for param in (
-            content_source_key,
-            user,
-        ):
-            if param in SKIP_IN_PATH:
-                raise ValueError("Empty value passed for a required argument")
-
-        return self.perform_request(
-            "POST",
             make_path(
                 "api",
                 "ws",
@@ -473,10 +433,7 @@ class WorkplaceSearch(BaseClient):
                 "sources",
                 content_source_key,
                 "permissions",
-                user,
-                "remove",
             ),
-            body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -510,7 +467,12 @@ class WorkplaceSearch(BaseClient):
         """
         return self.perform_request(
             "POST",
-            make_path("api", "ws", "v1", "search"),
+            make_path(
+                "api",
+                "ws",
+                "v1",
+                "search",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -678,6 +640,64 @@ class WorkplaceSearch(BaseClient):
                 content_source_key,
                 "permissions",
                 user,
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def remove_user_permissions(
+        self,
+        content_source_key,
+        user,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Removes one or more permissions from an existing set of permissions
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#remove-one>`_
+
+        :arg content_source_key: Unique key for a Custom API source, provided
+            upon creation of a Custom API Source
+        :arg user: The username in context
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.PaymentRequiredError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            content_source_key,
+            user,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        return self.perform_request(
+            "POST",
+            make_path(
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_key,
+                "permissions",
+                user,
+                "remove",
             ),
             body=body,
             params=params,

@@ -22,3 +22,6 @@ def test_all_is_sorted():
     assert elastic_enterprise_search.__all__ == sorted(
         elastic_enterprise_search.__all__
     )
+    assert elastic_enterprise_search.utils.__all__ == sorted(
+        elastic_enterprise_search.utils.__all__
+    )

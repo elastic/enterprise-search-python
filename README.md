@@ -17,7 +17,9 @@
 - [Installation](https://github.com/elastic/enterprise-search-python#installation)
 - [Getting Started](https://github.com/elastic/enterprise-search-python#getting-started)
   - [Authentication](https://github.com/elastic/enterprise-search-python#authentication)
-  - [App Search Signed Search Keys](https://github.com/elastic/enterprise-search-python#app-search-signed-search-keys)
+    - [Authenticating with Enterprise Search](https://github.com/elastic/enterprise-search-python#authenticating-with-enterprise-search)
+    - [App Search Signed Search Keys](https://github.com/elastic/enterprise-search-python#app-search-signed-search-keys)
+  - [Working with Datetimes](https://github.com/elastic/enterprise-search-python#working-with-datetimes)
 - [API Reference](https://github.com/elastic/enterprise-search-python#api-reference)
 - [License](https://github.com/elastic/enterprise-search-python#license)
 
