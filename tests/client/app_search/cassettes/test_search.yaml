@@ -1,0 +1,60 @@
+interactions:
+- request:
+    body: '{"query":"tree","page":{"size":2}}'
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: POST
+    uri: http://localhost:3002/api/as/v1/engines/national-parks-demo/search
+  response:
+    body:
+      string: '{"meta":{"alerts":[],"warnings":[],"page":{"current":1,"total_pages":12,"total_results":23,"size":2},"engine":{"name":"national-parks-demo","type":"default"},"request_id":"4999a4ef-b750-4bef-aea2-87f54d9c87b3"},"results":[{"nps_link":{"raw":"https://www.nps.gov/grsm/index.htm"},"title":{"raw":"Great
+        Smoky Mountains"},"date_established":{"raw":"1934-06-15T05:00:00+00:00"},"world_heritage_site":{"raw":"true"},"states":{"raw":["Tennessee","North
+        Carolina"]},"description":{"raw":"The Great Smoky Mountains, part of the Appalachian
+        Mountains, span a wide range of elevations, making them home to over 400 vertebrate
+        species, 100 tree species, and 5000 plant species. Hiking is the park''s main
+        attraction, with over 800 miles (1,300 km) of trails, including 70 miles (110
+        km) of the Appalachian Trail. Other activities include fishing, horseback
+        riding, and touring nearly 80 historic structures."},"visitors":{"raw":1.1312786E7},"_meta":{"id":"park_great-smoky-mountains","engine":"national-parks-demo","score":1.6969184E7},"id":{"raw":"park_great-smoky-mountains"},"location":{"raw":"35.68,-83.53"},"square_km":{"raw":2114.2},"acres":{"raw":522426.88}},{"nps_link":{"raw":"https://www.nps.gov/yose/index.htm"},"title":{"raw":"Yosemite"},"date_established":{"raw":"1890-10-01T05:00:00+00:00"},"world_heritage_site":{"raw":"true"},"states":{"raw":["California"]},"description":{"raw":"Yosemite
+        features sheer granite cliffs, exceptionally tall waterfalls, and old-growth
+        forests at a unique intersection of geology and hydrology. Half Dome and El
+        Capitan rise from the park''s centerpiece, the glacier-carved Yosemite Valley,
+        and from its vertical walls drop Yosemite Falls, one of North America''s tallest
+        waterfalls at 2,425 feet (739 m) high. Three giant sequoia groves, along with
+        a pristine wilderness in the heart of the Sierra Nevada, are home to a wide
+        variety of rare plant and animal species."},"visitors":{"raw":5028868.0},"_meta":{"id":"park_yosemite","engine":"national-parks-demo","score":7543302.0},"id":{"raw":"park_yosemite"},"location":{"raw":"37.83,-119.5"},"square_km":{"raw":3082.7},"acres":{"raw":761747.5}}]}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"5dd8bc60c7e4bb165f032e0a2f3973d1"
+      Server:
+      - Jetty(9.4.30.v20200611)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      X-App-Search-Version:
+      - 7.10.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 4999a4ef-b750-4bef-aea2-87f54d9c87b3
+      X-Runtime:
+      - '0.214131'
+      X-St-Internal-Rails-Version:
+      - 4.2.11.3
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

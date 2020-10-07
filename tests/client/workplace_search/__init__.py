@@ -14,13 +14,3 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-
-import elastic_enterprise_search
-from elastic_enterprise_search import utils
-
-
-def test_all_is_sorted():
-    assert elastic_enterprise_search.__all__ == sorted(
-        elastic_enterprise_search.__all__
-    )
-    assert utils.__all__ == sorted(utils.__all__)

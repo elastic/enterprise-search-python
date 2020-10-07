@@ -320,16 +320,8 @@ def main():
             f.truncate()
             f.write(env.get_template("client").render(spec=spec))
         print(env.get_template("readme").render(spec=spec))
-        os.system(f"black {spec_filepath}")
 
-        # Do a second pass for ',)' and ',}' that Black doesn't remove.
-        # Doesn't cause any problems but looks weird and flake8 doesn't like it.
-        with spec_filepath.open(mode="r") as f:
-            client_code = f.read()
-        client_code = client_code.replace(",)", ")").replace(",}", "}")
-        with spec_filepath.open(mode="w") as f:
-            f.truncate()
-            f.write(client_code)
+    os.system(f"cd {base_dir} && nox -rs format")
 
 
 if __name__ == "__main__":

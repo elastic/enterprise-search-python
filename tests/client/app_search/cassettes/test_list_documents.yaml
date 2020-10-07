@@ -1,0 +1,57 @@
+interactions:
+- request:
+    body: null
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: GET
+    uri: http://localhost:3002/api/as/v1/engines/national-parks-demo/documents/list?page%5Bcurrent%5D=3&page%5Bsize%5D=2
+  response:
+    body:
+      string: '{"meta":{"page":{"current":3,"total_pages":30,"total_results":59,"size":2}},"results":[{"nps_link":"https://www.nps.gov/zion/index.htm","title":"Zion","date_established":"1919-11-19T06:00:00+00:00","world_heritage_site":"false","states":["Utah"],"description":"Located
+        at the junction of the Colorado Plateau, Great Basin, and Mojave Desert, this
+        park contains sandstone features such as mesas, rock towers, and canyons,
+        including the Virgin River Narrows. The various sandstone formations and the
+        forks of the Virgin River create a wilderness divided into four ecosystems:
+        desert, riparian, woodland, and coniferous forest.","visitors":4295127.0,"id":"park_zion","location":"37.3,-113.05","square_km":595.8,"acres":147237.02},{"nps_link":"https://www.nps.gov/yell/index.htm","title":"Yellowstone","date_established":"1872-03-01T06:00:00+00:00","world_heritage_site":"true","states":["Wyoming","Montana","Idaho"],"description":"Situated
+        on the Yellowstone Caldera, the park has an expansive network of geothermal
+        areas including boiling mud pots, vividly colored hot springs such as Grand
+        Prismatic Spring, and regularly erupting geysers, the best-known being Old
+        Faithful. The yellow-hued Grand Canyon of the Yellowstone River contains several
+        high waterfalls, while four mountain ranges traverse the park. More than 60
+        mammal species including gray wolves, grizzly bears, black bears, lynxes,
+        bison, and elk, make this park one of the best wildlife viewing spots in the
+        country.","visitors":4257177.0,"id":"park_yellowstone","location":"44.6,-110.5","square_km":8983.2,"acres":2219790.71}]}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"01093bedf53df9d8d1850bde2e2dfe0f"
+      Server:
+      - Jetty(9.4.30.v20200611)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      X-App-Search-Version:
+      - 7.10.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 88baf656-e3d0-448e-bf7a-ba759535dead
+      X-Runtime:
+      - '0.112568'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

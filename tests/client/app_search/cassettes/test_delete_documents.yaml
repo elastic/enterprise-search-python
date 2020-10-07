@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: '["park_yellowstone","park_zion"]'
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: DELETE
+    uri: http://localhost:3002/api/as/v1/engines/national-parks-demo/documents
+  response:
+    body:
+      string: '[{"id":"park_yellowstone","deleted":true},{"id":"park_zion","deleted":true}]'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"e570abaf7d7c6a38591dedd188cb3e89"
+      Server:
+      - Jetty(9.4.30.v20200611)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      X-App-Search-Version:
+      - 7.10.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - ee8b5a71-5518-4483-8079-7a1e099293fb
+      X-Runtime:
+      - '0.123199'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

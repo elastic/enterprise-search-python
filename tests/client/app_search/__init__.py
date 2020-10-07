@@ -14,25 +14,3 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-
-import jwt
-
-from elastic_enterprise_search import AppSearch
-
-
-def test_create_signed_search_key():
-    private_key = "private-"
-    signed_key = AppSearch.create_signed_search_key(
-        api_key=private_key,
-        api_key_name="api-key-name",
-        search_fields={"first_name": {}},
-        filters={"status": "available"},
-        facets=None,
-    )
-    assert isinstance(signed_key, str)
-    assert jwt.decode(signed_key, private_key, algorithms="HS256") == {
-        "api_key_name": "api-key-name",
-        "facets": None,
-        "filters": {"status": "available"},
-        "search_fields": {"first_name": {}},
-    }
