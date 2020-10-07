@@ -45,7 +45,7 @@ Here's how you can get started:
     http_auth=("elastic", "<password>"),
 )
 >>> ent.get_version()
-{'number': '7.8.1', 'build_hash': '0b11f494eadfe43dbb141cf80fb0848019593edc', 'build_date': '2020-07-21T19:13:24Z'}
+{'number': '7.10.0', 'build_hash': '9d6eb9f067b7d7090c541890c21f6a1e15f29c48', 'build_date': '2020-10-05T16:19:16Z'}
 
 # If you're only planning on using App Search you
 # can instantiate App Search namespaced client by itself:

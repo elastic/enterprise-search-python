@@ -57,7 +57,7 @@ setup(
     },
     packages=packages,
     install_requires=[
-        "elastic-transport>=0,<2",
+        "elastic-transport>=0.dev0,<2.dev0",
         "PyJWT",
         "python-dateutil",
         "six>=1.12",
@@ -69,6 +69,7 @@ setup(
             "pytest",
             "pytest-cov",
             "pytest-mock",
+            "pytest-vcr",
             "pytest-freezegun",
             "mock",
             "requests",

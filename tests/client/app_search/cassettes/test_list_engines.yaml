@@ -1,0 +1,44 @@
+interactions:
+- request:
+    body: null
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: GET
+    uri: http://localhost:3002/api/as/v1/engines
+  response:
+    body:
+      string: '{"meta":{"page":{"current":1,"total_pages":1,"total_results":1,"size":25}},"results":[{"name":"national-parks-demo","type":"default","language":null}]}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"9ef387ce0646b06f31256d895398d906"
+      Server:
+      - Jetty(9.4.30.v20200611)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      X-App-Search-Version:
+      - 7.10.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - e90912b6-f732-4a73-9243-f39bc74e5b2b
+      X-Runtime:
+      - '0.020982'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

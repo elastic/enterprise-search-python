@@ -85,7 +85,15 @@ class AppSearch(BaseClient):
         )
         return self.perform_request(
             "GET",
-            make_path("api", "as", "v1", "engines", engine_name, "logs", "api"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "logs",
+                "api",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -122,7 +130,13 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(params, {"filters": filters, "interval": interval})
+        params = make_params(
+            params,
+            {
+                "filters": filters,
+                "interval": interval,
+            },
+        )
         return self.perform_request(
             "GET",
             make_path(
@@ -186,7 +200,14 @@ class AppSearch(BaseClient):
         )
         return self.perform_request(
             "POST",
-            make_path("api", "as", "v1", "engines", engine_name, "curations"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "curations",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -385,11 +406,22 @@ class AppSearch(BaseClient):
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
-            params, {"page[current]": current_page, "page[size]": page_size}
+            params,
+            {
+                "page[current]": current_page,
+                "page[size]": page_size,
+            },
         )
         return self.perform_request(
             "GET",
-            make_path("api", "as", "v1", "engines", engine_name, "curations"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "curations",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -425,7 +457,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "DELETE",
-            make_path("api", "as", "v1", "engines", engine_name, "documents"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "documents",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -462,7 +501,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "GET",
-            make_path("api", "as", "v1", "engines", engine_name, "documents"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "documents",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -499,7 +545,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "POST",
-            make_path("api", "as", "v1", "engines", engine_name, "documents"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "documents",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -537,11 +590,23 @@ class AppSearch(BaseClient):
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
-            params, {"page[current]": current_page, "page[size]": page_size}
+            params,
+            {
+                "page[current]": current_page,
+                "page[size]": page_size,
+            },
         )
         return self.perform_request(
             "GET",
-            make_path("api", "as", "v1", "engines", engine_name, "documents", "list"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "documents",
+                "list",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -577,7 +642,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "PATCH",
-            make_path("api", "as", "v1", "engines", engine_name, "documents"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "documents",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -627,7 +699,12 @@ class AppSearch(BaseClient):
         )
         return self.perform_request(
             "POST",
-            make_path("api", "as", "v1", "engines"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -661,7 +738,13 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "DELETE",
-            make_path("api", "as", "v1", "engines", engine_name),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -695,7 +778,13 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "GET",
-            make_path("api", "as", "v1", "engines", engine_name),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -728,11 +817,20 @@ class AppSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         """
         params = make_params(
-            params, {"page[current]": current_page, "page[size]": page_size}
+            params,
+            {
+                "page[current]": current_page,
+                "page[size]": page_size,
+            },
         )
         return self.perform_request(
             "GET",
-            make_path("api", "as", "v1", "engines"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -791,7 +889,14 @@ class AppSearch(BaseClient):
         )
         return self.perform_request(
             "POST",
-            make_path("api", "as", "v1", "engines", engine_name, "click"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "click",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -827,7 +932,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "POST",
-            make_path("api", "as", "v1", "engines", engine_name, "source_engines"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "source_engines",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -864,7 +976,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "DELETE",
-            make_path("api", "as", "v1", "engines", engine_name, "source_engines"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "source_engines",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -904,10 +1023,22 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(params, {"queries": queries})
+        params = make_params(
+            params,
+            {
+                "queries": queries,
+            },
+        )
         return self.perform_request(
             "POST",
-            make_path("api", "as", "v1", "engines", engine_name, "multi_search"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "multi_search",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -953,11 +1084,23 @@ class AppSearch(BaseClient):
                 raise ValueError("Empty value passed for a required argument")
 
         params = make_params(
-            params, {"query": query, "types[documents][fields]": fields, "size": size}
+            params,
+            {
+                "query": query,
+                "types[documents][fields]": fields,
+                "size": size,
+            },
         )
         return self.perform_request(
             "POST",
-            make_path("api", "as", "v1", "engines", engine_name, "query_suggestion"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "query_suggestion",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -991,7 +1134,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "GET",
-            make_path("api", "as", "v1", "engines", engine_name, "schema"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "schema",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -1027,7 +1177,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "POST",
-            make_path("api", "as", "v1", "engines", engine_name, "schema"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "schema",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -1064,7 +1221,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "POST",
-            make_path("api", "as", "v1", "engines", engine_name, "search"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "search",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -1099,7 +1263,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "GET",
-            make_path("api", "as", "v1", "engines", engine_name, "search_settings"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "search_settings",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -1135,7 +1306,14 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "PUT",
-            make_path("api", "as", "v1", "engines", engine_name, "search_settings"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "search_settings",
+            ),
             body=body,
             params=params,
             headers=headers,
@@ -1217,10 +1395,22 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(params, {"synonyms": synonyms})
+        params = make_params(
+            params,
+            {
+                "synonyms": synonyms,
+            },
+        )
         return self.perform_request(
             "POST",
-            make_path("api", "as", "v1", "engines", engine_name, "synonyms"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "synonyms",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -1360,7 +1550,12 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(params, {"synonyms": synonyms})
+        params = make_params(
+            params,
+            {
+                "synonyms": synonyms,
+            },
+        )
         return self.perform_request(
             "PUT",
             make_path(
@@ -1408,11 +1603,22 @@ class AppSearch(BaseClient):
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
-            params, {"page[current]": current_page, "page[size]": page_size}
+            params,
+            {
+                "page[current]": current_page,
+                "page[size]": page_size,
+            },
         )
         return self.perform_request(
             "GET",
-            make_path("api", "as", "v1", "engines", engine_name, "synonyms"),
+            make_path(
+                "api",
+                "as",
+                "v1",
+                "engines",
+                engine_name,
+                "synonyms",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,

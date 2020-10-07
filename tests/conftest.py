@@ -21,6 +21,11 @@ from elastic_transport import Connection
 from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSearch
 
 
+@pytest.fixture(scope="module")
+def vcr_config():
+    return {"filter_headers": ["user-agent"]}
+
+
 @pytest.fixture(params=[EnterpriseSearch, AppSearch, WorkplaceSearch])
 def client_class(request):
     return request.param
