@@ -1,12 +1,13 @@
 ---
 
 STACK_VERSION:
-  - 7.9-SNAPSHOT
+  - 7.x-SNAPSHOT
 
 PYTHON_VERSION:
   - 2.7
   - 3.6
   - 3.7
   - 3.8
+  - 3.9
 
 exclude: ~
