@@ -20,7 +20,7 @@ import datetime
 import pytest
 from dateutil import tz
 
-from elastic_enterprise_search import parse_datetime, utils
+from elastic_enterprise_search import utils
 
 
 def test_format_datetime_tz_naive():
@@ -101,7 +101,9 @@ def test_make_path():
         utils.make_path(
             "a",
             1,
-            "z",
+            "/&",
+            ",",
+            "*",
             ["d", 2],
             datetime.date(year=2020, month=1, day=1),
             datetime.datetime(
@@ -116,7 +118,7 @@ def test_make_path():
             ),
             False,
         )
-        == "/a/1/z/d,2/2020-01-01/2020-02-03T04:05:06-10:00/false"
+        == "/a/1/%2F%26/,/*/d,2/2020-01-01/2020-02-03T04:05:06-10:00/false"
     )
 
 
@@ -184,12 +186,12 @@ def test_datetime_with_timezone():
     ],
 )
 def test_parse_datetime(value, dt):
-    assert parse_datetime(value) == dt
+    assert utils.parse_datetime(value) == dt
 
 
 def test_parse_datetime_bad_format():
     with pytest.raises(ValueError) as e:
-        parse_datetime("2020-03-10T10:10:10")
+        utils.parse_datetime("2020-03-10T10:10:10")
     assert (
         str(e.value)
         == "Datetime must match format '(YYYY)-(MM)-(DD)T(HH):(MM):(SS)(TZ)' was '2020-03-10T10:10:10'"
