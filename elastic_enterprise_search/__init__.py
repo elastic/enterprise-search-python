@@ -38,7 +38,6 @@ from elastic_transport import UnauthorizedError as UnauthorizedError
 from ._version import __version__  # noqa: F401
 from .client import AppSearch, EnterpriseSearch, WorkplaceSearch
 from .serializer import JSONSerializer
-from .utils import parse_datetime
 
 __all__ = [
     "APIError",
@@ -62,5 +61,4 @@ __all__ = [
     "TransportError",
     "UnauthorizedError",
     "WorkplaceSearch",
-    "parse_datetime",
 ]
