@@ -87,25 +87,76 @@ def test_dist(dist):
 
 
 def main():
+    run("git", "checkout", "--", "elastic_enterprise_search/")
     run("rm", "-rf", "build/", "dist/", "*.egg-info", ".eggs")
 
-    with open(os.path.join(base_dir, "elastic_enterprise_search/_version.py")) as f:
+    # Grab the major version to be used as a suffix.
+    version_path = os.path.join(base_dir, "elastic_enterprise_search/_version.py")
+    with open(version_path) as f:
         version = re.search(
             r"^__version__\s+=\s+[\"\']([^\"\']+)[\"\']", f.read(), re.M
         ).group(1)
 
-    expect_version = sys.argv[1].replace("-alpha", "a").replace("-beta", "b")
-    if expect_version != version:
-        raise ValueError(
-            "Expected version %r, package has version %r" % (expect_version, version)
-        )
+    # If we're handed a version from the build manager we
+    # should check that the version is correct or write
+    # a new one.
+    if len(sys.argv) >= 2:
+        # 'build_version' is what the release manager wants,
+        # 'expect_version' is what we're expecting to compare
+        # the package version to before building the dists.
+        build_version = expect_version = sys.argv[1]
+
+        # '-SNAPSHOT' means we're making a pre-release.
+        if "-SNAPSHOT" in build_version:
+            # If there's no +dev already (as is the case on dev
+            # branches like 7.x, master) then we need to add one.
+            if not version.endswith("+dev"):
+                version = version + "+dev"
+            expect_version = expect_version.replace("-SNAPSHOT", "")
+            if expect_version.endswith(".x"):
+                expect_version = expect_version[:-2]
+
+            # For snapshots we ensure that the version in the package
+            # at least *starts* with the version. This is to support
+            # build_version='7.x-SNAPSHOT'.
+            if not version.startswith(expect_version):
+                print(
+                    "Version of package (%s) didn't match the "
+                    "expected release version (%s)" % (version, build_version)
+                )
+                exit(1)
+
+        # A release that will be tagged, we want
+        # there to be no '+dev', etc.
+        elif expect_version != version:
+            print(
+                "Version of package (%s) didn't match the "
+                "expected release version (%s)" % (version, build_version)
+            )
+            exit(1)
+
+    # Ensure that the version within 'elasticsearch/_version.py' is correct.
+    with open(version_path) as f:
+        version_data = f.read()
+    version_data = re.sub(
+        r"__version__ = \"[^\"]+\"",
+        '__version__ = "%s"' % version,
+        version_data,
+    )
+    with open(version_path, "w") as f:
+        f.truncate()
+        f.write(version_data)
 
     # Build the sdist/wheels
     run("python", "setup.py", "sdist", "bdist_wheel")
 
     # Test everything that got created
-    for dist in os.listdir(os.path.join(base_dir, "dist")):
+    dists = os.listdir(os.path.join(base_dir, "dist"))
+    assert len(dists) == 2
+    for dist in dists:
         test_dist(os.path.join(base_dir, "dist", dist))
+
+    run("git", "checkout", "--", "elastic_enterprise_search/")
 
     # After this run 'python -m twine upload dist/*'
     print(
