@@ -1,0 +1,2 @@
+nox-py2
+twine
