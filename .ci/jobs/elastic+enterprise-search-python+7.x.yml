@@ -1,6 +1,6 @@
 ---
 - job:
-    name: elastic+enterprise-search-python+master
+    name: elastic+enterprise-search-python+7.x
     display-name: 'elastic / enterprise-search-python # 7.x'
     description: Testing the enterprise-search-python 7.x branch.
     junit_results: "junit/*-junit.xml"
