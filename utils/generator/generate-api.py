@@ -19,10 +19,14 @@ import json
 import os
 import pathlib
 import re
+from functools import lru_cache
 from typing import List, Optional
 
 import jinja2
+import urllib3
 
+http = urllib3.PoolManager()
+current_branch = "7.10"
 base_dir = pathlib.Path(__file__).absolute().parent.parent.parent
 schemas_dir = base_dir.parent / "ent-search/swagger/v1"
 templates_dir = str(pathlib.Path(__file__).absolute().parent / "templates")
@@ -42,6 +46,11 @@ http_status_errors = {
     409: "elastic_enterprise_search.ConflictError",
     413: "elastic_enterprise_search.PayloadTooLargeError",
 }
+
+
+@lru_cache()
+def is_valid_url(url):
+    return 200 <= http.request("HEAD", url).status < 400
 
 
 def openapi_type_to_typing(openapi_type, required=True) -> str:
@@ -195,6 +204,16 @@ class API:
             match = re.match(r"\[[^]]+?\]\(([^)]+)\)", self.spec.get("description", ""))
             if match:
                 url = match.group(1)
+        if url:
+            new_url = re.sub(
+                r"/guide/en/([a-z\-]+)/current/",
+                r"/guide/en/\1/%s/" % current_branch,
+                url,
+            )
+            if is_valid_url(new_url):
+                url = new_url
+            else:
+                print(f"{new_url!r} isn't valid, sticking with {url!r}")
         return url
 
     @property
@@ -278,7 +297,7 @@ class OpenAPI:
             return x
 
         schema_data = expand_refs(schema_data)
-        namespace = filepath.name.replace(".json", "").replace("-", "_")
+        namespace = "_" + filepath.name.replace(".json", "").replace("-", "_")
         apis = []
         components = {}
         for cat, cat_val in schema_data.get("components", {}).items():

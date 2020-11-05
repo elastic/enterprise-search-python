@@ -21,9 +21,9 @@ from elastic_transport import Transport
 from elastic_transport.utils import create_user_agent, normalize_headers
 from six import ensure_binary, ensure_str, ensure_text
 
+from .._serializer import JSONSerializer
+from .._utils import DEFAULT
 from .._version import __version__
-from ..serializer import JSONSerializer
-from ..utils import DEFAULT
 
 __all__ = ["BaseClient"]
 

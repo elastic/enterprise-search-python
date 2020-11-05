@@ -75,15 +75,15 @@ for basic authentication will set the proper
 
 - Enterprise Search
   - Basic Authentication (Username / Password)
-- [App Search](https://www.elastic.co/guide/en/app-search/current/authentication.html)
-  - [Public Search Key](https://www.elastic.co/guide/en/app-search/current/authentication.html#authentication-search)
-  - [Private API Key](https://www.elastic.co/guide/en/app-search/current/authentication.html#authentication-private)
-  - [Private Admin Key](https://www.elastic.co/guide/en/app-search/current/authentication.html#authentication-admin)
-  - [Signed Search Key](https://www.elastic.co/guide/en/app-search/current/authentication.html#authentication-signed)
-  - [URL Parameters](https://www.elastic.co/guide/en/app-search/current/authentication.html#authentication-url-params)
+- [App Search](https://www.elastic.co/guide/en/app-search/7.10/authentication.html)
+  - [Public Search Key](https://www.elastic.co/guide/en/app-search/7.10/authentication.html#authentication-search)
+  - [Private API Key](https://www.elastic.co/guide/en/app-search/7.10/authentication.html#authentication-private)
+  - [Private Admin Key](https://www.elastic.co/guide/en/app-search/7.10/authentication.html#authentication-admin)
+  - [Signed Search Key](https://www.elastic.co/guide/en/app-search/7.10/authentication.html#authentication-signed)
+  - [URL Parameters](https://www.elastic.co/guide/en/app-search/7.10/authentication.html#authentication-url-params)
 - Workplace Search
-  - [Custom Source API Key](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#authentication)
-  - [OAuth for Search](https://www.elastic.co/guide/en/workplace-search/current/building-custom-search-workplace-search.html#configuring-search-oauth)
+  - [Custom Source API Key](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-custom-sources-api.html#authentication)
+  - [OAuth for Search](https://www.elastic.co/guide/en/workplace-search/7.10/building-custom-search-workplace-search.html#configuring-search-oauth)
 
 #### Authenticating with Enterprise Search
 
@@ -176,7 +176,7 @@ A list of APIs for each client along with parameters:
 <details>
   <summary>Expand for all APIs</summary>
 
-##### [`AppSearch.get_api_logs()`](https://www.elastic.co/guide/en/app-search/current/api-logs.html)
+##### [`AppSearch.get_api_logs()`](https://www.elastic.co/guide/en/app-search/7.10/api-logs.html)
 
 The API Log displays API request and response data at the Engine level
 
@@ -199,7 +199,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.get_count_analytics()`](https://www.elastic.co/guide/en/app-search/current/counts.html)
+##### [`AppSearch.get_count_analytics()`](https://www.elastic.co/guide/en/app-search/7.10/counts.html)
 
 Returns the number of clicks and total number of queries over a period
 
@@ -213,7 +213,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.create_curation()`](https://www.elastic.co/guide/en/app-search/current/curations.html#curations-create)
+##### [`AppSearch.create_curation()`](https://www.elastic.co/guide/en/app-search/7.10/curations.html#curations-create)
 
 Create a new curation
 
@@ -227,7 +227,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.delete_curation()`](https://www.elastic.co/guide/en/app-search/current/curations.html#curations-destroy)
+##### [`AppSearch.delete_curation()`](https://www.elastic.co/guide/en/app-search/7.10/curations.html#curations-destroy)
 
 Delete a curation by ID
 
@@ -239,7 +239,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.get_curation()`](https://www.elastic.co/guide/en/app-search/current/curations.html#curations-read)
+##### [`AppSearch.get_curation()`](https://www.elastic.co/guide/en/app-search/7.10/curations.html#curations-read)
 
 Retrieve a curation by ID
 
@@ -251,7 +251,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.put_curation()`](https://www.elastic.co/guide/en/app-search/current/curations.html#curations-update)
+##### [`AppSearch.put_curation()`](https://www.elastic.co/guide/en/app-search/7.10/curations.html#curations-update)
 
 Update an existing curation
 
@@ -266,7 +266,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.list_curations()`](https://www.elastic.co/guide/en/app-search/current/curations.html#curations-read)
+##### [`AppSearch.list_curations()`](https://www.elastic.co/guide/en/app-search/7.10/curations.html#curations-read)
 
 Retrieve available curations for the engine
 
@@ -279,7 +279,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.delete_documents()`](https://www.elastic.co/guide/en/app-search/current/documents.html#documents-delete)
+##### [`AppSearch.delete_documents()`](https://www.elastic.co/guide/en/app-search/7.10/documents.html#documents-delete)
 
 Delete documents by ID
 
@@ -291,7 +291,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.get_documents()`](https://www.elastic.co/guide/en/app-search/current/documents.html#documents-get)
+##### [`AppSearch.get_documents()`](https://www.elastic.co/guide/en/app-search/7.10/documents.html#documents-get)
 
 Retrieves one or more documents by ID
 
@@ -303,7 +303,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.index_documents()`](https://www.elastic.co/guide/en/app-search/current/documents.html#documents-create)
+##### [`AppSearch.index_documents()`](https://www.elastic.co/guide/en/app-search/7.10/documents.html#documents-create)
 
 Create or update documents
 
@@ -315,7 +315,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.list_documents()`](https://www.elastic.co/guide/en/app-search/current/documents.html#documents-list)
+##### [`AppSearch.list_documents()`](https://www.elastic.co/guide/en/app-search/7.10/documents.html#documents-list)
 
 List all available documents with optional pagination support
 
@@ -328,7 +328,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.put_documents()`](https://www.elastic.co/guide/en/app-search/current/documents.html#documents-partial)
+##### [`AppSearch.put_documents()`](https://www.elastic.co/guide/en/app-search/7.10/documents.html#documents-partial)
 
 Partial update of documents
 
@@ -340,7 +340,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.create_engine()`](https://www.elastic.co/guide/en/app-search/current/engines.html#engines-create)
+##### [`AppSearch.create_engine()`](https://www.elastic.co/guide/en/app-search/7.10/engines.html#engines-create)
 
 Creates a new engine
 
@@ -354,7 +354,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.delete_engine()`](https://www.elastic.co/guide/en/app-search/current/engines.html#engines-delete)
+##### [`AppSearch.delete_engine()`](https://www.elastic.co/guide/en/app-search/7.10/engines.html#engines-delete)
 
 Delete an engine by name
 
@@ -365,7 +365,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.get_engine()`](https://www.elastic.co/guide/en/app-search/current/engines.html#engines-get)
+##### [`AppSearch.get_engine()`](https://www.elastic.co/guide/en/app-search/7.10/engines.html#engines-get)
 
 Retrieves an engine by name
 
@@ -376,7 +376,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.list_engines()`](https://www.elastic.co/guide/en/app-search/current/engines.html#engines-list)
+##### [`AppSearch.list_engines()`](https://www.elastic.co/guide/en/app-search/7.10/engines.html#engines-list)
 
 Retrieves all engines with optional pagination support
 
@@ -388,7 +388,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.log_clickthrough()`](https://www.elastic.co/guide/en/app-search/current/clickthrough.html)
+##### [`AppSearch.log_clickthrough()`](https://www.elastic.co/guide/en/app-search/7.10/clickthrough.html)
 
 Send data about clicked results
 
@@ -405,7 +405,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.add_meta_engine_source()`](https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-add-source-engines)
+##### [`AppSearch.add_meta_engine_source()`](https://www.elastic.co/guide/en/app-search/7.10/meta-engines.html#meta-engines-add-source-engines)
 
 Add a source engine to an existing meta engine
 
@@ -417,7 +417,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.delete_meta_engine_source()`](https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-remove-source-engines)
+##### [`AppSearch.delete_meta_engine_source()`](https://www.elastic.co/guide/en/app-search/7.10/meta-engines.html#meta-engines-remove-source-engines)
 
 Delete a source engine from a meta engine
 
@@ -429,7 +429,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.multi_search()`](https://www.elastic.co/guide/en/app-search/current/search.html#search-multi)
+##### [`AppSearch.multi_search()`](https://www.elastic.co/guide/en/app-search/7.10/search.html#search-multi)
 
 Run several search in the same request
 
@@ -441,7 +441,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.query_suggestion()`](https://www.elastic.co/guide/en/app-search/current/query-suggestion.html)
+##### [`AppSearch.query_suggestion()`](https://www.elastic.co/guide/en/app-search/7.10/query-suggestion.html)
 
 Provide relevant query suggestions for incomplete queries
 
@@ -457,7 +457,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.get_schema()`](https://www.elastic.co/guide/en/app-search/current/schema.html#schema-read)
+##### [`AppSearch.get_schema()`](https://www.elastic.co/guide/en/app-search/7.10/schema.html#schema-read)
 
 Retrieve current schema for then engine
 
@@ -468,7 +468,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.put_schema()`](https://www.elastic.co/guide/en/app-search/current/schema.html#schema-patch)
+##### [`AppSearch.put_schema()`](https://www.elastic.co/guide/en/app-search/7.10/schema.html#schema-patch)
 
 Update schema for the current engine
 
@@ -480,7 +480,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.search()`](https://www.elastic.co/guide/en/app-search/current/search.html#search-single)
+##### [`AppSearch.search()`](https://www.elastic.co/guide/en/app-search/7.10/search.html#search-single)
 
 Allows you to search over, facet and filter your data
 
@@ -492,7 +492,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.get_search_settings()`](https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-show)
+##### [`AppSearch.get_search_settings()`](https://www.elastic.co/guide/en/app-search/7.10/search-settings.html#search-settings-show)
 
 Retrive current search settings for the engine
 
@@ -503,7 +503,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.put_search_settings()`](https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-update)
+##### [`AppSearch.put_search_settings()`](https://www.elastic.co/guide/en/app-search/7.10/search-settings.html#search-settings-update)
 
 Update search settings for the engine
 
@@ -515,7 +515,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.reset_search_settings()`](https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-reset)
+##### [`AppSearch.reset_search_settings()`](https://www.elastic.co/guide/en/app-search/7.10/search-settings.html#search-settings-reset)
 
 Reset search settings for the engine
 
@@ -526,7 +526,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.create_synonym_set()`](https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-create)
+##### [`AppSearch.create_synonym_set()`](https://www.elastic.co/guide/en/app-search/7.10/synonyms.html#synonyms-create)
 
 Create a new synonym set
 
@@ -538,7 +538,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.delete_synonym_set()`](https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-delete)
+##### [`AppSearch.delete_synonym_set()`](https://www.elastic.co/guide/en/app-search/7.10/synonyms.html#synonyms-delete)
 
 Delete a synonym set by ID
 
@@ -550,7 +550,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.get_synonym_set()`](https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-list-one)
+##### [`AppSearch.get_synonym_set()`](https://www.elastic.co/guide/en/app-search/7.10/synonyms.html#synonyms-list-one)
 
 Retrieve a synonym set by ID
 
@@ -562,7 +562,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.put_synonym_set()`](https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-update)
+##### [`AppSearch.put_synonym_set()`](https://www.elastic.co/guide/en/app-search/7.10/synonyms.html#synonyms-update)
 
 Update a synonym set by ID
 
@@ -575,7 +575,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.list_synonym_sets()`](https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-get)
+##### [`AppSearch.list_synonym_sets()`](https://www.elastic.co/guide/en/app-search/7.10/synonyms.html#synonyms-get)
 
 Retrieve available synonym sets for the engine
 
@@ -588,7 +588,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.get_top_clicks_analytics()`](https://www.elastic.co/guide/en/app-search/current/clicks.html)
+##### [`AppSearch.get_top_clicks_analytics()`](https://www.elastic.co/guide/en/app-search/7.10/clicks.html)
 
 Returns the number of clicks received by a document in descending order
 
@@ -603,7 +603,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`AppSearch.get_top_queries_analytics()`](https://www.elastic.co/guide/en/app-search/current/queries.html#queries-top-queries)
+##### [`AppSearch.get_top_queries_analytics()`](https://www.elastic.co/guide/en/app-search/7.10/queries.html#queries-top-queries)
 
 Returns queries analytics by usage count
 
@@ -624,7 +624,7 @@ Parameters:
 <details>
   <summary>Expand for all APIs</summary>
 
-##### [`WorkplaceSearch.delete_documents()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#destroy)
+##### [`WorkplaceSearch.delete_documents()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-custom-sources-api.html#destroy)
 
 Deletes a list of documents from a custom content source
 
@@ -637,7 +637,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.index_documents()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#index-and-update)
+##### [`WorkplaceSearch.index_documents()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-custom-sources-api.html#index-and-update)
 
 Indexes one or more new documents into a custom content source, or updates one
 or more existing documents
@@ -651,7 +651,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.list_external_identities()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#list-external-identities)
+##### [`WorkplaceSearch.list_external_identities()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-external-identities-api.html#list-external-identities)
 
 Retrieves all external identities
 
@@ -665,7 +665,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.create_external_identity()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#add-external-identity)
+##### [`WorkplaceSearch.create_external_identity()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-external-identities-api.html#add-external-identity)
 
 Adds a new external identity
 
@@ -678,7 +678,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.delete_external_identity()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#remove-external-identity)
+##### [`WorkplaceSearch.delete_external_identity()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-external-identities-api.html#remove-external-identity)
 
 Deletes an external identity
 
@@ -691,7 +691,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.get_external_identity()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#show-external-identity)
+##### [`WorkplaceSearch.get_external_identity()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-external-identities-api.html#show-external-identity)
 
 Retrieves an external identity
 
@@ -704,7 +704,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.put_external_identity()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#update-external-identity)
+##### [`WorkplaceSearch.put_external_identity()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-external-identities-api.html#update-external-identity)
 
 Updates an external identity
 
@@ -718,7 +718,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.list_permissions()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#list)
+##### [`WorkplaceSearch.list_permissions()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-document-permissions-api.html#list)
 
 Lists all permissions for all users
 
@@ -732,7 +732,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.remove_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#remove-one)
+##### [`WorkplaceSearch.remove_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-document-permissions-api.html#remove-one)
 
 Removes one or more permissions from an existing set of permissions
 
@@ -746,7 +746,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.search()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-search-api.html)
+##### [`WorkplaceSearch.search()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-search-api.html)
 
 search across available sources with various query tuning options
 
@@ -757,7 +757,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.add_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#add-one)
+##### [`WorkplaceSearch.add_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-document-permissions-api.html#add-one)
 
 Adds one or more new permissions atop existing permissions
 
@@ -771,7 +771,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.get_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#list-one)
+##### [`WorkplaceSearch.get_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-document-permissions-api.html#list-one)
 
 Lists all permissions for one user
 
@@ -784,7 +784,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`WorkplaceSearch.put_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#add-all)
+##### [`WorkplaceSearch.put_user_permissions()`](https://www.elastic.co/guide/en/workplace-search/7.10/workplace-search-document-permissions-api.html#add-all)
 
 Creates a new set of permissions or over-writes all existing permissions
 
@@ -805,7 +805,7 @@ Parameters:
 <details>
   <summary>Expand for all APIs</summary>
 
-##### [`EnterpriseSearch.get_health()`](https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#health-api-example)
+##### [`EnterpriseSearch.get_health()`](https://www.elastic.co/guide/en/enterprise-search/7.10/monitoring-apis.html#health-api-example)
 
 Get information on the health of a deployment and basic statistics around
 resource usage
@@ -816,7 +816,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`EnterpriseSearch.get_read_only()`](https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#getting-read-only-state)
+##### [`EnterpriseSearch.get_read_only()`](https://www.elastic.co/guide/en/enterprise-search/7.10/read-only-api.html#getting-read-only-state)
 
 Get the read-only flag's state
 
@@ -826,7 +826,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`EnterpriseSearch.put_read_only()`](https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#setting-read-only-state)
+##### [`EnterpriseSearch.put_read_only()`](https://www.elastic.co/guide/en/enterprise-search/7.10/read-only-api.html#setting-read-only-state)
 
 Update the read-only flag's state
 
@@ -837,7 +837,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`EnterpriseSearch.get_stats()`](https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#stats-api-example)
+##### [`EnterpriseSearch.get_stats()`](https://www.elastic.co/guide/en/enterprise-search/7.10/monitoring-apis.html#stats-api-example)
 
 Get information about the resource usage of the application, the state of
 different internal queues, etc.
@@ -849,7 +849,7 @@ Parameters:
 - `http_auth`: Access token or HTTP basic auth username
   and password to send with the request
 
-##### [`EnterpriseSearch.get_version()`](https://www.elastic.co/guide/en/enterprise-search/current/management-apis.html)
+##### [`EnterpriseSearch.get_version()`](https://www.elastic.co/guide/en/enterprise-search/7.10/management-apis.html)
 
 Get version information for this server
 

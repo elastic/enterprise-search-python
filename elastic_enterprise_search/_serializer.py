@@ -19,7 +19,7 @@ import datetime
 
 from elastic_transport import JSONSerializer as _JSONSerializer
 
-from .utils import format_datetime
+from ._utils import format_datetime
 
 
 class JSONSerializer(_JSONSerializer):
