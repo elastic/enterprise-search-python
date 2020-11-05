@@ -16,7 +16,7 @@
 #  under the License.
 
 from .._utils import DEFAULT, SKIP_IN_PATH, make_params, make_path  # noqa: F401
-from .base import BaseClient
+from ._base import BaseClient
 
 
 class WorkplaceSearch(BaseClient):
