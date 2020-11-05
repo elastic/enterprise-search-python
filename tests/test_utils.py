@@ -20,7 +20,7 @@ import datetime
 import pytest
 from dateutil import tz
 
-from elastic_enterprise_search import utils
+from elastic_enterprise_search import _utils
 
 
 def test_format_datetime_tz_naive():
@@ -30,7 +30,7 @@ def test_format_datetime_tz_naive():
     # Should serialize the same as local timezone
     dt2 = dt.replace(tzinfo=tz.tzlocal())
 
-    assert utils.format_datetime(dt) == utils.format_datetime(dt2)
+    assert _utils.format_datetime(dt) == _utils.format_datetime(dt2)
 
     # This is the dicey one, utcnow() is very broken and not recommended.
     dt = datetime.datetime.utcnow()
@@ -41,13 +41,13 @@ def test_format_datetime_tz_naive():
     # The two are only equal if the local timezone is UTC
     # otherwise they are different :(
     if tz.tzlocal() == tz.UTC:
-        assert utils.format_datetime(dt) == utils.format_datetime(dt2)
+        assert _utils.format_datetime(dt) == _utils.format_datetime(dt2)
     else:
-        assert utils.format_datetime(dt) != utils.format_datetime(dt2)
+        assert _utils.format_datetime(dt) != _utils.format_datetime(dt2)
 
 
 def test_make_params():
-    assert utils.make_params(
+    assert _utils.make_params(
         {},
         {
             "a": 1,
@@ -80,12 +80,12 @@ def test_make_params():
 
 def test_make_params_conflict():
     with pytest.raises(ValueError) as e:
-        utils.make_params({"k": "v1"}, {"k": "v2"})
+        _utils.make_params({"k": "v1"}, {"k": "v2"})
     assert str(e.value) == "Conflict between keyword argument and 'params'"
 
 
 def test_make_params_encode_and_none():
-    params = utils.make_params(
+    params = _utils.make_params(
         {"k1": ("!@#$%^&*", "(){}[]./"), "k2": None},
         {"k2": None, "k3": ",.*", "k4": 10},
     )
@@ -98,7 +98,7 @@ def test_make_params_encode_and_none():
 
 def test_make_path():
     assert (
-        utils.make_path(
+        _utils.make_path(
             "a",
             1,
             "/&",
@@ -128,12 +128,12 @@ def test_datetime_with_timezone():
     dt = datetime.datetime(
         year=2020, month=1, day=1, hour=10, minute=0, second=0, tzinfo=tz.gettz("HST")
     )
-    assert utils.make_params({}, {"dt": dt}) == {"dt": "2020-01-01T10:00:00-10:00"}
+    assert _utils.make_params({}, {"dt": dt}) == {"dt": "2020-01-01T10:00:00-10:00"}
 
     dt = datetime.datetime(
         year=2020, month=1, day=1, hour=10, minute=0, second=0, tzinfo=tz.UTC
     )
-    assert utils.make_params({}, {"dt": dt}) == {"dt": "2020-01-01T10:00:00Z"}
+    assert _utils.make_params({}, {"dt": dt}) == {"dt": "2020-01-01T10:00:00Z"}
 
 
 @pytest.mark.parametrize(
@@ -186,12 +186,12 @@ def test_datetime_with_timezone():
     ],
 )
 def test_parse_datetime(value, dt):
-    assert utils.parse_datetime(value) == dt
+    assert _utils.parse_datetime(value) == dt
 
 
 def test_parse_datetime_bad_format():
     with pytest.raises(ValueError) as e:
-        utils.parse_datetime("2020-03-10T10:10:10")
+        _utils.parse_datetime("2020-03-10T10:10:10")
     assert (
         str(e.value)
         == "Datetime must match format '(YYYY)-(MM)-(DD)T(HH):(MM):(SS)(TZ)' was '2020-03-10T10:10:10'"

@@ -15,7 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from ..utils import DEFAULT, SKIP_IN_PATH, make_params, make_path  # noqa: F401
+from .._utils import DEFAULT, SKIP_IN_PATH, make_params, make_path  # noqa: F401
 from .base import BaseClient
 
 
