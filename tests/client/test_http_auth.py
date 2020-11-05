@@ -18,7 +18,7 @@
 
 import pytest
 
-from elastic_enterprise_search.utils import DEFAULT
+from elastic_enterprise_search._utils import DEFAULT
 from tests.conftest import DummyConnection
 
 

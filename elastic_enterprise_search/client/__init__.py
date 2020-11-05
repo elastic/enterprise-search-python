@@ -18,14 +18,12 @@
 import jwt
 from six import ensure_str
 
-from .app_search import AppSearch as _AppSearch
-from .enterprise_search import EnterpriseSearch as _EnterpriseSearch
-from .workplace_search import WorkplaceSearch as _WorkplaceSearch
+from .._utils import DEFAULT
+from ._app_search import AppSearch as _AppSearch
+from ._enterprise_search import EnterpriseSearch as _EnterpriseSearch
+from ._workplace_search import WorkplaceSearch as _WorkplaceSearch
 
 __all__ = ["AppSearch", "EnterpriseSearch", "WorkplaceSearch"]
-
-
-DEFAULT = object()
 
 
 class AppSearch(_AppSearch):
