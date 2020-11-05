@@ -16,11 +16,12 @@
 #  under the License.
 
 import elastic_enterprise_search
-from elastic_enterprise_search import utils
+from elastic_enterprise_search import _utils, client
 
 
 def test_all_is_sorted():
     assert elastic_enterprise_search.__all__ == sorted(
         elastic_enterprise_search.__all__
     )
-    assert utils.__all__ == sorted(utils.__all__)
+    assert _utils.__all__ == sorted(_utils.__all__)
+    assert client.__all__ == sorted(client.__all__)

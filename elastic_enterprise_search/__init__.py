@@ -35,9 +35,9 @@ from elastic_transport import ServiceUnavailableError as ServiceUnavailableError
 from elastic_transport import TransportError as TransportError
 from elastic_transport import UnauthorizedError as UnauthorizedError
 
+from ._serializer import JSONSerializer
 from ._version import __version__  # noqa: F401
 from .client import AppSearch, EnterpriseSearch, WorkplaceSearch
-from .serializer import JSONSerializer
 
 __all__ = [
     "APIError",
