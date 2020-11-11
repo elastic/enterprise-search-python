@@ -64,7 +64,6 @@ setup(
     ],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*",
     extras_require={
-        "requests": ["requests>=2.4.0, <3.0.0"],
         "develop": [
             "pytest",
             "pytest-cov",
