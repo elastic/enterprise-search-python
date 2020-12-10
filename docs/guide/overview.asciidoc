@@ -1,0 +1,132 @@
+[[overview]]
+== Overview
+
+This is the official low-level Python client for Elastic Enterprise Search.
+Its goal is to provide common ground for all Enterprise Search-related code in Python.
+For this reason, the client  is designed to be un-opinionated and extendable.
+
+[discrete]
+=== Compatibility
+
+Current development happens in the master branch.
+
+The library is compatible with all Elastic Enterprise Search versions since `7.x`
+but you **have to use a matching major version**:
+
+For **Elastic Enterprise Search 7.0** and later, use the major version 7 (`7.x.y`) of the
+library.
+
+The recommended way to set your requirements in your `setup.py` or
+`requirements.txt` is::
+
+    # Elastic Enterprise Search 7.x
+    elastic-enterprise-search>=7,<8
+
+[discrete]
+=== Example use
+
+Simple use-case:
+
+[source,python]
+------------------------------------
+>>> from elastic_enterprise_search import EnterpriseSearch
+
+# Connecting to an instance on Elastic Cloud w/ username and password
+>>> ent_search = EnterpriseSearch(
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
+    http_auth=("elastic", "<password>"),
+)
+>>> ent_search.get_version()
+{'number': '7.10.0', 'build_hash': '9d6eb9f067b7d7090c541890c21f6a1e15f29c48', 'build_date': '2020-10-05T16:19:16Z'}
+
+# If you're only planning on using App Search you
+# can instantiate App Search namespaced client by itself:
+>>> from elastic_enterprise_search import AppSearch
+
+# Connecting to an instance on Elastic Cloud w/ an App Search private key
+>>> app_search = AppSearch(
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
+    http_auth="private-<private key>",
+)
+>>> app_search.index_documents(
+    engine_name="national-parks",
+    body=[{
+        "id": "yellowstone",
+        "title": "Yellowstone National Park"
+    }]
+)
+------------------------------------
+
+[NOTE]
+All the API calls map the raw REST API as closely as possible, including
+the distinction between required and optional arguments to the calls. This
+means that the code makes distinction between positional and keyword arguments;
+**we recommend that people use keyword arguments for all calls for
+consistency and safety.**
+
+
+[discrete]
+==== Using Python datetimes with timezones
+
+Python https://docs.python.org/3/library/datetime.html#datetime.datetime[`datetime.datetime`]
+objects are automatically serialized according to https://tools.ietf.org/html/rfc3339[RFC 3339]
+which requires a timezone to be included. We highly recommend using datetimes that
+are timezone-aware. When creating a datetime object, use the `tzinfo` or `tz` parameter
+along with https://dateutil.readthedocs.io[`python-dateutil`] to ensure proper
+timezones on serialized `datetime` objects.
+
+To get the current day and time in UTC you can do the following:
+
+[source,python]
+------------------------------------
+import datetime
+from dateutil import tz
+
+now = datetime.datetime.now(tz=tz.UTC)
+------------------------------------
+
+⚠️ **Datetimes without timezone information will be serialized as if they were within
+the locally configured timezone.** This is in line with HTTP and RFC 3339 specs
+which state that datetimes without timezone information should be assumed to be local time.
+
+⚠️ https://blog.ganssle.io/articles/2019/11/utcnow.html[**Do not use `datetime.datetime.utcnow()` or `utcfromtimestamp()`!**]
+These APIs don't add timezone information to the resulting datetime which causes the
+serializer to return incorrect results.
+
+
+[discrete]
+=== Features
+
+The client's features include:
+
+* Translating basic Python data types to and from JSON
+
+* Persistent connections
+
+* Failed connection penalization (time based - failed connections won't be
+  retried until a timeout is reached)
+
+* Thread safety
+
+* Pluggable architecture
+
+
+[discrete]
+=== License
+
+Licensed to Elasticsearch B.V. under one or more contributor
+license agreements. See the NOTICE file distributed with
+this work for additional information regarding copyright
+ownership. Elasticsearch B.V. licenses this file to you under
+the Apache License, Version 2.0 (the "License"); you may
+not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
