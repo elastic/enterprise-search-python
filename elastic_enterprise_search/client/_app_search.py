@@ -1395,12 +1395,6 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(
-            params,
-            {
-                "synonyms": synonyms,
-            },
-        )
         return self.perform_request(
             "POST",
             make_path(
@@ -1411,6 +1405,7 @@ class AppSearch(BaseClient):
                 engine_name,
                 "synonyms",
             ),
+            body={"synonyms": synonyms},
             params=params,
             headers=headers,
             http_auth=http_auth,
