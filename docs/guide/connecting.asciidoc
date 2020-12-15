@@ -1,0 +1,128 @@
+[[connecting]]
+== Connecting
+
+This page contains the information you need to connect and use the Client with 
+Elastic Enterprise Search.
+
+**On this page**
+
+* <<authentication>>
+
+
+[discrete]
+[[authentication]]
+=== Authentication
+
+This section contains code snippets to show you how to connect to Enterprise Search,
+App Search, and Workplace Search.
+
+Each service has its own authentication schemes. Using the `http_auth` property with either a string
+for a key / token or a tuple of `(username, password)` for basic authentication will set the proper
+`Authorization` HTTP header on the client instance.
+
+
+[discrete]
+[[auth-as]]
+==== Authenticating with App Search
+
+App Search supports authenticating with
+search keys, private keys, and signed search keys:
+
+[source,py]
+----------------------------
+from elastic_enterprise_search import AppSearch
+
+# Create an AppSearch client authenticated with a search key.
+server_side = AppSearch(
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
+    http_auth="<search key>"
+)
+
+# Creating a Signed Search Key on the server side...
+signed_search_key = server_side.create_signed_search_key(
+    api_key=server_side.http_auth,
+    api_key_name="<api key name>",
+    search_fields={
+        "body": {}
+    }   
+)
+
+# ...then a different client can then
+# use the Signed Search key for searches:
+client_side = AppSearch(
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
+    http_auth=signed_search_key
+)
+resp = client_side.search(
+    engine_name="example-engine",
+    body={
+        ...
+    }
+)
+----------------------------
+
+
+[discrete]
+[[auth-ws]]
+==== Authenticating with Workplace Search
+
+Workplace Search supports authenticating with
+a custom content source access token and with
+an OAuth access token:
+
+[source,py]
+----------------------------
+from elastic_enterprise_search import EnterpriseSearch
+
+ent_search = EnterpriseSearch(
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io"
+)
+
+# Authenticating with Workplace Search
+# Custom API Content Source access token
+ent_search.workplace_search.http_auth = "<content source access token>"
+
+# You can also use an authentication method for a single
+# request. This is useful for per-user authentication like OAuth:
+ent_search.workplace_search.search(
+    body={"query": "That one document"},
+    http_auth="<oauth access token>"
+)
+
+# You can also create a WorkplaceSearch client on its
+# own an authenticate in the constructor:
+from elastic_enterprise_search import WorkplaceSearch
+
+workplace_search = WorkplaceSearch(
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
+    http_auth="<content source access token>"
+)
+----------------------------
+
+
+[discrete]
+[[auth-ent]]
+==== Authenticating with Enterprise Search
+
+Enterprise Search supports HTTP basic authentication
+with a username and password.
+
+HTTP basic authentication uses the `http_auth` parameter
+by passing in a username and password as a tuple:
+
+[source,py]
+----------------------------
+from elastic_enterprise_search import EnterpriseSearch
+
+# Authenticating via basic auth for Enterprise Search APIs
+ent_search = EnterpriseSearch(
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
+    http_auth=("enterprise_search", "<password>")
+)
+
+# You can set `http_auth` property on the client
+ent_search.http_auth = ("enterprise_search", "<password>")
+
+# You can also set a per-request `http_auth`
+ent_search.get_version(http_auth=("enterprise_search", "<password>"))
+----------------------------
