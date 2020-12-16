@@ -20,9 +20,50 @@ from ._base import BaseClient
 
 
 class WorkplaceSearch(BaseClient):
+    def create_analytics_event(
+        self,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        capture click and feedback analytic events
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-analytics-api.html>`_
+
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        """
+        return self.perform_request(
+            "POST",
+            make_path(
+                "api",
+                "ws",
+                "v1",
+                "analytics",
+                "event",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
     def delete_documents(
         self,
-        content_source_key,
+        content_source_id,
         body,
         params=None,
         headers=None,
@@ -35,8 +76,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#destroy>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -49,7 +90,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.NotFoundError:
         :raises elastic_enterprise_search.PayloadTooLargeError:
         """
-        if content_source_key in SKIP_IN_PATH:
+        if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "POST",
@@ -58,7 +99,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "documents",
                 "bulk_destroy",
             ),
@@ -72,7 +113,7 @@ class WorkplaceSearch(BaseClient):
 
     def index_documents(
         self,
-        content_source_key,
+        content_source_id,
         body,
         params=None,
         headers=None,
@@ -86,8 +127,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#index-and-update>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -100,7 +141,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.NotFoundError:
         :raises elastic_enterprise_search.PayloadTooLargeError:
         """
-        if content_source_key in SKIP_IN_PATH:
+        if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "POST",
@@ -109,7 +150,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "documents",
                 "bulk_create",
             ),
@@ -123,7 +164,7 @@ class WorkplaceSearch(BaseClient):
 
     def list_external_identities(
         self,
-        content_source_key,
+        content_source_id,
         current_page=None,
         page_size=None,
         params=None,
@@ -137,8 +178,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#list-external-identities>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg current_page: Which page of results to request
         :arg page_size: The number of results to return in a page
         :arg params: Additional query params to send with the request
@@ -150,7 +191,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.UnauthorizedError:
         :raises elastic_enterprise_search.NotFoundError:
         """
-        if content_source_key in SKIP_IN_PATH:
+        if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params,
@@ -166,7 +207,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "external_identities",
             ),
             params=params,
@@ -178,7 +219,7 @@ class WorkplaceSearch(BaseClient):
 
     def create_external_identity(
         self,
-        content_source_key,
+        content_source_id,
         body,
         params=None,
         headers=None,
@@ -191,8 +232,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#add-external-identity>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -204,7 +245,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.UnauthorizedError:
         :raises elastic_enterprise_search.NotFoundError:
         """
-        if content_source_key in SKIP_IN_PATH:
+        if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "POST",
@@ -213,7 +254,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "external_identities",
             ),
             body=body,
@@ -226,7 +267,7 @@ class WorkplaceSearch(BaseClient):
 
     def delete_external_identity(
         self,
-        content_source_key,
+        content_source_id,
         user,
         params=None,
         headers=None,
@@ -239,8 +280,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#remove-external-identity>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg user: The username in context
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -252,7 +293,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
-            content_source_key,
+            content_source_id,
             user,
         ):
             if param in SKIP_IN_PATH:
@@ -265,7 +306,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "external_identities",
                 user,
             ),
@@ -278,7 +319,7 @@ class WorkplaceSearch(BaseClient):
 
     def get_external_identity(
         self,
-        content_source_key,
+        content_source_id,
         user,
         params=None,
         headers=None,
@@ -291,8 +332,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#show-external-identity>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg user: The username in context
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -304,7 +345,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
-            content_source_key,
+            content_source_id,
             user,
         ):
             if param in SKIP_IN_PATH:
@@ -317,7 +358,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "external_identities",
                 user,
             ),
@@ -330,7 +371,7 @@ class WorkplaceSearch(BaseClient):
 
     def put_external_identity(
         self,
-        content_source_key,
+        content_source_id,
         user,
         body,
         params=None,
@@ -344,8 +385,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#update-external-identity>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg user: The username in context
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
@@ -359,7 +400,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
-            content_source_key,
+            content_source_id,
             user,
         ):
             if param in SKIP_IN_PATH:
@@ -372,7 +413,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "external_identities",
                 user,
             ),
@@ -386,7 +427,7 @@ class WorkplaceSearch(BaseClient):
 
     def list_permissions(
         self,
-        content_source_key,
+        content_source_id,
         current_page=None,
         page_size=None,
         params=None,
@@ -400,8 +441,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#list>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg current_page: Which page of results to request
         :arg page_size: The number of results to return in a page
         :arg params: Additional query params to send with the request
@@ -415,7 +456,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.PaymentRequiredError:
         :raises elastic_enterprise_search.NotFoundError:
         """
-        if content_source_key in SKIP_IN_PATH:
+        if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
         params = make_params(
             params,
@@ -431,7 +472,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "permissions",
             ),
             params=params,
@@ -443,7 +484,7 @@ class WorkplaceSearch(BaseClient):
 
     def remove_user_permissions(
         self,
-        content_source_key,
+        content_source_id,
         user,
         body,
         params=None,
@@ -457,8 +498,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#remove-one>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg user: The username in context
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
@@ -473,7 +514,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
-            content_source_key,
+            content_source_id,
             user,
         ):
             if param in SKIP_IN_PATH:
@@ -486,7 +527,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "permissions",
                 user,
                 "remove",
@@ -541,7 +582,7 @@ class WorkplaceSearch(BaseClient):
 
     def add_user_permissions(
         self,
-        content_source_key,
+        content_source_id,
         user,
         body,
         params=None,
@@ -555,8 +596,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#add-one>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg user: The username in context
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
@@ -571,7 +612,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
-            content_source_key,
+            content_source_id,
             user,
         ):
             if param in SKIP_IN_PATH:
@@ -584,7 +625,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "permissions",
                 user,
                 "add",
@@ -599,7 +640,7 @@ class WorkplaceSearch(BaseClient):
 
     def get_user_permissions(
         self,
-        content_source_key,
+        content_source_id,
         user,
         params=None,
         headers=None,
@@ -612,8 +653,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#list-one>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg user: The username in context
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -626,7 +667,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
-            content_source_key,
+            content_source_id,
             user,
         ):
             if param in SKIP_IN_PATH:
@@ -639,7 +680,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "permissions",
                 user,
             ),
@@ -652,7 +693,7 @@ class WorkplaceSearch(BaseClient):
 
     def put_user_permissions(
         self,
-        content_source_key,
+        content_source_id,
         user,
         body,
         params=None,
@@ -666,8 +707,8 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#add-all>`_
 
-        :arg content_source_key: Unique key for a Custom API source, provided
-            upon creation of a Custom API Source
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
         :arg user: The username in context
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
@@ -682,7 +723,7 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.NotFoundError:
         """
         for param in (
-            content_source_key,
+            content_source_id,
             user,
         ):
             if param in SKIP_IN_PATH:
@@ -695,7 +736,7 @@ class WorkplaceSearch(BaseClient):
                 "ws",
                 "v1",
                 "sources",
-                content_source_key,
+                content_source_id,
                 "permissions",
                 user,
             ),

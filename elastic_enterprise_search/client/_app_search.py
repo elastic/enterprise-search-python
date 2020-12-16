@@ -1118,7 +1118,7 @@ class AppSearch(BaseClient):
         ignore_status=(),
     ):
         """
-        Retrieve current schema for then engine
+        Retrieve current schema for the engine
 
         `<https://www.elastic.co/guide/en/app-search/current/schema.html#schema-read>`_
 
@@ -1367,7 +1367,7 @@ class AppSearch(BaseClient):
     def create_synonym_set(
         self,
         engine_name,
-        synonyms,
+        body,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -1380,7 +1380,7 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-create>`_
 
         :arg engine_name: Name of the engine
-        :arg synonyms: List of synonyms words
+        :arg body: Synonym set description
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -1388,19 +1388,8 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        for param in (
-            engine_name,
-            synonyms,
-        ):
-            if param in SKIP_IN_PATH:
-                raise ValueError("Empty value passed for a required argument")
-
-        params = make_params(
-            params,
-            {
-                "synonyms": synonyms,
-            },
-        )
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
         return self.perform_request(
             "POST",
             make_path(
@@ -1411,6 +1400,7 @@ class AppSearch(BaseClient):
                 engine_name,
                 "synonyms",
             ),
+            body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -1520,7 +1510,7 @@ class AppSearch(BaseClient):
         self,
         engine_name,
         synonym_set_id,
-        synonyms,
+        body,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -1534,7 +1524,7 @@ class AppSearch(BaseClient):
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
-        :arg synonyms: List of synonyms words
+        :arg body: Synonym set description
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -1545,17 +1535,10 @@ class AppSearch(BaseClient):
         for param in (
             engine_name,
             synonym_set_id,
-            synonyms,
         ):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(
-            params,
-            {
-                "synonyms": synonyms,
-            },
-        )
         return self.perform_request(
             "PUT",
             make_path(
@@ -1567,6 +1550,7 @@ class AppSearch(BaseClient):
                 "synonyms",
                 synonym_set_id,
             ),
+            body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
