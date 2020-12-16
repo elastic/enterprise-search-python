@@ -36,7 +36,7 @@ def test_transport_constructor(client_class, option):
 
 @pytest.mark.parametrize("request_timeout", [3, 5.0])
 def test_request_timeout(request_timeout):
-    client = EnterpriseSearch(connection_class=DummyConnection)
+    client = EnterpriseSearch(connection_class=DummyConnection, meta_header=False)
     client.get_version(request_timeout=request_timeout)
 
     calls = client.transport.get_connection().calls

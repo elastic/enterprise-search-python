@@ -60,6 +60,7 @@ def tests_impl(session):
         abspath(dirname(__file__)),
         "junit/enterprise-search-python-junit.xml",
     )
+    session.install("git+https://github.com/elastic/elastic-transport-python")
     session.install(".[develop]")
     session.run(
         "pytest",

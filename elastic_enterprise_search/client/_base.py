@@ -18,7 +18,11 @@
 import base64
 
 from elastic_transport import Transport
-from elastic_transport.utils import create_user_agent, normalize_headers
+from elastic_transport.utils import (
+    client_meta_version,
+    create_user_agent,
+    normalize_headers,
+)
 from six import ensure_binary, ensure_str, ensure_text
 
 from .._serializer import JSONSerializer
@@ -34,12 +38,16 @@ class BaseClient(object):
         hosts=None,
         http_auth=None,
         transport_class=None,
+        meta_header=None,
         _transport=None,
         **kwargs
     ):
         if _transport is not None:
             if (
-                any(x is not None for x in (hosts, http_auth, transport_class))
+                any(
+                    x is not None
+                    for x in (hosts, http_auth, transport_class, meta_header)
+                )
                 or kwargs
             ):
                 raise ValueError(
@@ -56,9 +64,16 @@ class BaseClient(object):
             kwargs.setdefault("serializers", {"application/json": JSONSerializer()})
             self.transport = (transport_class or Transport)(hosts, **kwargs)
 
+        if meta_header is None:
+            meta_header = True
+
         self._user_agent_header = create_user_agent(
             name="enterprise-search-python", version=__version__
         )
+        self._client_meta = (
+            ("ent", client_meta_version(__version__)),
+        ) + self.transport.transport_client_meta
+        self.meta_header = meta_header
 
         # Clients hold on to their own 'Authorization' HTTP header
         # because Enterprise, Workplace, and App Search all have
@@ -89,6 +104,16 @@ class BaseClient(object):
     @http_auth.setter
     def http_auth(self, http_auth):
         self._authorization_header = self._parse_http_auth(http_auth)
+
+    @property
+    def meta_header(self):
+        return self._meta_header
+
+    @meta_header.setter
+    def meta_header(self, meta_header):
+        if not isinstance(meta_header, bool):
+            raise TypeError("meta_header must be of type bool")
+        self._meta_header = meta_header
 
     @staticmethod
     def _parse_http_auth(http_auth):
@@ -132,6 +157,21 @@ class BaseClient(object):
         """
         headers = normalize_headers(headers)
         headers.setdefault("user-agent", self._user_agent_header)
+
+        # Remove additional client meta from params
+        # on the '__elastic_client_meta' parameter and create
+        # the 'x-elastic-client-meta' HTTP header if
+        # meta_header is set to True.
+        if params:
+            client_meta = params.pop("__elastic_client_meta", ())
+        else:
+            client_meta = ()
+        if self.meta_header:
+            client_meta = self._client_meta + client_meta
+            headers["x-elastic-client-meta"] = ",".join(
+                "%s=%s" % (k, v) for k, v in client_meta
+            )
+
         if self._authorization_header is not None or http_auth is not DEFAULT:
             if http_auth is not DEFAULT:
                 auth_header = self._parse_http_auth(http_auth)

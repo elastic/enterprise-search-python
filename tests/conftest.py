@@ -23,7 +23,7 @@ from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSear
 
 @pytest.fixture(scope="module")
 def vcr_config():
-    return {"filter_headers": ["user-agent"]}
+    return {"filter_headers": ["user-agent", "x-elastic-client-meta"]}
 
 
 @pytest.fixture(params=[EnterpriseSearch, AppSearch, WorkplaceSearch])
