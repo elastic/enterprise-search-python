@@ -23,7 +23,7 @@ from dateutil import tz
 from elastic_enterprise_search import NotFoundError, WorkplaceSearch
 
 access_token = "b6e5d30d7e5248533b5a8f5362e16853e2fc32826bc940aa32bf3ff1f1748f9b"
-content_source_key = "5f7e1407678c1d8435a949a8"
+content_source_id = "5f7e1407678c1d8435a949a8"
 
 
 @pytest.fixture()
@@ -35,7 +35,7 @@ def workplace_search():
 def test_index_documents(workplace_search):
     dt = datetime.datetime(year=2019, month=6, day=1, hour=12, tzinfo=tz.UTC)
     resp = workplace_search.index_documents(
-        content_source_key=content_source_key,
+        content_source_id=content_source_id,
         body=[
             {
                 "id": 1234,
@@ -63,7 +63,7 @@ def test_index_documents(workplace_search):
 def test_index_documents_content_source_not_found(workplace_search):
     with pytest.raises(NotFoundError) as e:
         workplace_search.index_documents(
-            content_source_key=content_source_key + "a",
+            content_source_id=content_source_id + "a",
             body=[
                 {
                     "id": 1234,
