@@ -23,7 +23,7 @@ from tests.conftest import DummyConnection
 
 
 def test_http_auth_none(client_class):
-    client = client_class(connection_class=DummyConnection)
+    client = client_class(connection_class=DummyConnection, meta_header=False)
     assert client.http_auth is None
     client.perform_request("GET", "/")
 
@@ -39,7 +39,9 @@ def test_http_auth_none(client_class):
         )
     ]
 
-    client = client_class(http_auth=None, connection_class=DummyConnection)
+    client = client_class(
+        http_auth=None, connection_class=DummyConnection, meta_header=False
+    )
     assert client.http_auth is None
     client.perform_request("GET", "/")
 

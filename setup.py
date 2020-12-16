@@ -57,7 +57,7 @@ setup(
     },
     packages=packages,
     install_requires=[
-        "elastic-transport>=0.dev0,<1.dev0",
+        "elastic-transport>=7,<8",
         "PyJWT",
         "python-dateutil",
         "six>=1.12",
