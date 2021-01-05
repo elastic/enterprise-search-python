@@ -17,7 +17,7 @@
 The package can be installed from PyPI:
 
 ```bash
-$ python -m pip install --pre elastic-enterprise-search
+$ python -m pip install elastic-enterprise-search
 ```
 
 The version follows the Elastic Stack version so `7.10` is compatible

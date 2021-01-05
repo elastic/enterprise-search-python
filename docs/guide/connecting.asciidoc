@@ -28,7 +28,7 @@ for a key / token or a tuple of `(username, password)` for basic authentication 
 App Search supports authenticating with
 search keys, private keys, and signed search keys:
 
-[source,py]
+[source,python]
 ----------------------------
 from elastic_enterprise_search import AppSearch
 
@@ -70,7 +70,7 @@ Workplace Search supports authenticating with
 a custom content source access token and with
 an OAuth access token:
 
-[source,py]
+[source,python]
 ----------------------------
 from elastic_enterprise_search import EnterpriseSearch
 
@@ -110,7 +110,7 @@ with a username and password.
 HTTP basic authentication uses the `http_auth` parameter
 by passing in a username and password as a tuple:
 
-[source,py]
+[source,python]
 ----------------------------
 from elastic_enterprise_search import EnterpriseSearch
 
