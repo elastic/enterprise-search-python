@@ -37,7 +37,11 @@ Simple use-case:
     http_auth=("elastic", "<password>"),
 )
 >>> ent_search.get_version()
-{'number': '7.10.0', 'build_hash': '9d6eb9f067b7d7090c541890c21f6a1e15f29c48', 'build_date': '2020-10-05T16:19:16Z'}
+{
+  'number': '7.10.0',
+  'build_hash': '9d6eb9f067b7d7090c541890c21f6a1e15f29c48',
+  'build_date': '2020-10-05T16:19:16Z'
+}
 
 # If you're only planning on using App Search you
 # can instantiate App Search namespaced client by itself:
@@ -63,6 +67,20 @@ the distinction between required and optional arguments to the calls. This
 means that the code makes distinction between positional and keyword arguments;
 **we recommend that people use keyword arguments for all calls for
 consistency and safety.**
+
+
+[discrete]
+=== Features
+
+The client's features include:
+
+* Translating basic Python data types to and from JSON
+
+* Persistent connections
+
+* Thread safety
+
+* Pluggable architecture
 
 
 [discrete]
@@ -92,23 +110,6 @@ which state that datetimes without timezone information should be assumed to be 
 ⚠️ https://blog.ganssle.io/articles/2019/11/utcnow.html[**Do not use `datetime.datetime.utcnow()` or `utcfromtimestamp()`!**]
 These APIs don't add timezone information to the resulting datetime which causes the
 serializer to return incorrect results.
-
-
-[discrete]
-=== Features
-
-The client's features include:
-
-* Translating basic Python data types to and from JSON
-
-* Persistent connections
-
-* Failed connection penalization (time based - failed connections won't be
-  retried until a timeout is reached)
-
-* Thread safety
-
-* Pluggable architecture
 
 
 [discrete]
