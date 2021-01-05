@@ -1,0 +1,14 @@
+[[installation]]
+== Installation
+
+The Python client for Enterprise Search can be installed with pip:
+
+[source,sh]
+-------------------------------------------------
+$ python -m pip install elastic-enterprise-search
+-------------------------------------------------
+
+[NOTE]
+The package `elastic-enterprise-search` was previously used as a client for
+only 'Elastic Workplace Search' before the product was renamed. When installing
+make sure you receive a version greater than 7.10.0
