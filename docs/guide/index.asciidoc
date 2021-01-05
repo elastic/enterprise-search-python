@@ -1,0 +1,11 @@
+= enterprise-search-python
+
+:doctype:           book
+
+include::{asciidoc-dir}/../../shared/attributes.asciidoc[]
+
+include::overview.asciidoc[]
+
+include::installation.asciidoc[]
+
+include::connecting.asciidoc[]
