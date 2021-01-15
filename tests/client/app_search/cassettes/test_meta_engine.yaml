@@ -1,0 +1,346 @@
+interactions:
+- request:
+    body: null
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: POST
+    uri: http://localhost:3002/api/as/v1/engines?name=source-engine-1&language=en&type=default
+  response:
+    body:
+      string: '{"name":"source-engine-1","type":"default","language":"en","document_count":0}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"74614a2504a2c94a3e1be2f355749def"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Accept-Encoding, User-Agent
+      X-App-Search-Version:
+      - 7.12.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 020351af-2e4b-4c18-aab6-780bda3f02ee
+      X-Runtime:
+      - '0.586303'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: POST
+    uri: http://localhost:3002/api/as/v1/engines?name=source-engine-2
+  response:
+    body:
+      string: '{"name":"source-engine-2","type":"default","language":null,"document_count":0}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"31836892104886f2db9ec80b40e51352"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Accept-Encoding, User-Agent
+      X-App-Search-Version:
+      - 7.12.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 092ea86b-70e6-46f2-ae0e-849e9578d9c2
+      X-Runtime:
+      - '0.619503'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: POST
+    uri: http://localhost:3002/api/as/v1/engines?name=meta-engine&type=meta&source_engines%5B%5D=source-engine-1&source_engines%5B%5D=source-engine-2
+  response:
+    body:
+      string: '{"name":"meta-engine","type":"meta","source_engines":["source-engine-1","source-engine-2"],"document_count":0}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"87bb2b2707808233e73fd310bf23ab7f"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Accept-Encoding, User-Agent
+      X-App-Search-Version:
+      - 7.12.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 4413ac36-7745-4a46-8c7d-4e993c12df10
+      X-Runtime:
+      - '0.131557'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: DELETE
+    uri: http://localhost:3002/api/as/v1/engines/source-engine-2
+  response:
+    body:
+      string: '{"deleted":true}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"ebaee1a83baef03e1492e5832fc006d0"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Accept-Encoding, User-Agent
+      X-App-Search-Version:
+      - 7.12.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 7edde1ca-ef36-4888-a3cf-b59395aefdf7
+      X-Runtime:
+      - '0.097203'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: DELETE
+    uri: http://localhost:3002/api/as/v1/engines/source-engine-1
+  response:
+    body:
+      string: '{"deleted":true}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"ebaee1a83baef03e1492e5832fc006d0"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Accept-Encoding, User-Agent
+      X-App-Search-Version:
+      - 7.12.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 494005a7-4ebc-4906-99cd-2c3f9f470e90
+      X-Runtime:
+      - '0.081105'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: GET
+    uri: http://localhost:3002/api/as/v1/engines/meta-engine
+  response:
+    body:
+      string: '{"name":"meta-engine","type":"meta","source_engines":[],"document_count":0}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"fdc9f994767ce36d8438f13d09f4c2eb"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Accept-Encoding, User-Agent
+      X-App-Search-Version:
+      - 7.12.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - cef9c212-24a9-4d36-a4ee-b12909c024a1
+      X-Runtime:
+      - '0.023017'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: POST
+    uri: http://localhost:3002/api/as/v1/engines?name=source-engine-added
+  response:
+    body:
+      string: '{"name":"source-engine-added","type":"default","language":null,"document_count":0}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"c270bf1f46bf3231c07b45c89b75e90e"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Accept-Encoding, User-Agent
+      X-App-Search-Version:
+      - 7.12.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 355da029-b2f0-4076-8f4b-88980b41f23a
+      X-Runtime:
+      - '0.649006'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '["source-engine-added"]'
+    headers:
+      authorization:
+      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: POST
+    uri: http://localhost:3002/api/as/v1/engines/meta-engine/source_engines
+  response:
+    body:
+      string: '{"name":"meta-engine","type":"meta","source_engines":["source-engine-added"],"document_count":0}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"fdc9f994767ce36d8438f13d09f4c2eb"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - Accept-Encoding, User-Agent
+      X-App-Search-Version:
+      - 7.12.0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 56e6803f-f851-40f2-a37b-7c1c44aa69fc
+      X-Runtime:
+      - '0.085542'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

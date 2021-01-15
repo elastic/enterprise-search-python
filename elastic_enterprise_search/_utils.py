@@ -20,21 +20,22 @@ import sys
 from datetime import date, datetime
 
 from dateutil import parser, tz
+from elastic_transport import QueryParams  # noqa: F401
+from elastic_transport.compat import quote, urlencode, urlparse
 from elastic_transport.utils import DEFAULT as DEFAULT
-from six import ensure_binary
-from six.moves.urllib_parse import quote, unquote, urlencode, urlparse
+from six import ensure_str
 
 __all__ = [
     "DEFAULT",
     "PY2",
     "SKIP_IN_PATH",
-    "escape",
+    "default_params_encoder",
     "format_datetime",
-    "make_params",
-    "make_path",
     "parse_datetime",
     "string_types",
-    "unquote",
+    "to_array",
+    "to_path",
+    "typing",
     "urlencode",
     "urlparse",
 ]
@@ -47,16 +48,23 @@ if PY2:
 else:
     string_types = (str, bytes)
 
+try:
+    import typing
+except ImportError:
+    typing = None
 
-def escape(value):
+
+def to_param(value):
+    # type: (typing.Any) -> str
     """
     Escape a single value of a URL string or a query parameter. If it is a list
     or tuple, turn it into a comma-separated string first.
-    """
 
-    # make sequences into comma-separated stings
+    Note that 'exploded' query string arrays are converted to individual key-value
+    pairs first so won't be encoded as a list/tuple by this method.
+    """
     if isinstance(value, (list, tuple)):
-        value = b",".join([escape(x) for x in value])
+        value = ",".join([to_param(val) for val in value])
 
     elif isinstance(value, datetime):
         value = format_datetime(value)
@@ -64,57 +72,44 @@ def escape(value):
     elif isinstance(value, date):
         value = value.isoformat()
 
-    # don't decode bytestrings
     elif isinstance(value, bytes):
-        return value
+        value = ensure_str(value, encoding="utf-8", errors="surrogatepass")
 
     elif isinstance(value, bool):
         value = str(value).lower()
 
     if not isinstance(value, string_types):
         value = str(value)
+    return value
 
-    return ensure_binary(value, encoding="utf-8", errors="surrogatepass")
 
-
-def make_path(*parts):
+def to_path(*parts):
+    # type: (typing.Any) -> str
     """
     Create a URL string from parts, omit all `None` values and empty strings.
     Convert lists and tuples to comma separated values.
     """
     return "/" + "/".join(
-        # preserve ',' and '*' in url for nicer URLs in logs
-        quote(escape(p), b",*[]:-")
-        for p in parts
-        if p not in SKIP_IN_PATH
+        # Don't percent encode these characters for nicer logs
+        quote(to_param(part), ",*[]:-")
+        for part in parts
+        if part not in SKIP_IN_PATH
     )
 
 
-def make_params(params, extra_params):
-    """
-    Creates URL query params by combining arbitrary params
-    with params designated by keyword arguments and escapes
-    them to be compatible with HTTP request URI.
-
-    Raises an exception if there is a conflict between the
-    two ways to specify a query param.
-    """
-    params = params or {}
-    wire_params = {
-        k: quote(escape(v), b",*[]:/-")
-        for k, v in (extra_params or {}).items()
-        if v is not None
-    }
-    if set(wire_params).intersection(set(params)):
-        raise ValueError("Conflict between keyword argument and 'params'")
-    for k, v in (params or {}).items():
-        if v is None:
-            continue
-        wire_params[k] = quote(escape(v), b",*[]:/-")
-    return wire_params
+def to_array(value, param=None):
+    # type: (typing.Union[typing.Tuple[typing.Any, ...], typing.List[typing.Any]], str) -> typing.Sequence[typing.Any]
+    """Ensures that a parameter is an array"""
+    if not isinstance(value, (tuple, list)):
+        raise TypeError(
+            "Parameter %smust be a tuple or list"
+            % (repr(param) + " " if param else "",)
+        )
+    return value
 
 
 def format_datetime(value):
+    # type: (datetime) -> str
     """Format a datetime object to RFC 3339"""
     # When given a timezone unaware datetime, use local timezone.
     if value.tzinfo is None:
@@ -135,6 +130,7 @@ def format_datetime(value):
 
 
 def parse_datetime(value):
+    # type: (str) -> datetime
     """Convert a string value RFC 3339 into a datetime with tzinfo"""
     if not re.match(
         r"^[0-9]{4}-[0-9]{2}-[0-9]{2}[T ][0-9]{2}:[0-9]{2}:[0-9]{2}(?:Z|[+\-][0-9]{2}:[0-9]{2})$",
@@ -145,3 +141,21 @@ def parse_datetime(value):
             % value
         )
     return parser.isoparse(value)
+
+
+def default_params_encoder(params):
+    # type: (QueryParams) -> str
+    """Convert a elastic_transport.QueryParams instance
+    into the query section of a URL.
+
+    This function is used for elastic_transport.Transport(params_encoder)
+    """
+    to_encode = []
+    for key, val in params.items():
+        key = quote(key, ",*[]:-")
+        if val is not None:  # pass-through None values
+            val = quote(to_param(val), ",*[]:-")
+        to_encode.append((key, val))
+    return "&".join(
+        ("%s=%s" % (key, val) if val is not None else key) for key, val in to_encode
+    )

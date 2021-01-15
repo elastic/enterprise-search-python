@@ -15,7 +15,10 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from .._utils import DEFAULT, SKIP_IN_PATH, make_params, make_path  # noqa: F401
+from elastic_transport import QueryParams
+from elastic_transport.response import Response  # noqa: F401
+
+from .._utils import DEFAULT, SKIP_IN_PATH, to_array, to_path, typing  # noqa: F401
 from ._base import BaseClient
 
 
@@ -42,15 +45,12 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
-                "api",
-                "ent",
-                "v1",
-                "internal",
-                "health",
-            ),
+            "/api/ent/v1/internal/health",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -79,15 +79,12 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
-                "api",
-                "ent",
-                "v1",
-                "internal",
-                "read_only_mode",
-            ),
+            "/api/ent/v1/internal/read_only_mode",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -118,15 +115,12 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "PUT",
-            make_path(
-                "api",
-                "ent",
-                "v1",
-                "internal",
-                "read_only_mode",
-            ),
+            "/api/ent/v1/internal/read_only_mode",
             body=body,
             params=params,
             headers=headers,
@@ -159,21 +153,14 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
-        params = make_params(
-            params,
-            {
-                "include": include,
-            },
-        )
+
+        params = QueryParams(params)
+        if include is not None:
+            params.add("include", include)
+
         return self.perform_request(
             "GET",
-            make_path(
-                "api",
-                "ent",
-                "v1",
-                "internal",
-                "stats",
-            ),
+            "/api/ent/v1/internal/stats",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -202,15 +189,12 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
-                "api",
-                "ent",
-                "v1",
-                "internal",
-                "version",
-            ),
+            "/api/ent/v1/internal/version",
             params=params,
             headers=headers,
             http_auth=http_auth,

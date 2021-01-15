@@ -26,7 +26,7 @@ from elastic_transport.utils import (
 from six import ensure_binary, ensure_str, ensure_text
 
 from .._serializer import JSONSerializer
-from .._utils import DEFAULT
+from .._utils import DEFAULT, default_params_encoder
 from .._version import __version__
 
 __all__ = ["BaseClient"]
@@ -59,6 +59,10 @@ class BaseClient(object):
             kwargs["default_hosts"] = [
                 {"use_ssl": False, "host": "localhost", "port": 3002}
             ]
+
+            # Default params encoder
+            kwargs["params_encoder"] = default_params_encoder
+
             # Override the default JSON serializer with one
             # that handles datetimes wrt. RFC 3339
             kwargs.setdefault("serializers", {"application/json": JSONSerializer()})
@@ -163,7 +167,7 @@ class BaseClient(object):
         # the 'x-elastic-client-meta' HTTP header if
         # meta_header is set to True.
         if params:
-            client_meta = params.pop("__elastic_client_meta", ())
+            client_meta = tuple(params.pop("__elastic_client_meta", ()))
         else:
             client_meta = ()
         if self.meta_header:

@@ -42,7 +42,7 @@ def test_request_timeout(request_timeout):
     calls = client.transport.get_connection().calls
     assert calls == [
         (
-            ("GET", "/api/ent/v1/internal/version", None, None),
+            ("GET", "/api/ent/v1/internal/version", None),
             {
                 "headers": {"user-agent": client._user_agent_header},
                 "ignore_status": (),

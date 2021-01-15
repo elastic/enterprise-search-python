@@ -19,6 +19,7 @@ import datetime
 
 import pytest
 from dateutil import tz
+from elastic_transport import QueryParams
 
 from elastic_enterprise_search import _utils
 
@@ -46,59 +47,42 @@ def test_format_datetime_tz_naive():
         assert _utils.format_datetime(dt) != _utils.format_datetime(dt2)
 
 
-def test_make_params():
-    assert _utils.make_params(
-        {},
-        {
-            "a": 1,
-            "b": u"z",
-            "c": ["d", 2],
-            "e": datetime.date(year=2020, month=1, day=1),
-            "f": datetime.datetime(
-                year=2020,
-                month=2,
-                day=3,
-                hour=4,
-                minute=5,
-                second=6,
-                microsecond=7,
-                tzinfo=tz.gettz("HST"),
+def test_to_params():
+    params = QueryParams(
+        [
+            ("a", 1),
+            ("b", u"z"),
+            ("c", ["d", 2]),
+            ("e", datetime.date(year=2020, month=1, day=1)),
+            (
+                "f",
+                datetime.datetime(
+                    year=2020,
+                    month=2,
+                    day=3,
+                    hour=4,
+                    minute=5,
+                    second=6,
+                    microsecond=7,
+                    tzinfo=tz.gettz("HST"),
+                ),
             ),
-            "g": True,
-            "h": b"hello-world",
-        },
-    ) == {
-        "a": "1",
-        "b": "z",
-        "c": "d,2",
-        "e": "2020-01-01",
-        "f": "2020-02-03T04:05:06-10:00",
-        "g": "true",
-        "h": "hello-world",
-    }
-
-
-def test_make_params_conflict():
-    with pytest.raises(ValueError) as e:
-        _utils.make_params({"k": "v1"}, {"k": "v2"})
-    assert str(e.value) == "Conflict between keyword argument and 'params'"
-
-
-def test_make_params_encode_and_none():
-    params = _utils.make_params(
-        {"k1": ("!@#$%^&*", "(){}[]./"), "k2": None},
-        {"k2": None, "k3": ",.*", "k4": 10},
+            ("g", (True, False)),
+            ("h", b"hello-world"),
+            ("i", None),
+            ("z", "[]1234567890-_~. `=!@#$%^&*()+;'{}:,<>?/\\\""),
+        ]
     )
-    assert params == {
-        "k1": "%21%40%23%24%25%5E%26*,%28%29%7B%7D[]./",
-        "k3": ",.*",
-        "k4": "10",
-    }
+    assert _utils.default_params_encoder(params) == (
+        "a=1&b=z&c=d,2&e=2020-01-01&f=2020-02-03T04:05:06-10:00&"
+        "g=true,false&h=hello-world&i&z=[]1234567890-_~."
+        "%20%60%3D%21%40%23%24%25%5E%26*%28%29%2B%3B%27%7B%7D:,%3C%3E%3F%2F%5C%22"
+    )
 
 
 def test_make_path():
     assert (
-        _utils.make_path(
+        _utils.to_path(
             "a",
             1,
             "/&",
@@ -125,15 +109,26 @@ def test_make_path():
 def test_datetime_with_timezone():
     # Hawaii Standard Time is UTC-10 and doesn't observe
     # daylight savings so this should continue to pass :)
-    dt = datetime.datetime(
-        year=2020, month=1, day=1, hour=10, minute=0, second=0, tzinfo=tz.gettz("HST")
+    params = QueryParams(
+        {
+            "dt": datetime.datetime(
+                year=2020,
+                month=1,
+                day=1,
+                hour=10,
+                minute=0,
+                second=0,
+                tzinfo=tz.gettz("HST"),
+            )
+        }
     )
-    assert _utils.make_params({}, {"dt": dt}) == {"dt": "2020-01-01T10:00:00-10:00"}
+    assert _utils.default_params_encoder(params) == "dt=2020-01-01T10:00:00-10:00"
 
     dt = datetime.datetime(
         year=2020, month=1, day=1, hour=10, minute=0, second=0, tzinfo=tz.UTC
     )
-    assert _utils.make_params({}, {"dt": dt}) == {"dt": "2020-01-01T10:00:00Z"}
+    params["dt"] = dt
+    assert _utils.default_params_encoder(params) == "dt=2020-01-01T10:00:00Z"
 
 
 @pytest.mark.parametrize(
