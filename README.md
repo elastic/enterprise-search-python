@@ -868,4 +868,4 @@ Parameters:
 ## License
 
 `enterprise-search-python` is available under the Apache-2.0 license.
-For more details see [LICENSE](https://github.com/elastic/enterprise-search-python/blob/maaster/LICENSE).
+For more details see [LICENSE](https://github.com/elastic/enterprise-search-python/blob/master/LICENSE).
