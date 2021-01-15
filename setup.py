@@ -58,13 +58,13 @@ setup(
     packages=packages,
     install_requires=[
         "elastic-transport>=7,<8",
-        "PyJWT",
-        "python-dateutil",
+        "PyJWT>=1,<3",
+        "python-dateutil>=2,<3",
         "six>=1.12",
     ],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*",
     extras_require={
-        "requests": ["requests>=2.4.0, <3.0.0"],
+        "requests": ["requests>=2.4, <3"],
         "develop": [
             "pytest",
             "pytest-cov",

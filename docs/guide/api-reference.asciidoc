@@ -1,0 +1,771 @@
+[[api]]
+== API reference
+
+The Elastic APM Python agent has several public APIs.
+Most of the public API functionality is not needed when using one of our <<framework-support, supported frameworks>>,
+but they allow customized usage.
+
+[float]
+[[enterprise-search-api]]
+=== Enterprise Search APIs
+
+[source,python]
+----
+>>> from elastic_enterprise_search import EnterpriseSearch
+>>> enterprise_search = EnterpriseSearch()
+----
+
+
+[float]
+[[enterprise-search-api-get-health]]
+===== ``EnterpriseSearch.get_health()``
+
+Get information on the health of a deployment and basic statistics around resource usage
+
+[source,python]
+----
+>>> enterprise_search.get_health()
+----
+
+[float]
+[[enterprise-search-api-get-read-only]]
+===== ``EnterpriseSearch.get_read_only()``
+
+Get the read-only flag's state
+
+[source,python]
+----
+>>> enterprise_search.get_read_only()
+----
+
+[float]
+[[enterprise-search-api-put-read-only]]
+===== ``EnterpriseSearch.put_read_only()``
+
+Update the read-only flag's state
+
+[source,python]
+----
+>>> enterprise_search.put_read_only()
+----
+
+- `body`: (*required*) HTTP request body
+[float]
+[[enterprise-search-api-get-stats]]
+===== ``EnterpriseSearch.get_stats()``
+
+Get information about the resource usage of the application, the state of different internal
+queues, etc.
+
+[source,python]
+----
+>>> enterprise_search.get_stats()
+----
+
+- `include`: (*optional*) Comma-separated list of stats to return
+[float]
+[[enterprise-search-api-get-version]]
+===== ``EnterpriseSearch.get_version()``
+
+Get version information for this server
+
+[source,python]
+----
+>>> enterprise_search.get_version()
+----
+
+[float]
+[[app-search-api]]
+=== App Search APIs
+
+[source,python]
+----
+>>> app_search = AppSearch()
+----
+
+
+[float]
+[[app-search-api-get-api-logs]]
+===== ``AppSearch.get_api_logs()``
+
+The API Log displays API request and response data at the Engine level
+
+[source,python]
+----
+>>> app_search.get_api_logs()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `from_date`: (*required*) Filter date from
+- `to_date`: (*required*) Filter date to
+- `current_page`: (*optional*) The page to fetch. Defaults to 1
+- `page_size`: (*optional*) The number of results per page
+- `query`: (*optional*) Use this to specify a particular endpoint, like
+  analytics, search, curations and so on
+- `http_status_filter`: (*optional*) Filter based on a particular status
+  code: 400, 401, 403, 429, 200
+- `http_method_filter`: (*optional*) Filter based on a particular HTTP
+  method: GET, POST, PUT, PATCH, DELETE
+- `sort_direction`: (*optional*) Would you like to have your results
+  ascending, oldest to newest, or descending, newest to oldest?
+[float]
+[[app-search-api-get-count-analytics]]
+===== ``AppSearch.get_count_analytics()``
+
+Returns the number of clicks and total number of queries over a period
+
+[source,python]
+----
+>>> app_search.get_count_analytics()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `filters`: (*optional*) Analytics filters
+- `interval`: (*optional*) You can define an interval along with your
+  date range. Can be either hour or day
+[float]
+[[app-search-api-create-curation]]
+===== ``AppSearch.create_curation()``
+
+Create a new curation
+
+[source,python]
+----
+>>> app_search.create_curation()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `queries`: (*required*) List of affected search queries
+- `promoted_doc_ids`: (*optional*) List of promoted document IDs
+- `hidden_doc_ids`: (*optional*) List of hidden document IDs
+[float]
+[[app-search-api-delete-curation]]
+===== ``AppSearch.delete_curation()``
+
+Delete a curation by ID
+
+[source,python]
+----
+>>> app_search.delete_curation()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `curation_id`: (*required*) Curation ID
+[float]
+[[app-search-api-get-curation]]
+===== ``AppSearch.get_curation()``
+
+Retrieve a curation by ID
+
+[source,python]
+----
+>>> app_search.get_curation()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `curation_id`: (*required*) Curation ID
+[float]
+[[app-search-api-put-curation]]
+===== ``AppSearch.put_curation()``
+
+Update an existing curation
+
+[source,python]
+----
+>>> app_search.put_curation()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `curation_id`: (*required*) Curation ID
+- `queries`: (*required*) List of affected search queries
+- `promoted_doc_ids`: (*optional*) List of promoted document IDs
+- `hidden_doc_ids`: (*optional*) List of hidden document IDs
+[float]
+[[app-search-api-list-curations]]
+===== ``AppSearch.list_curations()``
+
+Retrieve available curations for the engine
+
+[source,python]
+----
+>>> app_search.list_curations()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `current_page`: (*optional*) The page to fetch. Defaults to 1
+- `page_size`: (*optional*) The number of results per page
+[float]
+[[app-search-api-delete-documents]]
+===== ``AppSearch.delete_documents()``
+
+Delete documents by ID
+
+[source,python]
+----
+>>> app_search.delete_documents()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `body`: (*required*) List of document IDs
+[float]
+[[app-search-api-get-documents]]
+===== ``AppSearch.get_documents()``
+
+Retrieves one or more documents by ID
+
+[source,python]
+----
+>>> app_search.get_documents()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `body`: (*required*) List of document IDs
+[float]
+[[app-search-api-index-documents]]
+===== ``AppSearch.index_documents()``
+
+Create or update documents
+
+[source,python]
+----
+>>> app_search.index_documents()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `body`: (*required*) List of document to index
+[float]
+[[app-search-api-list-documents]]
+===== ``AppSearch.list_documents()``
+
+List all available documents with optional pagination support
+
+[source,python]
+----
+>>> app_search.list_documents()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `current_page`: (*optional*) The page to fetch. Defaults to 1
+- `page_size`: (*optional*) The number of results per page
+[float]
+[[app-search-api-put-documents]]
+===== ``AppSearch.put_documents()``
+
+Partial update of documents
+
+[source,python]
+----
+>>> app_search.put_documents()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `body`: (*required*) List of documents to update
+[float]
+[[app-search-api-create-engine]]
+===== ``AppSearch.create_engine()``
+
+Creates a new engine
+
+[source,python]
+----
+>>> app_search.create_engine()
+----
+
+- `engine_name`: (*required*) Engine name
+- `language`: (*optional*) Engine language (null for universal)
+- `type`: (*optional*) Engine type
+- `source_engines`: (*optional*) Sources engines list
+[float]
+[[app-search-api-delete-engine]]
+===== ``AppSearch.delete_engine()``
+
+Delete an engine by name
+
+[source,python]
+----
+>>> app_search.delete_engine()
+----
+
+- `engine_name`: (*required*) Name of the engine
+[float]
+[[app-search-api-get-engine]]
+===== ``AppSearch.get_engine()``
+
+Retrieves an engine by name
+
+[source,python]
+----
+>>> app_search.get_engine()
+----
+
+- `engine_name`: (*required*) Name of the engine
+[float]
+[[app-search-api-list-engines]]
+===== ``AppSearch.list_engines()``
+
+Retrieves all engines with optional pagination support
+
+[source,python]
+----
+>>> app_search.list_engines()
+----
+
+- `current_page`: (*optional*) The page to fetch. Defaults to 1
+- `page_size`: (*optional*) The number of results per page
+[float]
+[[app-search-api-log-clickthrough]]
+===== ``AppSearch.log_clickthrough()``
+
+Send data about clicked results
+
+[source,python]
+----
+>>> app_search.log_clickthrough()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `query_text`: (*required*) Search query text
+- `document_id`: (*required*) The ID of the document that was clicked on
+- `request_id`: (*optional*) The request ID returned in the meta tag of
+  a search API response
+- `tags`: (*optional*) Array of strings representing additional
+  information you wish to track with the clickthrough
+[float]
+[[app-search-api-add-meta-engine-source]]
+===== ``AppSearch.add_meta_engine_source()``
+
+Add a source engine to an existing meta engine
+
+[source,python]
+----
+>>> app_search.add_meta_engine_source()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `body`: (*required*) List of engine IDs
+[float]
+[[app-search-api-delete-meta-engine-source]]
+===== ``AppSearch.delete_meta_engine_source()``
+
+Delete a source engine from a meta engine
+
+[source,python]
+----
+>>> app_search.delete_meta_engine_source()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `body`: (*required*) List of engine IDs
+[float]
+[[app-search-api-multi-search]]
+===== ``AppSearch.multi_search()``
+
+Run several search in the same request
+
+[source,python]
+----
+>>> app_search.multi_search()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `queries`: (*required*) Search queries
+[float]
+[[app-search-api-query-suggestion]]
+===== ``AppSearch.query_suggestion()``
+
+Provide relevant query suggestions for incomplete queries
+
+[source,python]
+----
+>>> app_search.query_suggestion()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `query`: (*required*) A partial query for which to receive suggestions
+- `fields`: (*optional*) List of fields to use to generate suggestions.
+  Defaults to all text fields
+- `size`: (*optional*) Number of query suggestions to return. Must be
+  between 1 and 20. Defaults to 5
+[float]
+[[app-search-api-get-schema]]
+===== ``AppSearch.get_schema()``
+
+Retrieve current schema for the engine
+
+[source,python]
+----
+>>> app_search.get_schema()
+----
+
+- `engine_name`: (*required*) Name of the engine
+[float]
+[[app-search-api-put-schema]]
+===== ``AppSearch.put_schema()``
+
+Update schema for the current engine
+
+[source,python]
+----
+>>> app_search.put_schema()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `body`: (*required*) Schema description
+[float]
+[[app-search-api-search]]
+===== ``AppSearch.search()``
+
+Allows you to search over, facet and filter your data
+
+[source,python]
+----
+>>> app_search.search()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `body`: (*required*) Search request parameters
+[float]
+[[app-search-api-get-search-settings]]
+===== ``AppSearch.get_search_settings()``
+
+Retrive current search settings for the engine
+
+[source,python]
+----
+>>> app_search.get_search_settings()
+----
+
+- `engine_name`: (*required*) Name of the engine
+[float]
+[[app-search-api-put-search-settings]]
+===== ``AppSearch.put_search_settings()``
+
+Update search settings for the engine
+
+[source,python]
+----
+>>> app_search.put_search_settings()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `body`: (*required*) Search settings
+[float]
+[[app-search-api-reset-search-settings]]
+===== ``AppSearch.reset_search_settings()``
+
+Reset search settings for the engine
+
+[source,python]
+----
+>>> app_search.reset_search_settings()
+----
+
+- `engine_name`: (*required*) Name of the engine
+[float]
+[[app-search-api-create-synonym-set]]
+===== ``AppSearch.create_synonym_set()``
+
+Create a new synonym set
+
+[source,python]
+----
+>>> app_search.create_synonym_set()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `body`: (*required*) Synonym set description
+[float]
+[[app-search-api-delete-synonym-set]]
+===== ``AppSearch.delete_synonym_set()``
+
+Delete a synonym set by ID
+
+[source,python]
+----
+>>> app_search.delete_synonym_set()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `synonym_set_id`: (*required*) Synonym set ID
+[float]
+[[app-search-api-get-synonym-set]]
+===== ``AppSearch.get_synonym_set()``
+
+Retrieve a synonym set by ID
+
+[source,python]
+----
+>>> app_search.get_synonym_set()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `synonym_set_id`: (*required*) Synonym set ID
+[float]
+[[app-search-api-put-synonym-set]]
+===== ``AppSearch.put_synonym_set()``
+
+Update a synonym set by ID
+
+[source,python]
+----
+>>> app_search.put_synonym_set()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `synonym_set_id`: (*required*) Synonym set ID
+- `body`: (*required*) Synonym set description
+[float]
+[[app-search-api-list-synonym-sets]]
+===== ``AppSearch.list_synonym_sets()``
+
+Retrieve available synonym sets for the engine
+
+[source,python]
+----
+>>> app_search.list_synonym_sets()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `current_page`: (*optional*) The page to fetch. Defaults to 1
+- `page_size`: (*optional*) The number of results per page
+[float]
+[[app-search-api-get-top-clicks-analytics]]
+===== ``AppSearch.get_top_clicks_analytics()``
+
+Returns the number of clicks received by a document in descending order
+
+[source,python]
+----
+>>> app_search.get_top_clicks_analytics()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `query`: (*optional*) Filter clicks over a search query
+- `current_page`: (*optional*) The page to fetch. Defaults to 1
+- `page_size`: (*optional*) The number of results per page
+- `filters`: (*optional*) Analytics filters
+[float]
+[[app-search-api-get-top-queries-analytics]]
+===== ``AppSearch.get_top_queries_analytics()``
+
+Returns queries analytics by usage count
+
+[source,python]
+----
+>>> app_search.get_top_queries_analytics()
+----
+
+- `engine_name`: (*required*) Name of the engine
+- `current_page`: (*optional*) The page to fetch. Defaults to 1
+- `page_size`: (*optional*) The number of results per page
+- `filters`: (*optional*) Analytics filters
+
+[float]
+[[workplace-search-api]]
+=== Workplace Search APIs
+
+[source,python]
+----
+>>> workplace_search = WorkplaceSearch()
+----
+
+
+[float]
+[[workplace-search-api-create-analytics-event]]
+===== ``WorkplaceSearch.create_analytics_event()``
+
+Capture click and feedback analytic events
+
+[source,python]
+----
+>>> workplace_search.create_analytics_event()
+----
+
+- `body`: (*required*) HTTP request body
+[float]
+[[workplace-search-api-delete-documents]]
+===== ``WorkplaceSearch.delete_documents()``
+
+Deletes a list of documents from a custom content source
+
+[source,python]
+----
+>>> workplace_search.delete_documents()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `body`: (*required*) HTTP request body
+[float]
+[[workplace-search-api-index-documents]]
+===== ``WorkplaceSearch.index_documents()``
+
+Indexes one or more new documents into a custom content source, or updates one or more existing
+documents
+
+[source,python]
+----
+>>> workplace_search.index_documents()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `body`: (*required*) HTTP request body
+[float]
+[[workplace-search-api-list-external-identities]]
+===== ``WorkplaceSearch.list_external_identities()``
+
+Retrieves all external identities
+
+[source,python]
+----
+>>> workplace_search.list_external_identities()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `current_page`: (*optional*) Which page of results to request
+- `page_size`: (*optional*) The number of results to return in a page
+[float]
+[[workplace-search-api-create-external-identity]]
+===== ``WorkplaceSearch.create_external_identity()``
+
+Adds a new external identity
+
+[source,python]
+----
+>>> workplace_search.create_external_identity()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `body`: (*required*) HTTP request body
+[float]
+[[workplace-search-api-delete-external-identity]]
+===== ``WorkplaceSearch.delete_external_identity()``
+
+Deletes an external identity
+
+[source,python]
+----
+>>> workplace_search.delete_external_identity()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `user`: (*required*) The username in context
+[float]
+[[workplace-search-api-get-external-identity]]
+===== ``WorkplaceSearch.get_external_identity()``
+
+Retrieves an external identity
+
+[source,python]
+----
+>>> workplace_search.get_external_identity()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `user`: (*required*) The username in context
+[float]
+[[workplace-search-api-put-external-identity]]
+===== ``WorkplaceSearch.put_external_identity()``
+
+Updates an external identity
+
+[source,python]
+----
+>>> workplace_search.put_external_identity()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `user`: (*required*) The username in context
+- `body`: (*required*) HTTP request body
+[float]
+[[workplace-search-api-list-permissions]]
+===== ``WorkplaceSearch.list_permissions()``
+
+Lists all permissions for all users
+
+[source,python]
+----
+>>> workplace_search.list_permissions()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `current_page`: (*optional*) Which page of results to request
+- `page_size`: (*optional*) The number of results to return in a page
+[float]
+[[workplace-search-api-remove-user-permissions]]
+===== ``WorkplaceSearch.remove_user_permissions()``
+
+Removes one or more permissions from an existing set of permissions
+
+[source,python]
+----
+>>> workplace_search.remove_user_permissions()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `user`: (*required*) The username in context
+- `body`: (*required*) HTTP request body
+[float]
+[[workplace-search-api-search]]
+===== ``WorkplaceSearch.search()``
+
+Search across available sources with various query tuning options
+
+[source,python]
+----
+>>> workplace_search.search()
+----
+
+- `body`: (*required*) HTTP request body
+[float]
+[[workplace-search-api-add-user-permissions]]
+===== ``WorkplaceSearch.add_user_permissions()``
+
+Adds one or more new permissions atop existing permissions
+
+[source,python]
+----
+>>> workplace_search.add_user_permissions()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `user`: (*required*) The username in context
+- `body`: (*required*) HTTP request body
+[float]
+[[workplace-search-api-get-user-permissions]]
+===== ``WorkplaceSearch.get_user_permissions()``
+
+Lists all permissions for one user
+
+[source,python]
+----
+>>> workplace_search.get_user_permissions()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `user`: (*required*) The username in context
+[float]
+[[workplace-search-api-put-user-permissions]]
+===== ``WorkplaceSearch.put_user_permissions()``
+
+Creates a new set of permissions or over-writes all existing permissions
+
+[source,python]
+----
+>>> workplace_search.put_user_permissions()
+----
+
+- `content_source_id`: (*required*) Unique ID for a Custom API source,
+  provided upon creation of a Custom API Source
+- `user`: (*required*) The username in context
+- `body`: (*required*) HTTP request body

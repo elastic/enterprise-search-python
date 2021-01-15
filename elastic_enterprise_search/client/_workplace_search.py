@@ -30,7 +30,7 @@ class WorkplaceSearch(BaseClient):
         ignore_status=(),
     ):
         """
-        capture click and feedback analytic events
+        Capture click and feedback analytic events
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-analytics-api.html>`_
 
@@ -550,7 +550,7 @@ class WorkplaceSearch(BaseClient):
         ignore_status=(),
     ):
         """
-        search across available sources with various query tuning options
+        Search across available sources with various query tuning options
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-search-api.html>`_
 

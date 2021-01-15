@@ -194,8 +194,9 @@ class API:
         return [x for x in self.path.split("/") if x]
 
     @property
-    def description(self) -> List[str]:
-        return self.spec["summary"]
+    def description(self) -> str:
+        summary = self.spec["summary"]
+        return summary[0].upper() + summary[1:]
 
     @property
     def docs_url(self) -> Optional[str]:
@@ -212,8 +213,6 @@ class API:
             )
             if is_valid_url(new_url):
                 url = new_url
-            else:
-                print(f"{new_url!r} isn't valid, sticking with {url!r}")
         return url
 
     @property
@@ -253,6 +252,10 @@ class API:
                 r"^#/components/(?:schemas|responses|requestBodies)/(.+)$", ref
             ).group(1)
 
+    @property
+    def asciidoc_fragment(self) -> str:
+        return re.sub(r"[^a-zA-Z0-9]+", "-", self.func_name).strip("-")
+
     def __repr__(self):
         return f"API(func_name={self.func_name!r}, method={self.method!r}, path={self.path!r}, resp={self.response_component!r})"
 
@@ -262,6 +265,10 @@ class OpenAPI:
         self.namespace = namespace
         self.components = components
         self.apis = apis
+
+    @property
+    def asciidoc_fragment(self) -> str:
+        return re.sub(r"[^a-zA-Z0-9]+", "-", self.namespace).strip("-")
 
     @property
     def client_class_name(self):
@@ -338,7 +345,7 @@ def main():
         with spec_filepath.open(mode="w") as f:
             f.truncate()
             f.write(env.get_template("client").render(spec=spec))
-        print(env.get_template("readme").render(spec=spec))
+        print(env.get_template("asciidoc").render(spec=spec))
 
     os.system(f"cd {base_dir} && nox -rs format")
 
