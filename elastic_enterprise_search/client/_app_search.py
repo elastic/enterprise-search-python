@@ -16,9 +16,8 @@
 #  under the License.
 
 from elastic_transport import QueryParams
-from elastic_transport.response import Response  # noqa: F401
 
-from .._utils import DEFAULT, SKIP_IN_PATH, to_array, to_path, typing  # noqa: F401
+from .._utils import DEFAULT, SKIP_IN_PATH, to_array, to_path  # noqa: F401
 from ._base import BaseClient
 
 
