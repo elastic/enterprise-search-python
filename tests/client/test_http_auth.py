@@ -30,7 +30,7 @@ def test_http_auth_none(client_class):
     calls = client.transport.get_connection().calls
     assert calls == [
         (
-            ("GET", "/", None, None),
+            ("GET", "/", None),
             {
                 "headers": {"user-agent": client._user_agent_header},
                 "ignore_status": (),
@@ -48,7 +48,7 @@ def test_http_auth_none(client_class):
     calls = client.transport.get_connection().calls
     assert calls == [
         (
-            ("GET", "/", None, None),
+            ("GET", "/", None),
             {
                 "headers": {"user-agent": client._user_agent_header},
                 "ignore_status": (),

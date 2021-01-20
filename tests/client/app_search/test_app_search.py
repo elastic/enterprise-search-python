@@ -213,6 +213,107 @@ def test_not_authorized(app_search):
     assert resp == {"error": "You need to sign in before continuing."}
 
 
+@pytest.mark.vcr()
+def test_meta_engine(app_search):
+    # Create some source engines
+    resp = app_search.create_engine(
+        engine_name="source-engine-1",
+        type="default",
+        language="en",
+    )
+    assert resp.status == 200
+    assert resp == {
+        "document_count": 0,
+        "language": "en",
+        "name": "source-engine-1",
+        "type": "default",
+    }
+
+    resp = app_search.create_engine(
+        engine_name="source-engine-2",
+    )
+    assert resp.status == 200
+    assert resp == {
+        "document_count": 0,
+        "language": None,
+        "name": "source-engine-2",
+        "type": "default",
+    }
+
+    # Create a meta engine
+    resp = app_search.create_engine(
+        engine_name="meta-engine",
+        type="meta",
+        source_engines=["source-engine-1", "source-engine-2"],
+    )
+    assert resp.status == 200
+    assert resp == {
+        "document_count": 0,
+        "name": "meta-engine",
+        "source_engines": ["source-engine-1", "source-engine-2"],
+        "type": "meta",
+    }
+
+    # Delete some source engines
+    resp = app_search.delete_engine(engine_name="source-engine-2")
+    assert resp.status == 200
+    assert resp == {"deleted": True}
+
+    resp = app_search.delete_engine(engine_name="source-engine-1")
+    assert resp.status == 200
+    assert resp == {"deleted": True}
+
+    # See the meta engine has no source engines
+    resp = app_search.get_engine(engine_name="meta-engine")
+    assert resp.status == 200
+    assert resp == {
+        "document_count": 0,
+        "name": "meta-engine",
+        "source_engines": [],
+        "type": "meta",
+    }
+
+    # Use the add_meta_engine_source() API
+    app_search.create_engine(engine_name="source-engine-added")
+    resp = app_search.add_meta_engine_source(
+        engine_name="meta-engine", body=["source-engine-added"]
+    )
+    assert resp.status == 200
+    assert resp == {
+        "document_count": 0,
+        "name": "meta-engine",
+        "source_engines": ["source-engine-added"],
+        "type": "meta",
+    }
+
+
+@pytest.mark.vcr()
+def test_query_suggestions(app_search):
+    resp = app_search.query_suggestion(
+        engine_name="national-parks-demo",
+        query="ca",
+        fields=["title", "states"],
+    )
+    assert resp.status == 200
+    assert resp == {
+        "meta": {"request_id": "15a4ce10-1d5b-49d0-a83f-f4cf35b0e45e"},
+        "results": {
+            "documents": [
+                {"suggestion": "cave"},
+                {"suggestion": "capitol"},
+                {"suggestion": "capitol reef"},
+                {"suggestion": "canyon"},
+                {"suggestion": "california"},
+                {"suggestion": "canyonlands"},
+                {"suggestion": "carlsbad caverns"},
+                {"suggestion": "cascades"},
+                {"suggestion": "carolina"},
+                {"suggestion": "canyon of"},
+            ]
+        },
+    }
+
+
 def test_create_signed_search_key():
     private_key = "private-"
     signed_key = AppSearch.create_signed_search_key(
@@ -229,3 +330,11 @@ def test_create_signed_search_key():
         "filters": {"status": "available"},
         "search_fields": {"first_name": {}},
     }
+
+
+def test_array_type_check(app_search):
+    with pytest.raises(TypeError) as e:
+        app_search.create_engine(
+            engine_name="test-engine", type="meta", source_engines="source-engine"
+        )
+    assert str(e.value) == "Parameter 'source_engines' must be a tuple or list"

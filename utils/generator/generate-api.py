@@ -89,7 +89,15 @@ class Parameter:
 
     @property
     def wire_name(self):
-        return self.spec["name"]
+        wire_name = self.spec["name"]
+
+        # If there's an unstyled array with explode=True (or default 'True')
+        # then we add '[]' after the spec wire name to comply with Ruby on Rails
+        # query parameter arrays.
+        if self.type == "array" and self.style is None and self.explode:
+            wire_name += "[]"
+
+        return wire_name
 
     @property
     def param_name(self) -> str:
@@ -106,6 +114,21 @@ class Parameter:
     @property
     def description(self):
         return self.spec.get("description", "")
+
+    @property
+    def type(self):
+        return self.spec.get("type", self.spec.get("schema", {}).get("type", None))
+
+    @property
+    def style(self):
+        return self.spec.get("style", None)
+
+    @property
+    def explode(self):
+        explode = self.spec.get("explode", None)
+        if self.type == "array" and self.style is None and explode is None:
+            return True  # By default we explode with x[]=...,x[]=...
+        return explode
 
     def __repr__(self):
         return f"Parameter(param_name={self.param_name!r})"
@@ -194,8 +217,13 @@ class API:
         return [x for x in self.path.split("/") if x]
 
     @property
-    def description(self) -> List[str]:
-        return self.spec["summary"]
+    def has_path_params(self):
+        return any(part.startswith("{") for part in self.path_parts)
+
+    @property
+    def description(self) -> str:
+        summary = self.spec["summary"]
+        return summary[0].upper() + summary[1:]
 
     @property
     def docs_url(self) -> Optional[str]:
@@ -212,8 +240,6 @@ class API:
             )
             if is_valid_url(new_url):
                 url = new_url
-            else:
-                print(f"{new_url!r} isn't valid, sticking with {url!r}")
         return url
 
     @property
@@ -232,6 +258,13 @@ class API:
     @property
     def has_body(self) -> bool:
         return "requestBody" in self.spec
+
+    @property
+    def body_required(self) -> bool:
+        # TODO: OpenAPI actually should default to 'False' but
+        # the Enterprise Search specs seem to default to 'True' so
+        # for now we do this.
+        return self.spec.get("requestBody", {}).get("required", True)
 
     @property
     def body_description(self):
@@ -253,6 +286,10 @@ class API:
                 r"^#/components/(?:schemas|responses|requestBodies)/(.+)$", ref
             ).group(1)
 
+    @property
+    def asciidoc_fragment(self) -> str:
+        return re.sub(r"[^a-zA-Z0-9]+", "-", self.func_name).strip("-")
+
     def __repr__(self):
         return f"API(func_name={self.func_name!r}, method={self.method!r}, path={self.path!r}, resp={self.response_component!r})"
 
@@ -262,6 +299,10 @@ class OpenAPI:
         self.namespace = namespace
         self.components = components
         self.apis = apis
+
+    @property
+    def asciidoc_fragment(self) -> str:
+        return re.sub(r"[^a-zA-Z0-9]+", "-", self.namespace).strip("-")
 
     @property
     def client_class_name(self):
@@ -338,7 +379,7 @@ def main():
         with spec_filepath.open(mode="w") as f:
             f.truncate()
             f.write(env.get_template("client").render(spec=spec))
-        print(env.get_template("readme").render(spec=spec))
+        print(env.get_template("asciidoc").render(spec=spec))
 
     os.system(f"cd {base_dir} && nox -rs format")
 

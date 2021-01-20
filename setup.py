@@ -39,6 +39,15 @@ packages = [
     if package.startswith("elastic_enterprise_search")
 ]
 
+# Allow pre-releases of elastic-transport if the
+# package itself is a pre-release, otherwise only
+# allow stable releases to avoid disrupting stable versions.
+elastic_transport_required = "elastic-transport>=7,<8"
+if not re.match(r"^[0-9.]+$", version):
+    # Adds '.dev' to the end of every version number.
+    elastic_transport_required = re.sub(
+        r"([0-9]+)([^0-9]|$)", r"\1.dev\2", elastic_transport_required
+    )
 
 setup(
     name="elastic-enterprise-search",
@@ -57,14 +66,14 @@ setup(
     },
     packages=packages,
     install_requires=[
-        "elastic-transport>=7,<8",
-        "PyJWT",
-        "python-dateutil",
+        elastic_transport_required,
+        "PyJWT>=1,<3",
+        "python-dateutil>=2,<3",
         "six>=1.12",
     ],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*",
     extras_require={
-        "requests": ["requests>=2.4.0, <3.0.0"],
+        "requests": ["requests>=2.4, <3"],
         "develop": [
             "pytest",
             "pytest-cov",
