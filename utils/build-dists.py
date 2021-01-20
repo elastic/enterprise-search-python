@@ -87,7 +87,6 @@ def test_dist(dist):
 
 
 def main():
-    run("git", "checkout", "--", "elastic_enterprise_search/")
     run("rm", "-rf", "build/", "dist/", "*.egg-info", ".eggs")
 
     # Grab the major version to be used as a suffix.

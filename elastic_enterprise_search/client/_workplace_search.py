@@ -15,7 +15,9 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from .._utils import DEFAULT, SKIP_IN_PATH, make_params, make_path  # noqa: F401
+from elastic_transport import QueryParams
+
+from .._utils import DEFAULT, SKIP_IN_PATH, to_array, to_path  # noqa: F401
 from ._base import BaseClient
 
 
@@ -30,7 +32,7 @@ class WorkplaceSearch(BaseClient):
         ignore_status=(),
     ):
         """
-        capture click and feedback analytic events
+        Capture click and feedback analytic events
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-analytics-api.html>`_
 
@@ -44,15 +46,12 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.BadRequestError:
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
-                "api",
-                "ws",
-                "v1",
-                "analytics",
-                "event",
-            ),
+            "/api/ws/v1/analytics/event",
             body=body,
             params=params,
             headers=headers,
@@ -92,9 +91,12 @@ class WorkplaceSearch(BaseClient):
         """
         if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -143,9 +145,12 @@ class WorkplaceSearch(BaseClient):
         """
         if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -193,16 +198,16 @@ class WorkplaceSearch(BaseClient):
         """
         if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(
-            params,
-            {
-                "page[current]": current_page,
-                "page[size]": page_size,
-            },
-        )
+
+        params = QueryParams(params)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -247,9 +252,12 @@ class WorkplaceSearch(BaseClient):
         """
         if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -299,9 +307,11 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "DELETE",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -351,9 +361,11 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -406,9 +418,11 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "PUT",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -458,16 +472,16 @@ class WorkplaceSearch(BaseClient):
         """
         if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(
-            params,
-            {
-                "page[current]": current_page,
-                "page[size]": page_size,
-            },
-        )
+
+        params = QueryParams(params)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -520,9 +534,11 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -550,7 +566,7 @@ class WorkplaceSearch(BaseClient):
         ignore_status=(),
     ):
         """
-        search across available sources with various query tuning options
+        Search across available sources with various query tuning options
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-search-api.html>`_
 
@@ -564,14 +580,12 @@ class WorkplaceSearch(BaseClient):
         :raises elastic_enterprise_search.BadRequestError:
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
-                "api",
-                "ws",
-                "v1",
-                "search",
-            ),
+            "/api/ws/v1/search",
             body=body,
             params=params,
             headers=headers,
@@ -618,9 +632,11 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -673,9 +689,11 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
@@ -729,9 +747,11 @@ class WorkplaceSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "PUT",
-            make_path(
+            to_path(
                 "api",
                 "ws",
                 "v1",
