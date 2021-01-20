@@ -15,7 +15,9 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from .._utils import DEFAULT, SKIP_IN_PATH, make_params, make_path  # noqa: F401
+from elastic_transport import QueryParams
+
+from .._utils import DEFAULT, SKIP_IN_PATH, to_array, to_path  # noqa: F401
 from ._base import BaseClient
 
 
@@ -40,7 +42,7 @@ class AppSearch(BaseClient):
         """
         The API Log displays API request and response data at the Engine level
 
-        `<https://www.elastic.co/guide/en/app-search/current/api-logs.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/api-logs.html>`_
 
         :arg engine_name: Name of the engine
         :arg from_date: Filter date from
@@ -70,22 +72,27 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(
-            params,
-            {
-                "filters[date][from]": from_date,
-                "filters[date][to]": to_date,
-                "page[current]": current_page,
-                "page[size]": page_size,
-                "query": query,
-                "filters[status]": http_status_filter,
-                "filters[method]": http_method_filter,
-                "sort_direction": sort_direction,
-            },
-        )
+        params = QueryParams(params)
+        if from_date is not None:
+            params.add("filters[date][from]", from_date)
+        if to_date is not None:
+            params.add("filters[date][to]", to_date)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+        if query is not None:
+            params.add("query", query)
+        if http_status_filter is not None:
+            params.add("filters[status]", http_status_filter)
+        if http_method_filter is not None:
+            params.add("filters[method]", http_method_filter)
+        if sort_direction is not None:
+            params.add("sort_direction", sort_direction)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -115,7 +122,7 @@ class AppSearch(BaseClient):
         """
         Returns the number of clicks and total number of queries over a period
 
-        `<https://www.elastic.co/guide/en/app-search/current/counts.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/counts.html>`_
 
         :arg engine_name: Name of the engine
         :arg filters: Analytics filters
@@ -130,16 +137,17 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(
-            params,
-            {
-                "filters": filters,
-                "interval": interval,
-            },
-        )
+
+        params = QueryParams(params)
+        if filters is not None:
+            for val in to_array(filters, param="filters"):
+                params.add("filters[]", val)
+        if interval is not None:
+            params.add("interval", interval)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -170,7 +178,7 @@ class AppSearch(BaseClient):
         """
         Create a new curation
 
-        `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/curations.html#curations-create>`_
 
         :arg engine_name: Name of the engine
         :arg queries: List of affected search queries
@@ -190,17 +198,20 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(
-            params,
-            {
-                "queries": queries,
-                "promoted": promoted_doc_ids,
-                "hidden": hidden_doc_ids,
-            },
-        )
+        params = QueryParams(params)
+        if queries is not None:
+            for val in to_array(queries, param="queries"):
+                params.add("queries[]", val)
+        if promoted_doc_ids is not None:
+            for val in to_array(promoted_doc_ids, param="promoted_doc_ids"):
+                params.add("promoted[]", val)
+        if hidden_doc_ids is not None:
+            for val in to_array(hidden_doc_ids, param="hidden_doc_ids"):
+                params.add("hidden[]", val)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -228,7 +239,7 @@ class AppSearch(BaseClient):
         """
         Delete a curation by ID
 
-        `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-destroy>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/curations.html#curations-destroy>`_
 
         :arg engine_name: Name of the engine
         :arg curation_id: Curation ID
@@ -246,9 +257,11 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "DELETE",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -277,7 +290,7 @@ class AppSearch(BaseClient):
         """
         Retrieve a curation by ID
 
-        `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-read>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/curations.html#curations-read>`_
 
         :arg engine_name: Name of the engine
         :arg curation_id: Curation ID
@@ -295,9 +308,11 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -329,7 +344,7 @@ class AppSearch(BaseClient):
         """
         Update an existing curation
 
-        `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/curations.html#curations-update>`_
 
         :arg engine_name: Name of the engine
         :arg curation_id: Curation ID
@@ -351,17 +366,20 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(
-            params,
-            {
-                "queries": queries,
-                "promoted": promoted_doc_ids,
-                "hidden": hidden_doc_ids,
-            },
-        )
+        params = QueryParams(params)
+        if queries is not None:
+            for val in to_array(queries, param="queries"):
+                params.add("queries[]", val)
+        if promoted_doc_ids is not None:
+            for val in to_array(promoted_doc_ids, param="promoted_doc_ids"):
+                params.add("promoted[]", val)
+        if hidden_doc_ids is not None:
+            for val in to_array(hidden_doc_ids, param="hidden_doc_ids"):
+                params.add("hidden[]", val)
+
         return self.perform_request(
             "PUT",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -391,7 +409,7 @@ class AppSearch(BaseClient):
         """
         Retrieve available curations for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/curations.html#curations-read>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/curations.html#curations-read>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
@@ -405,16 +423,16 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(
-            params,
-            {
-                "page[current]": current_page,
-                "page[size]": page_size,
-            },
-        )
+
+        params = QueryParams(params)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -442,7 +460,7 @@ class AppSearch(BaseClient):
         """
         Delete documents by ID
 
-        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-delete>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/documents.html#documents-delete>`_
 
         :arg engine_name: Name of the engine
         :arg body: List of document IDs
@@ -455,9 +473,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "DELETE",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -486,7 +507,7 @@ class AppSearch(BaseClient):
         """
         Retrieves one or more documents by ID
 
-        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-get>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/documents.html#documents-get>`_
 
         :arg engine_name: Name of the engine
         :arg body: List of document IDs
@@ -499,9 +520,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -530,7 +554,7 @@ class AppSearch(BaseClient):
         """
         Create or update documents
 
-        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/documents.html#documents-create>`_
 
         :arg engine_name: Name of the engine
         :arg body: List of document to index
@@ -543,9 +567,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -575,7 +602,7 @@ class AppSearch(BaseClient):
         """
         List all available documents with optional pagination support
 
-        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-list>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/documents.html#documents-list>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
@@ -589,16 +616,16 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(
-            params,
-            {
-                "page[current]": current_page,
-                "page[size]": page_size,
-            },
-        )
+
+        params = QueryParams(params)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -627,7 +654,7 @@ class AppSearch(BaseClient):
         """
         Partial update of documents
 
-        `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-partial>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/documents.html#documents-partial>`_
 
         :arg engine_name: Name of the engine
         :arg body: List of documents to update
@@ -640,9 +667,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "PATCH",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -673,7 +703,7 @@ class AppSearch(BaseClient):
         """
         Creates a new engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/engines.html#engines-create>`_
 
         :arg engine_name: Engine name
         :arg language: Engine language (null for universal)
@@ -688,23 +718,21 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(
-            params,
-            {
-                "name": engine_name,
-                "language": language,
-                "type": type,
-                "source_engines": source_engines,
-            },
-        )
+
+        params = QueryParams(params)
+        if engine_name is not None:
+            params.add("name", engine_name)
+        if language is not None:
+            params.add("language", language)
+        if type is not None:
+            params.add("type", type)
+        if source_engines is not None:
+            for val in to_array(source_engines, param="source_engines"):
+                params.add("source_engines[]", val)
+
         return self.perform_request(
             "POST",
-            make_path(
-                "api",
-                "as",
-                "v1",
-                "engines",
-            ),
+            "/api/as/v1/engines",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -724,7 +752,7 @@ class AppSearch(BaseClient):
         """
         Delete an engine by name
 
-        `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-delete>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/engines.html#engines-delete>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -736,9 +764,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "DELETE",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -764,7 +795,7 @@ class AppSearch(BaseClient):
         """
         Retrieves an engine by name
 
-        `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-get>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/engines.html#engines-get>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -776,9 +807,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -805,7 +839,7 @@ class AppSearch(BaseClient):
         """
         Retrieves all engines with optional pagination support
 
-        `<https://www.elastic.co/guide/en/app-search/current/engines.html#engines-list>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/engines.html#engines-list>`_
 
         :arg current_page: The page to fetch. Defaults to 1
         :arg page_size: The number of results per page
@@ -816,21 +850,16 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        params = make_params(
-            params,
-            {
-                "page[current]": current_page,
-                "page[size]": page_size,
-            },
-        )
+
+        params = QueryParams(params)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+
         return self.perform_request(
             "GET",
-            make_path(
-                "api",
-                "as",
-                "v1",
-                "engines",
-            ),
+            "/api/as/v1/engines",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -854,7 +883,7 @@ class AppSearch(BaseClient):
         """
         Send data about clicked results
 
-        `<https://www.elastic.co/guide/en/app-search/current/clickthrough.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/clickthrough.html>`_
 
         :arg engine_name: Name of the engine
         :arg query_text: Search query text
@@ -878,18 +907,20 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(
-            params,
-            {
-                "query": query_text,
-                "document_id": document_id,
-                "request_id": request_id,
-                "tags": tags,
-            },
-        )
+        params = QueryParams(params)
+        if query_text is not None:
+            params.add("query", query_text)
+        if document_id is not None:
+            params.add("document_id", document_id)
+        if request_id is not None:
+            params.add("request_id", request_id)
+        if tags is not None:
+            for val in to_array(tags, param="tags"):
+                params.add("tags[]", val)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -917,7 +948,7 @@ class AppSearch(BaseClient):
         """
         Add a source engine to an existing meta engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-add-source-engines>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/meta-engines.html#meta-engines-add-source-engines>`_
 
         :arg engine_name: Name of the engine
         :arg body: List of engine IDs
@@ -930,9 +961,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -961,7 +995,7 @@ class AppSearch(BaseClient):
         """
         Delete a source engine from a meta engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-remove-source-engines>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/meta-engines.html#meta-engines-remove-source-engines>`_
 
         :arg engine_name: Name of the engine
         :arg body: List of engine IDs
@@ -974,9 +1008,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "DELETE",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1005,7 +1042,7 @@ class AppSearch(BaseClient):
         """
         Run several search in the same request
 
-        `<https://www.elastic.co/guide/en/app-search/current/search.html#search-multi>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/search.html#search-multi>`_
 
         :arg engine_name: Name of the engine
         :arg queries: Search queries
@@ -1023,15 +1060,14 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(
-            params,
-            {
-                "queries": queries,
-            },
-        )
+        params = QueryParams(params)
+        if queries is not None:
+            for val in to_array(queries, param="queries"):
+                params.add("queries[]", val)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1061,7 +1097,7 @@ class AppSearch(BaseClient):
         """
         Provide relevant query suggestions for incomplete queries
 
-        `<https://www.elastic.co/guide/en/app-search/current/query-suggestion.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/query-suggestion.html>`_
 
         :arg engine_name: Name of the engine
         :arg query: A partial query for which to receive suggestions
@@ -1083,17 +1119,18 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
-        params = make_params(
-            params,
-            {
-                "query": query,
-                "types[documents][fields]": fields,
-                "size": size,
-            },
-        )
+        params = QueryParams(params)
+        if query is not None:
+            params.add("query", query)
+        if fields is not None:
+            for val in to_array(fields, param="fields"):
+                params.add("types[documents][fields][]", val)
+        if size is not None:
+            params.add("size", size)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1120,7 +1157,7 @@ class AppSearch(BaseClient):
         """
         Retrieve current schema for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/schema.html#schema-read>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/schema.html#schema-read>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -1132,9 +1169,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1162,7 +1202,7 @@ class AppSearch(BaseClient):
         """
         Update schema for the current engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/schema.html#schema-patch>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/schema.html#schema-patch>`_
 
         :arg engine_name: Name of the engine
         :arg body: Schema description
@@ -1175,9 +1215,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1206,7 +1249,7 @@ class AppSearch(BaseClient):
         """
         Allows you to search over, facet and filter your data
 
-        `<https://www.elastic.co/guide/en/app-search/current/search.html#search-single>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/search.html#search-single>`_
 
         :arg engine_name: Name of the engine
         :arg body: Search request parameters
@@ -1219,9 +1262,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1249,7 +1295,7 @@ class AppSearch(BaseClient):
         """
         Retrive current search settings for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-show>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/search-settings.html#search-settings-show>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -1261,9 +1307,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1291,7 +1340,7 @@ class AppSearch(BaseClient):
         """
         Update search settings for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/search-settings.html#search-settings-update>`_
 
         :arg engine_name: Name of the engine
         :arg body: Search settings
@@ -1304,9 +1353,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "PUT",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1334,7 +1386,7 @@ class AppSearch(BaseClient):
         """
         Reset search settings for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/search-settings.html#search-settings-reset>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/search-settings.html#search-settings-reset>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -1346,9 +1398,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1377,7 +1432,7 @@ class AppSearch(BaseClient):
         """
         Create a new synonym set
 
-        `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/synonyms.html#synonyms-create>`_
 
         :arg engine_name: Name of the engine
         :arg body: Synonym set description
@@ -1390,9 +1445,12 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "POST",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1421,7 +1479,7 @@ class AppSearch(BaseClient):
         """
         Delete a synonym set by ID
 
-        `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-delete>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/synonyms.html#synonyms-delete>`_
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
@@ -1439,9 +1497,11 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "DELETE",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1470,7 +1530,7 @@ class AppSearch(BaseClient):
         """
         Retrieve a synonym set by ID
 
-        `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-list-one>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/synonyms.html#synonyms-list-one>`_
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
@@ -1488,9 +1548,11 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1520,7 +1582,7 @@ class AppSearch(BaseClient):
         """
         Update a synonym set by ID
 
-        `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/synonyms.html#synonyms-update>`_
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
@@ -1539,9 +1601,11 @@ class AppSearch(BaseClient):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
+        params = QueryParams(params)
+
         return self.perform_request(
             "PUT",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1572,7 +1636,7 @@ class AppSearch(BaseClient):
         """
         Retrieve available synonym sets for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-get>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/synonyms.html#synonyms-get>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
@@ -1586,16 +1650,16 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(
-            params,
-            {
-                "page[current]": current_page,
-                "page[size]": page_size,
-            },
-        )
+
+        params = QueryParams(params)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1626,7 +1690,7 @@ class AppSearch(BaseClient):
         """
         Returns the number of clicks received by a document in descending order
 
-        `<https://www.elastic.co/guide/en/app-search/current/clicks.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/clicks.html>`_
 
         :arg engine_name: Name of the engine
         :arg query: Filter clicks over a search query
@@ -1642,18 +1706,21 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(
-            params,
-            {
-                "query": query,
-                "page[current]": current_page,
-                "page[size]": page_size,
-                "filters": filters,
-            },
-        )
+
+        params = QueryParams(params)
+        if query is not None:
+            params.add("query", query)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+        if filters is not None:
+            for val in to_array(filters, param="filters"):
+                params.add("filters[]", val)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",
@@ -1684,7 +1751,7 @@ class AppSearch(BaseClient):
         """
         Returns queries analytics by usage count
 
-        `<https://www.elastic.co/guide/en/app-search/current/queries.html#queries-top-queries>`_
+        `<https://www.elastic.co/guide/en/app-search/7.11/queries.html#queries-top-queries>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
@@ -1699,17 +1766,19 @@ class AppSearch(BaseClient):
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
-        params = make_params(
-            params,
-            {
-                "page[current]": current_page,
-                "page[size]": page_size,
-                "filters": filters,
-            },
-        )
+
+        params = QueryParams(params)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+        if filters is not None:
+            for val in to_array(filters, param="filters"):
+                params.add("filters[]", val)
+
         return self.perform_request(
             "GET",
-            make_path(
+            to_path(
                 "api",
                 "as",
                 "v1",

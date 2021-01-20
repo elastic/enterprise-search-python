@@ -15,7 +15,9 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-from .._utils import DEFAULT, SKIP_IN_PATH, make_params, make_path  # noqa: F401
+from elastic_transport import QueryParams
+
+from .._utils import DEFAULT, SKIP_IN_PATH, to_array, to_path  # noqa: F401
 from ._base import BaseClient
 
 
@@ -32,7 +34,7 @@ class EnterpriseSearch(BaseClient):
         Get information on the health of a deployment and basic statistics around
         resource usage
 
-        `<https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#health-api-example>`_
+        `<https://www.elastic.co/guide/en/enterprise-search/7.11/monitoring-apis.html#health-api-example>`_
 
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -42,15 +44,12 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
-                "api",
-                "ent",
-                "v1",
-                "internal",
-                "health",
-            ),
+            "/api/ent/v1/internal/health",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -69,7 +68,7 @@ class EnterpriseSearch(BaseClient):
         """
         Get the read-only flag's state
 
-        `<https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#getting-read-only-state>`_
+        `<https://www.elastic.co/guide/en/enterprise-search/7.11/read-only-api.html#getting-read-only-state>`_
 
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -79,15 +78,12 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
-                "api",
-                "ent",
-                "v1",
-                "internal",
-                "read_only_mode",
-            ),
+            "/api/ent/v1/internal/read_only_mode",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -107,7 +103,7 @@ class EnterpriseSearch(BaseClient):
         """
         Update the read-only flag's state
 
-        `<https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#setting-read-only-state>`_
+        `<https://www.elastic.co/guide/en/enterprise-search/7.11/read-only-api.html#setting-read-only-state>`_
 
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
@@ -118,15 +114,12 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "PUT",
-            make_path(
-                "api",
-                "ent",
-                "v1",
-                "internal",
-                "read_only_mode",
-            ),
+            "/api/ent/v1/internal/read_only_mode",
             body=body,
             params=params,
             headers=headers,
@@ -148,7 +141,7 @@ class EnterpriseSearch(BaseClient):
         Get information about the resource usage of the application, the state of
         different internal queues, etc.
 
-        `<https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#stats-api-example>`_
+        `<https://www.elastic.co/guide/en/enterprise-search/7.11/monitoring-apis.html#stats-api-example>`_
 
         :arg include: Comma-separated list of stats to return
         :arg params: Additional query params to send with the request
@@ -159,21 +152,14 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
-        params = make_params(
-            params,
-            {
-                "include": include,
-            },
-        )
+
+        params = QueryParams(params)
+        if include is not None:
+            params.add("include", include)
+
         return self.perform_request(
             "GET",
-            make_path(
-                "api",
-                "ent",
-                "v1",
-                "internal",
-                "stats",
-            ),
+            "/api/ent/v1/internal/stats",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -192,7 +178,7 @@ class EnterpriseSearch(BaseClient):
         """
         Get version information for this server
 
-        `<https://www.elastic.co/guide/en/enterprise-search/current/management-apis.html>`_
+        `<https://www.elastic.co/guide/en/enterprise-search/7.11/management-apis.html>`_
 
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -202,15 +188,12 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+
+        params = QueryParams(params)
+
         return self.perform_request(
             "GET",
-            make_path(
-                "api",
-                "ent",
-                "v1",
-                "internal",
-                "version",
-            ),
+            "/api/ent/v1/internal/version",
             params=params,
             headers=headers,
             http_auth=http_auth,
