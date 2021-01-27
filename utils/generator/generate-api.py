@@ -34,7 +34,6 @@ loader = jinja2.FileSystemLoader(templates_dir)
 env = jinja2.Environment(
     loader=loader,
 )
-t = env.get_template("component")
 
 
 http_status_errors = {
@@ -84,8 +83,9 @@ def to_python_param(name):
 
 
 class Parameter:
-    def __init__(self, spec):
+    def __init__(self, spec, named_body=False):
         self.spec = spec
+        self.named_body = named_body
 
     @property
     def wire_name(self):
@@ -94,13 +94,20 @@ class Parameter:
         # If there's an unstyled array with explode=True (or default 'True')
         # then we add '[]' after the spec wire name to comply with Ruby on Rails
         # query parameter arrays.
-        if self.type == "array" and self.style is None and self.explode:
+        if (
+            self.type == "array"
+            and self.style is None
+            and self.explode
+            and self.in_ == "query"
+        ):
             wire_name += "[]"
 
         return wire_name
 
     @property
     def param_name(self) -> str:
+        if self.named_body:
+            return to_python_param(self.named_body)
         return to_python_param(self.spec.get("x-codegen-param-name", self.spec["name"]))
 
     @property
@@ -131,7 +138,14 @@ class Parameter:
         return explode
 
     def __repr__(self):
-        return f"Parameter(param_name={self.param_name!r})"
+        key_values = [
+            ("param_name", self.param_name),
+            ("in", self.in_),
+            ("required", self.required),
+        ]
+        if self.named_body:
+            key_values.append(("named_body", self.named_body))
+        return f"Parameter({', '.join('%s=%r' % kv for kv in key_values)})"
 
 
 class Component:
@@ -194,9 +208,92 @@ class API:
 
     @property
     def all_params(self):
+        return self.cached_all_params()
+
+    @lru_cache()
+    def cached_all_params(self):
+        """Builds all_params and caches it within an lru_cache()"""
         param_specs = self.spec.get("parameters", [])
+        params = [Parameter(spec) for spec in param_specs]
+
+        # If there's a request body build a list of
+        # parameters from the top-level of keys in the
+        # request body in case that body is a dictionary.
+        body_params = []
+        if self.body_required:
+            body_spec = self.spec["requestBody"]["content"]["application/json"]
+
+            # Sometimes the requestBody carries a description but the schema doesn't
+            if "description" in self.spec["requestBody"]:
+                body_spec.setdefault(
+                    "description", self.spec["requestBody"]["description"]
+                )
+            body_spec.setdefault("description", "HTTP request body")
+
+            # If the body is an object we sometimes unpack the top-level
+            # properties into parameters, but only if all properties are
+            # required.
+            if body_spec["type"] == "object":
+                properties = body_spec.get("properties", {})
+                additional_props = bool(body_spec.get("additionalProperties", False))
+                required_props = body_spec.get("required", ())
+                body_param_required = True
+
+                # Small number of defined properties that
+                # we can transform into function params.
+                if (
+                    not additional_props
+                    and required_props
+                    and len(required_props) == len(properties)
+                    # If any path_params have the same name as our
+                    # body params we skip them for now.
+                    # This currently only impacts WorkplaceSearch
+                    # external_identity APIs
+                    and not (
+                        set(required_props).intersection(set(self.path_param_names))
+                    )
+                ):
+                    body_param_required = False
+                    for param_name, param_spec in properties.items():
+                        param_spec["name"] = param_name
+                        param_spec["in"] = "body"
+                        param_spec["required"] = True
+                        body_params.append(Parameter(param_spec))
+
+                # If it's a dictionary also allow free-form bodies
+                body_spec["name"] = "body"
+                body_spec["in"] = "body"
+                body_spec["required"] = body_param_required
+                body_params.append(Parameter(body_spec, named_body="body"))
+
+            # Otherwise if the body is not an object we only add a named body param
+            else:
+                body_spec = body_spec.copy()
+                request_body_name = self.spec.get(
+                    "x-codegen-request-body-name",
+                    body_spec.get("x-codegen-ref-name", "body"),
+                )
+
+                # TODO: Remove once 'WorkplaceSearch.indexDocuments'
+                # API sets 'x-codegen-request-body-name'
+                if request_body_name == "bulk_documents":
+                    request_body_name = "documents"
+
+                body_spec["name"] = request_body_name
+                body_spec["in"] = "body"
+                body_spec["required"] = True
+                body_params.append(Parameter(body_spec, named_body=body_spec["name"]))
+
+        # If there's a query parameter with the same name
+        # as a body parameter, favor the body parameter.
+        body_param_names = {param.param_name for param in body_params}
+        for i in reversed(range(len(params))):
+            if params[i].param_name in body_param_names:
+                params.pop(i)
+        params.extend(body_params)
+
         return sorted(
-            [Parameter(spec) for spec in param_specs],
+            params,
             key=lambda x: (not x.required, x.in_ == "query"),
         )
 
@@ -213,12 +310,20 @@ class API:
         return [param for param in self.all_params if param.in_ == "query"]
 
     @property
+    def body_params(self):
+        return [param for param in self.all_params if param.in_ == "body"]
+
+    @property
     def path_parts(self):
         return [x for x in self.path.split("/") if x]
 
     @property
     def has_path_params(self):
         return any(part.startswith("{") for part in self.path_parts)
+
+    @property
+    def path_param_names(self):
+        return [part[1:-1] for part in self.path_parts if part.startswith("{")]
 
     @property
     def description(self) -> str:
@@ -264,40 +369,38 @@ class API:
         # TODO: OpenAPI actually should default to 'False' but
         # the Enterprise Search specs seem to default to 'True' so
         # for now we do this.
-        return self.spec.get("requestBody", {}).get("required", True)
+        if "requestBody" not in self.spec:
+            return False
+        return self.spec["requestBody"].get("required", True)
 
     @property
-    def body_description(self):
-        if self.has_body:
-            return self.spec["requestBody"].get("description", "HTTP request body")
-        return None
-
-    @property
-    def response_component(self) -> str:
-        spec_resps = self.spec["responses"]
-        resp = spec_resps.get("default", spec_resps.get("200", ""))
-        ref = None
-        if "$ref" in resp:
-            ref = resp["$ref"]
-        elif "content" in resp:
-            ref = resp["content"]["application/json"]["schema"]["$ref"]
-        if ref:
-            return re.match(
-                r"^#/components/(?:schemas|responses|requestBodies)/(.+)$", ref
-            ).group(1)
+    def named_body_param(self):
+        """Returns either a parameter with `in_ == 'body'`
+        if the body is a simple array or scalar to be
+        directly set via `body = param` or None if this
+        is not the case.
+        """
+        if not self.body_required:
+            return None
+        body_params = []
+        for param in self.required_params:
+            if param.in_ == "body":
+                body_params.append(param)
+        if len(body_params) != 1 or not body_params[0].named_body:
+            return "body"
+        return body_params[0]
 
     @property
     def asciidoc_fragment(self) -> str:
         return re.sub(r"[^a-zA-Z0-9]+", "-", self.func_name).strip("-")
 
     def __repr__(self):
-        return f"API(func_name={self.func_name!r}, method={self.method!r}, path={self.path!r}, resp={self.response_component!r})"
+        return f"API(func_name={self.func_name!r}, method={self.method!r}, path={self.path!r}, params={self.all_params!r})"
 
 
 class OpenAPI:
-    def __init__(self, namespace, components, apis):
+    def __init__(self, namespace, apis):
         self.namespace = namespace
-        self.components = components
         self.apis = apis
 
     @property
@@ -313,9 +416,14 @@ class OpenAPI:
         with filepath.open() as f:
             schema_data = json.loads(f.read())
 
-        def expand_refs(x):
+        def expand_refs(x, depth=0):
+            # Hack to prevent recursive expansion, we only
+            # really need top-most layers expanded.
+            if depth > 10:
+                return x
+
             if isinstance(x, list):
-                return [expand_refs(i) for i in x]
+                return [expand_refs(i, depth + 1) for i in x]
             elif isinstance(x, dict):
                 if "$ref" in x or ("schema" in x and tuple(x["schema"]) == ("$ref",)):
                     keys = (
@@ -327,23 +435,23 @@ class OpenAPI:
                         .split("/")
                     )
                     base = schema_data
+                    refname = keys[-1]
                     for key in keys:
                         base = base[key]
-                    base = base.copy()
+                    base = expand_refs(base, depth + 1)
+                    x = x.copy()
                     x.pop("$ref" if "$ref" in x else "schema")
                     base.update(x)
+                    # Set 'x-codegen-ref-name mostly for request body names
+                    base.setdefault("x-codegen-ref-name", refname)
                     return base
                 else:
-                    return {k: expand_refs(v) for k, v in x.items()}
+                    return {k: expand_refs(v, depth + 1) for k, v in x.items()}
             return x
 
         schema_data = expand_refs(schema_data)
         namespace = "_" + filepath.name.replace(".json", "").replace("-", "_")
         apis = []
-        components = {}
-        for cat, cat_val in schema_data.get("components", {}).items():
-            for name, spec in cat_val.items():
-                components[name] = Component(name, spec)
         for path_key, path_val in schema_data["paths"].items():
             path_parameters = []
             for method_key, method_val in path_val.items():
@@ -354,14 +462,14 @@ class OpenAPI:
             for api in apis:
                 if api.path == path_key:
                     api.spec.setdefault("parameters", []).extend(path_parameters)
+
         apis = sorted(apis, key=API.sorted_key)
-        return OpenAPI(namespace, components=components, apis=apis)
+        return OpenAPI(namespace, apis=apis)
 
     def __repr__(self):
         return (
             f"OpenAPI(\n"
             f"  namespace={self.namespace!r},\n"
-            f"  components={self.components},\n"
             f"  apis={self.apis}\n"
             f")"
         )

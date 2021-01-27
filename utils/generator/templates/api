@@ -2,9 +2,7 @@
         self,
         {% for param in api.required_params %}
         {{ param.param_name }},
-        {% endfor %}{% if api.has_body %}
-        body{% if not api.body_required %}=None{% endif %},
-        {% endif %}{% for param in api.optional_params %}
+        {% endfor %}{% for param in api.optional_params %}
         {{ param.param_name }}=None,
         {% endfor %}
         params=None,
@@ -17,9 +15,8 @@
         {{ api.description|replace("\n", " ")|wordwrap(wrapstring="\n        ") }}{% endif %}{% if api.docs_url %}
 
         `<{{ api.docs_url }}>`_
-{% endif %}{% if api.all_params|list|length or api.has_body %}{% for param in api.all_params %}
-        {% filter wordwrap(72, wrapstring="\n            ") %}:arg {{ param.param_name }}: {{ param.description }}{% endfilter %}{% endfor %}{% if api.has_body %}
-        :arg body: {{ api.body_description }}{% endif %}{% endif %}
+{% endif %}{% if api.all_params|list|length %}{% for param in api.all_params %}
+        {% filter wordwrap(72, wrapstring="\n            ") %}:arg {{ param.param_name }}: {{ param.description }}{% endfilter %}{% endfor %}{% endif %}
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -43,6 +40,12 @@
                 params.add("{{ param.wire_name }}", val){% else %}
             params.add("{{ param.wire_name }}", {{ param.param_name}}){% endif %}{% endfor %}
 
+        {% if api.has_body %}
+        {% if api.body_params|list|length >= 2 %}
+        body = body or {% raw %}{}{% endraw %}{% for param in api.required_params %}{% if param.in_ == "body" %}
+        body["{{ param.wire_name }}"] = {{ param.param_name }}{% endif %}{% endfor %}{% endif %}
+        {% endif %}
+
         return self.perform_request(
             "{{ api.method }}",
             {% if api.has_path_params %}to_path({% for part in api.path_parts %}
@@ -53,7 +56,7 @@
                 {% endif %}
             {% endfor %}){% else %}"{% for part in api.path_parts %}/{{ part }}{% endfor %}"{% endif %},
             {% if api.has_body %}
-            body=body,
+            body={% if api.body_params|list|length >= 2 %}body{% else %}{{ api.named_body_param.param_name }}{% endif %},
             {% endif %}
             params=params,
             headers=headers,

@@ -53,7 +53,7 @@ Here's how you can get started:
 )
 >>> app_search.index_documents(
     engine_name="national-parks",
-    body=[{
+    documents=[{
         "id": "yellowstone",
         "title": "Yellowstone National Park"
     }]

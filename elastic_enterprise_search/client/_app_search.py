@@ -450,7 +450,7 @@ class AppSearch(BaseClient):
     def delete_documents(
         self,
         engine_name,
-        body,
+        document_ids,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -463,7 +463,7 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-delete>`_
 
         :arg engine_name: Name of the engine
-        :arg body: List of document IDs
+        :arg document_ids: List of document IDs
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -471,8 +471,12 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
+        for param in (
+            engine_name,
+            document_ids,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
 
@@ -486,7 +490,7 @@ class AppSearch(BaseClient):
                 engine_name,
                 "documents",
             ),
-            body=body,
+            body=document_ids,
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -497,7 +501,7 @@ class AppSearch(BaseClient):
     def get_documents(
         self,
         engine_name,
-        body,
+        document_ids,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -510,7 +514,7 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-get>`_
 
         :arg engine_name: Name of the engine
-        :arg body: List of document IDs
+        :arg document_ids: List of document IDs
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -518,8 +522,12 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
+        for param in (
+            engine_name,
+            document_ids,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
 
@@ -533,7 +541,7 @@ class AppSearch(BaseClient):
                 engine_name,
                 "documents",
             ),
-            body=body,
+            body=document_ids,
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -544,7 +552,7 @@ class AppSearch(BaseClient):
     def index_documents(
         self,
         engine_name,
-        body,
+        documents,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -557,7 +565,7 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-create>`_
 
         :arg engine_name: Name of the engine
-        :arg body: List of document to index
+        :arg documents: List of document to index
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -565,8 +573,12 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
+        for param in (
+            engine_name,
+            documents,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
 
@@ -580,7 +592,7 @@ class AppSearch(BaseClient):
                 engine_name,
                 "documents",
             ),
-            body=body,
+            body=documents,
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -644,7 +656,7 @@ class AppSearch(BaseClient):
     def put_documents(
         self,
         engine_name,
-        body,
+        documents,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -657,7 +669,7 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/documents.html#documents-partial>`_
 
         :arg engine_name: Name of the engine
-        :arg body: List of documents to update
+        :arg documents: List of documents to update
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -665,8 +677,12 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
+        for param in (
+            engine_name,
+            documents,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
 
@@ -680,7 +696,7 @@ class AppSearch(BaseClient):
                 engine_name,
                 "documents",
             ),
-            body=body,
+            body=documents,
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -938,7 +954,7 @@ class AppSearch(BaseClient):
     def add_meta_engine_source(
         self,
         engine_name,
-        body,
+        source_engines,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -951,7 +967,7 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-add-source-engines>`_
 
         :arg engine_name: Name of the engine
-        :arg body: List of engine IDs
+        :arg source_engines: List of engine names
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -959,8 +975,12 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
+        for param in (
+            engine_name,
+            source_engines,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
 
@@ -974,7 +994,7 @@ class AppSearch(BaseClient):
                 engine_name,
                 "source_engines",
             ),
-            body=body,
+            body=source_engines,
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -985,7 +1005,7 @@ class AppSearch(BaseClient):
     def delete_meta_engine_source(
         self,
         engine_name,
-        body,
+        source_engines,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -998,7 +1018,7 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/meta-engines.html#meta-engines-remove-source-engines>`_
 
         :arg engine_name: Name of the engine
-        :arg body: List of engine IDs
+        :arg source_engines: List of engine names
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -1006,8 +1026,12 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
+        for param in (
+            engine_name,
+            source_engines,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
 
@@ -1021,7 +1045,7 @@ class AppSearch(BaseClient):
                 engine_name,
                 "source_engines",
             ),
-            body=body,
+            body=source_engines,
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -1213,8 +1237,12 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
+        for param in (
+            engine_name,
+            body,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
 
@@ -1260,8 +1288,12 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
+        for param in (
+            engine_name,
+            body,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
 
@@ -1351,8 +1383,12 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
+        for param in (
+            engine_name,
+            body,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
 
@@ -1422,7 +1458,8 @@ class AppSearch(BaseClient):
     def create_synonym_set(
         self,
         engine_name,
-        body,
+        synonyms,
+        body=None,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -1435,6 +1472,7 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/synonyms.html#synonyms-create>`_
 
         :arg engine_name: Name of the engine
+        :arg synonyms:
         :arg body: Synonym set description
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -1443,10 +1481,17 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
+        for param in (
+            engine_name,
+            synonyms,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
+
+        body = body or {}
+        body["synonyms"] = synonyms
 
         return self.perform_request(
             "POST",
@@ -1572,7 +1617,8 @@ class AppSearch(BaseClient):
         self,
         engine_name,
         synonym_set_id,
-        body,
+        synonyms,
+        body=None,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -1586,6 +1632,7 @@ class AppSearch(BaseClient):
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
+        :arg synonyms:
         :arg body: Synonym set description
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -1597,11 +1644,15 @@ class AppSearch(BaseClient):
         for param in (
             engine_name,
             synonym_set_id,
+            synonyms,
         ):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
+
+        body = body or {}
+        body["synonyms"] = synonyms
 
         return self.perform_request(
             "PUT",

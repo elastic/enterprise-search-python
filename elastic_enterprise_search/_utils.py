@@ -40,7 +40,7 @@ __all__ = [
     "urlparse",
 ]
 
-SKIP_IN_PATH = (None, "", b"", [], ())
+SKIP_IN_PATH = (None, "", b"")
 PY2 = sys.version_info[0] == 2
 
 if PY2:

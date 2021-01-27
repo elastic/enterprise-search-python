@@ -93,7 +93,8 @@ class EnterpriseSearch(BaseClient):
 
     def put_read_only(
         self,
-        body,
+        enabled,
+        body=None,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -105,6 +106,7 @@ class EnterpriseSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html#setting-read-only-state>`_
 
+        :arg enabled:
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -114,8 +116,13 @@ class EnterpriseSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
         """
+        if enabled in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
+
+        body = body or {}
+        body["enabled"] = enabled
 
         return self.perform_request(
             "PUT",
