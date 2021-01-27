@@ -6,7 +6,56 @@ Elastic Enterprise Search.
 
 **On this page**
 
+* <<connect-es-cloud>>
+* <<connect-self-hosted>>
+* <<connection-parameters>>
 * <<authentication>>
+* <<auth-as>>
+* <<auth-ws>>
+* <<auth-ent>>
+
+[discrete]
+[[connect-es-cloud]]
+=== Connecting to an Elastic Cloud Instance
+
+To connect to an Elastic Enterprise Search instance
+hosted in :ecloud: after provisioning an Enterprise
+Search instance on the deployment screen you'll
+see links for `Launch` and `Copy endpoint`.
+
+Select `Copy endpoint` to copy a URL to your clipboard.
+From there paste the URL into the first parameter of a client like so:
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+client = EnterpriseSearch("<paste here>")
+---------------
+
+The URL will look like this:
+
+[source,python]
+--------
+"https://3b898c...ent-search.us-central1.gcp.cloud.es.io/login"
+--------
+
+Notice the `/login` at the end, remove this part from
+the URL so that you end up with a URL like this:
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+client = EnterpriseSearch("https://3b898c...ent-search.us-central1.gcp.cloud.es.io")
+---------------
+
+From here your client only need authentication and then is ready to be used!
+
+[discrete]
+[[connect-self-hosted]]
+=== Connecting to Self-Hosted Instance
+
 
 
 [discrete]
