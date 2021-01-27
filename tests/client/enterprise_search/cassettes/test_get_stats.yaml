@@ -1,0 +1,82 @@
+interactions:
+- request:
+    body: null
+    headers:
+      authorization:
+      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: GET
+    uri: http://localhost:3002/api/ent/v1/internal/stats
+  response:
+    body:
+      string: '{"app":{"pid":6,"start":"2021-01-27T20:34:48+00:00","end":"2021-01-27T20:35:48+00:00","metrics":{"timers.actastic.relation.search":{"sum":214.88393805339,"max":7.693164021475241,"mean":3.6421006449727122},"timers.cron.local.cron-keep_filebeat_alive.total_job_time":{"sum":23.110500012990087,"max":23.110500012990087,"mean":23.110500012990087},"timers.cron.local.cron-cleanup_heartbeat_index.total_job_time":{"sum":27.537045010831207,"max":27.537045010831207,"mean":27.537045010831207},"timers.cron.local.cron-refresh_elasticsearch_license.total_job_time":{"sum":31.15287100081332,"max":31.15287100081332,"mean":31.15287100081332},"timers.actastic.relation.document_count":{"sum":9.87388999783434,"max":2.1980470046401024,"mean":1.974777999566868},"timers.http.request.all":{"sum":281.4068794250488,"max":232.64312744140625,"mean":70.3517198562622},"timers.http.request.302":{"sum":32.675743103027344,"max":17.500877380371094,"mean":16.337871551513672},"timers.http.request.401":{"sum":16.088008880615234,"max":16.088008880615234,"mean":16.088008880615234},"timers.http.request.200":{"sum":232.64312744140625,"max":232.64312744140625,"mean":232.64312744140625},"counters.http.request.all":4,"counters.http.request.302":2,"counters.http.request.401":1,"counters.http.request.200":1}},"queues":{"connectors":{"pending":0},"document_destroyer":{"pending":0},"engine_destroyer":{"pending":0},"index_adder":{"pending":0},"indexed_doc_remover":{"pending":0},"mailer":{"pending":0},"refresh_document_counts":{"pending":0},"reindexer":{"pending":0},"schema_updater":{"pending":0},"seed_sample_engine":{"pending":0},"workplace_search":{"pending":0},"failed":[]},"connectors":{"alive":true,"pool":{"extract_worker_pool":{"running":true,"queue_depth":0,"size":8,"busy":1,"idle":7,"total_scheduled":1911,"total_completed":1910},"subextract_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"publish_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"status_update_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0}},"job_store":{"waiting":0,"working":0,"job_types":{"full":0,"incremental":0,"delete":0,"permissions":0}}}}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"797d682bdbd532571cb49ebd0ff1b313"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - c8f14630-5b1b-49fd-b39e-5c0a8617af83
+      X-Runtime:
+      - '0.058923'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      authorization:
+      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: GET
+    uri: http://localhost:3002/api/ent/v1/internal/stats?include=connectors,queues
+  response:
+    body:
+      string: '{"connectors":{"alive":true,"pool":{"extract_worker_pool":{"running":true,"queue_depth":0,"size":8,"busy":1,"idle":7,"total_scheduled":1911,"total_completed":1910},"subextract_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"publish_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"status_update_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0}},"job_store":{"waiting":0,"working":0,"job_types":{"full":0,"incremental":0,"delete":0,"permissions":0}}},"queues":{"connectors":{"pending":0},"document_destroyer":{"pending":0},"engine_destroyer":{"pending":0},"index_adder":{"pending":0},"indexed_doc_remover":{"pending":0},"mailer":{"pending":0},"refresh_document_counts":{"pending":0},"reindexer":{"pending":0},"schema_updater":{"pending":0},"seed_sample_engine":{"pending":0},"workplace_search":{"pending":0},"failed":[]}}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"e262a6c051b70a3f99cb1cf9a643d3f8"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 5e674fad-3c40-4bbb-92ad-153345dd4c27
+      X-Runtime:
+      - '0.060609'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1
