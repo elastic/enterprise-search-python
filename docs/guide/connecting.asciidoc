@@ -56,6 +56,16 @@ From here your client only need authentication and then is ready to be used!
 [[connect-self-hosted]]
 === Connecting to Self-Hosted Instance
 
+When connecting to a self-hosted instance provide the 
+scheme, host, port, and URL prefix (if any) for the instance:
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+client = EnterpriseSearch("https://self-hosted.ent-search.xyz/url-prefix")
+---------------
+
 [discrete]
 [[connection-parameters]]
 === Connection Parameters

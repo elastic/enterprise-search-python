@@ -1,6 +1,38 @@
 [[app-search-api]]
 == App Search API
 
+=== Initializing the Client
+
+The `AppSearch` client can either be configured directly:
+
+[source,python]
+---------------
+# Use the AppSearch client directly:
+from elastic_enterprise_search import AppSearch
+
+app_search = AppSearch(
+    "http://localhost:3002",
+    http_auth="private-..."
+)
+# Now call API methods
+app_search.search(...)
+---------------
+
+...or can be used via a configured `EnterpriseSearch.app_search` instance:
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+ent_search = EnterpriseSearch("http://localhost:3002")
+
+# Configure authentication of the AppSearch instance
+ent_search.app_search.http_auth = "private-..."
+
+# Now call API methods
+ent_search.app_search.search(...)
+---------------
+
 === API Key Privileges
 
 Using the APIs require a key with `read`, `write` or `search` access
@@ -19,14 +51,6 @@ as a language:
 
 [source,python]
 ---------------
-from elastic_enterprise_search import AppSearch
-
-# Configure the AppSearch instance
-app_search = AppSearch(
-    "http://localhost:3002",
-    http_auth="private-..."
-)
-
 # Request:
 app_search.create_engine(
     engine_name="national-parks",
