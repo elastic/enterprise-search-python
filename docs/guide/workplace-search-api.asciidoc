@@ -1,0 +1,273 @@
+[[workplace-search-api]]
+== Workplace Search API
+
+=== Initializing the Client
+
+The `WorkplaceSearch` client can either be configured directly:
+
+[source,python]
+---------------
+# Use the Workplace client directly:
+from elastic_enterprise_search import WorkplaceSearch
+
+workplace_search = WorkplaceSearch(
+    "http://localhost:3002"
+)
+# Now call API methods
+workplace_search.search(..., http_auth="<oauth-access-token>")
+---------------
+
+...or can be used via a configured `EnterpriseSearch.workplace_search` instance:
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+ent_search = EnterpriseSearch("http://localhost:3002")
+
+# Now call API methods
+ent_search.workplace_search.search(..., http_auth="<oauth-access-token>")
+---------------
+
+=== Documents
+
+To ingest documents into Workplace Search with the API you must first
+create a https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-api-sources.html#create-custom-source[Custom Content Source]
+and get the Content Source ID and Content Source Access Token.
+
+In the examples below assume that `CONTENT_SOURCE_ID` is the Content Source ID
+and `CONTENT_SOURCE_ACCESS_TOKEN` is the Content Source Access Token from above.
+
+==== Index Documents
+
+To create new documents or update existing documents use the `index_documents()` method.
+
+The `_allow_permissions` and `_deny_permissions` properties can be used to
+control visibility of the documents for users. See the Permissions section below
+for more information on Permissions.
+
+[source,python]
+---------------
+# Request:
+workplace_search.index_documents(
+    http_auth=CONTENT_SOURCE_ACCESS_TOKEN,
+    content_source_id=CONTENT_SOURCE_ID,
+    body=[
+      {
+        "_allow_permissions": ["permission1"],
+        "_deny_permissions": [],
+        "id" : 1234,
+        "title" : "The Meaning of Time",
+        "body" : "Not much. It is a made up thing.",
+        "url" : "https://example.com/meaning/of/time",
+        "created_at": "2019-06-01T12:00:00+00:00",
+        "type": "list"
+      },
+      {
+        "_allow_permissions": [],
+        "_deny_permissions": ["permission2"],
+        "id" : 1235,
+        "title" : "The Meaning of Sleep",
+        "body" : "Rest, recharge, and connect to the Ether.",
+        "url" : "https://example.com/meaning/of/sleep",
+        "created_at": "2019-06-01T12:00:00+00:00",
+        "type": "list"
+      }
+    ]
+)
+
+# Response:
+{
+  "results": [
+    {
+       "id":"1234",
+       "errors":[]
+    },
+    {
+       "id":"1235",
+       "errors":[]
+    }
+  ]
+}
+---------------
+
+==== Delete Documents
+
+To remove documents from a custom content source use the `delete_documents()` method
+and supply a list of document IDs to `body`:
+
+[source,python]
+---------------
+# Request:
+workplace_search.delete_documents(
+    http_auth=CONTENT_SOURCE_ACCESS_TOKEN,
+    content_source_id=CONTENT_SOURCE_ID,
+    body=[1234, 1235]
+)
+
+# Response:
+{
+  "results": [
+    {
+      "id": 1234,
+      "success": True
+    },
+    {
+      "id": 1235,
+      "success": True
+    }
+  ]
+}
+---------------
+
+=== Search
+
+Search requires an https://www.elastic.co/guide/en/workplace-search/current/workplace-search-search-oauth.html[OAuth access token]
+in the `http_auth` parameter to authenticate.
+
+[source,python]
+---------------
+# Request:
+workplace_search.search(
+    body={
+        "query": "sleep"
+    }
+)
+
+# Response:
+{
+  "meta": {
+    ...
+  },
+  "results": [
+    {
+      "title": {
+        "raw": "The Meaning of Sleep",
+        "snippet": "The Meaning of <em>Sleep</em>",
+      },
+      "_meta": {
+        "source": "custom-source",
+        "last_updated": "2020-03-27T20:10:33+00:00",
+        "content_source_id": "<CONTENT_SOURCE_ID>",
+        "id": "1235",
+        "score": 6.359234
+      },
+      "source": {
+        "raw": "custom-source"
+      },
+      "content_source_id": {
+        "raw": "<CONTENT_SOURCE_ID>"
+      },
+      "id": {
+        "raw": "park_american-samoa"
+      },
+      ...
+    },
+    ...
+  ]
+}
+---------------
+
+=== Permissions
+
+Permissions can be set per-user and then applied  to documents either
+by `_allow_permissions` or `_deny_permissions` to control access to documents.
+
+==== Add Permission to User
+
+To add permissions to a user `example.user`
+use the `add_user_permissions()` method:
+
+[source,python]
+---------------
+# Request:
+workplace_search.add_user_permissions(
+    content_source_id=CONTENT_SOURCE_ID,
+    http_auth=CONTENT_SOURCE_ACCESS_TOKEN,
+    user="example.user",
+    body={
+        "permissions": ["permission1", "permission2"]
+    }
+)
+
+# Response:
+{
+ "user": "example.user",
+ "permissions": [
+   "permission1",
+   "permission2"
+ ]
+}
+---------------
+
+==== Get User Permissions
+
+To view a users permissions use the `get_permissions()` method:
+
+[source,python]
+---------------
+# Request:
+workplace_search.get_user_permissions(
+    content_source_id=CONTENT_SOURCE_ID,
+    http_auth=CONTENT_SOURCE_ACCESS_TOKEN,
+    user="example.user"
+)
+
+# Response:
+{
+ "user": "example.user",
+ "permissions": [
+   "permission1",
+   "permission2"
+ ]
+}
+---------------
+
+==== Listing Permissions for Content Source
+
+To view all users permissions for a custom content source use the `list_permissions()` method:
+
+[source,python]
+---------------
+# Request:
+workplace_search.list_permissions(
+    content_source_id=CONTENT_SOURCE_ID,
+    http_auth=CONTENT_SOURCE_ACCESS_TOKEN
+)
+
+# Response:
+[
+  {
+   "user": "example.user",
+   "permissions": [
+     "permission1",
+     "permission2"
+   ]
+  }
+]
+---------------
+
+==== Remove Permissions from User
+
+To remove one or more permissions from a user use the `delete_user_permissions()` method:
+
+[source,python]
+---------------
+# Request:
+workplace_search.delete_user_permissions(
+    content_source_id=CONTENT_SOURCE_ID,
+    http_auth=CONTENT_SOURCE_ACCESS_TOKEN,
+    user="example.user",
+    body={
+        "permissions": ["permission2"]
+    }
+)
+
+# Response:
+{
+  "user": "example.user",
+  "permissions": [
+    "permission1"
+  ]
+}
+---------------
