@@ -56,7 +56,44 @@ From here your client only need authentication and then is ready to be used!
 [[connect-self-hosted]]
 === Connecting to Self-Hosted Instance
 
+[discrete]
+[[connection-parameters]]
+=== Connection Parameters
 
+All connection parameters that can be passed into each client
+come from https://github.com/elastic/elastic-transport-python[`elastic-transport-python`]:
+
+[options="header"]
+|============
+| Parameter                 | Types                         | Default               | Description
+| `host`                    | `str`                         | `"localhost"`         | TCP host to connect to. If set to a URL will set `port`, `use_ssl`, and `url_prefix` after parsing.
+| `port`                    | `Optional[int]`               | `3002`                | TCP port to connect to
+| `use_ssl`                 | `bool`                        | `False`               | Whether to connect using TLS/SSL
+| `url_prefix`              | `str`                         | `""`                  | Path prefix for all requests
+| `request_timeout`         | `Optional[float]`             | `10.0`                | Amount of time to wait for a response. Set to `None` for no limit
+| `headers`                 | `Dict[str, str]`              | `{}`                  | HTTP headers to add to every request
+| `connections_per_host`    | `int`                         | `10`                  | Number of concurrent connections to allow per-host. Only matters if making concurrent requests
+| `verify_cert`             | `bool`                        | `True`                | Whether to verify the server certificate during TLS handshake
+| `ca_certs`                | `Optional[str]`               | `certifi.where()`     | CA certificates to use when verifying server certificate
+| `client_cert`             | `Optional[str]`               | `None`                | Client certificate to present during TLS/SSL handshake
+| `client_key`              | `Optional[str]`               | `None`                | Client private key for `client_cert`
+| `ssl_version`             | `ssl.PROTOCOL_TLS*`           | `ssl.PROTOCOL_TLS`    | TLS version to use when connecting. By default uses the best version.
+| `ssl_assert_hostname`     | `Union[str, bool]`            | `host`                | Expected hostname on the server certificate. By default is the same as `host`. If set to `False` will not verify hostname on certificate
+| `ssl_assert_fingerprint`  | `Optional[str]`               | `None`                | Checksum to verify against the fingerprint of the server certificate
+| `ssl_context`             | `Optional[ssl.SSLContext]`    | `None`                | Pre-configured `ssl.SSLContext` to use for TLS handshake
+|============
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+client = EnterpriseSearch(
+    "https://localhost:8080",
+    request_timeout=5,
+    verify_certs=True,
+    connections_per_host=5,
+)
+---------------
 
 [discrete]
 [[authentication]]
