@@ -6,8 +6,65 @@ Elastic Enterprise Search.
 
 **On this page**
 
+* <<connect-es-cloud>>
+* <<connect-self-hosted>>
 * <<authentication>>
+* <<auth-as>>
+* <<auth-ws>>
+* <<auth-ent>>
+* <<connection-parameters>>
 
+[discrete]
+[[connect-es-cloud]]
+=== Connecting to an Elastic Cloud Instance
+
+To connect to an Elastic Enterprise Search instance
+hosted in :ecloud: after provisioning an Enterprise
+Search instance on the deployment screen you'll
+see links for `Launch` and `Copy endpoint`.
+
+Select `Copy endpoint` to copy a URL to your clipboard.
+From there paste the URL into the first parameter of a client like so:
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+client = EnterpriseSearch("<paste here>")
+---------------
+
+The URL will look like this:
+
+[source,python]
+--------
+"https://3b898c...ent-search.us-central1.gcp.cloud.es.io/login"
+--------
+
+Notice the `/login` at the end, remove this part from
+the URL so that you end up with a URL like this:
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+client = EnterpriseSearch("https://3b898c...ent-search.us-central1.gcp.cloud.es.io")
+---------------
+
+From here your client only needs authentication and then is ready to be used!
+
+[discrete]
+[[connect-self-hosted]]
+=== Connecting to Self-Hosted Instance
+
+When connecting to a self-hosted instance provide the 
+scheme, host, port, and URL prefix (if any) for the instance:
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+client = EnterpriseSearch("https://self-hosted.ent-search.xyz/url-prefix")
+---------------
 
 [discrete]
 [[authentication]]
@@ -126,3 +183,42 @@ ent_search.http_auth = ("enterprise_search", "<password>")
 # You can also set a per-request `http_auth`
 ent_search.get_version(http_auth=("enterprise_search", "<password>"))
 ----------------------------
+
+[discrete]
+[[connection-parameters]]
+=== Connection Parameters
+
+All connection parameters that can be passed into each client
+come from https://github.com/elastic/elastic-transport-python[`elastic-transport-python`]:
+
+[options="header"]
+|============
+| Parameter                 | Types                         | Default               | Description
+| `host`                    | `str`                         | `"localhost"`         | TCP host to connect to. If set to a URL will set `port`, `use_ssl`, and `url_prefix` after parsing.
+| `port`                    | `Optional[int]`               | `3002`                | TCP port to connect to
+| `use_ssl`                 | `bool`                        | `False`               | Whether to connect using TLS/SSL
+| `url_prefix`              | `str`                         | `""`                  | Path prefix for all requests
+| `request_timeout`         | `Optional[float]`             | `10.0`                | Amount of time to wait for a response. Set to `None` for no limit
+| `headers`                 | `Dict[str, str]`              | `{}`                  | HTTP headers to add to every request
+| `connections_per_host`    | `int`                         | `10`                  | Number of concurrent connections to allow per-host. Only matters if making concurrent requests
+| `verify_cert`             | `bool`                        | `True`                | Whether to verify the server certificate during TLS handshake
+| `ca_certs`                | `Optional[str]`               | `certifi.where()`     | CA certificates to use when verifying server certificate
+| `client_cert`             | `Optional[str]`               | `None`                | Client certificate to present during TLS/SSL handshake
+| `client_key`              | `Optional[str]`               | `None`                | Client private key for `client_cert`
+| `ssl_version`             | `ssl.PROTOCOL_TLS*`           | `ssl.PROTOCOL_TLS`    | TLS version to use when connecting. By default uses the best version.
+| `ssl_assert_hostname`     | `Union[str, bool]`            | `host`                | Expected hostname on the server certificate. By default is the same as `host`. If set to `False` will not verify hostname on certificate
+| `ssl_assert_fingerprint`  | `Optional[str]`               | `None`                | Checksum to verify against the fingerprint of the server certificate
+| `ssl_context`             | `Optional[ssl.SSLContext]`    | `None`                | Pre-configured `ssl.SSLContext` to use for TLS handshake
+|============
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+client = EnterpriseSearch(
+    "https://localhost:8080",
+    request_timeout=5,
+    verify_certs=True,
+    connections_per_host=5,
+)
+---------------

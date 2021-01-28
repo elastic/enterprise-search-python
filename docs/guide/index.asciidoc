@@ -9,3 +9,9 @@ include::overview.asciidoc[]
 include::installation.asciidoc[]
 
 include::connecting.asciidoc[]
+
+include::app-search-api.asciidoc[]
+
+include::workplace-search-api.asciidoc[]
+
+include::enterprise-search-api.asciidoc[]

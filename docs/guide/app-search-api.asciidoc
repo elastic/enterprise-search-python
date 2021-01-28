@@ -1,0 +1,656 @@
+[[app-search-api]]
+== App Search API
+
+=== Initializing the Client
+
+The `AppSearch` client can either be configured directly:
+
+[source,python]
+---------------
+# Use the AppSearch client directly:
+from elastic_enterprise_search import AppSearch
+
+app_search = AppSearch(
+    "http://localhost:3002",
+    http_auth="private-..."
+)
+# Now call API methods
+app_search.search(...)
+---------------
+
+...or can be used via a configured `EnterpriseSearch.app_search` instance:
+
+[source,python]
+---------------
+from elastic_enterprise_search import EnterpriseSearch
+
+ent_search = EnterpriseSearch("http://localhost:3002")
+
+# Configure authentication of the AppSearch instance
+ent_search.app_search.http_auth = "private-..."
+
+# Now call API methods
+ent_search.app_search.search(...)
+---------------
+
+=== API Key Privileges
+
+Using the APIs require a key with `read`, `write` or `search` access
+depending on the action. If you're receiving an `UnauthorizedError`
+make sure the key you're using in `http_auth` has the proper privileges.
+
+=== Engines
+
+Engines index documents and perform search functions.
+To use App Search you must first create an Engine.
+
+==== Create Engine
+
+Let's create an Engine named `national-parks` and uses English
+as a language:
+
+[source,python]
+---------------
+# Request:
+app_search.create_engine(
+    engine_name="national-parks",
+    language="en",
+)
+
+# Response:
+{
+  "name": "national-parks",
+  "type": "default",
+  "language": "en"
+}
+---------------
+
+==== Get Engine
+
+Once we've created an Engine we can look at it:
+
+[source,python]
+---------------
+# Request:
+app_search.get_engine(engine_name="national-parks")
+
+# Response:
+{
+  "document_count": 0,
+  "language": "en",
+  "name": "national-parks",
+  "type": "default"
+}
+---------------
+
+==== List Engines
+
+We can see all our Engines in the App Search instance:
+
+[source,python]
+---------------
+# Request:
+app_search.list_engines()
+
+# Response:
+{
+  "meta": {
+    "page": {
+      "current": 1,
+      "size": 25,
+      "total_pages": 1,
+      "total_results": 1
+    }
+  },
+  "results": [
+    {
+      "document_count": 0,
+      "language": "en",
+      "name": "national-parks",
+      "type": "default"
+    }
+  ]
+}
+---------------
+
+==== Delete Engine
+
+If we want to delete the Engine and all documents
+inside you can use the `delete_engine()` method:
+
+[source,python]
+---------------
+# Request:
+app_search.delete_engine(engine_name="national-parks")
+
+# Response:
+{
+  "deleted": True
+}
+---------------
+
+=== Documents
+
+==== Index Documents
+
+Once you've created an Engine you can start indexing documents into it:
+
+[source,python]
+---------------
+# Request:
+app_search.index_documents(
+    engine_name="national-parks",
+    body=[{
+        "id": "park_rocky-mountain",
+        "title": "Rocky Mountain",
+        "nps_link": "https://www.nps.gov/romo/index.htm",
+        "states": [
+            "Colorado"
+        ],
+        "visitors": 4517585,
+        "world_heritage_site": False,
+        "location": "40.4,-105.58",
+        "acres": 265795.2,
+        "date_established": "1915-01-26T06:00:00Z"
+    }, {
+        "id": "park_saguaro",
+        "title": "Saguaro",
+        "nps_link": "https://www.nps.gov/sagu/index.htm",
+        "states": [
+            "Arizona"
+        ],
+        "visitors": 820426,
+        "world_heritage_site": False,
+        "location": "32.25,-110.5",
+        "acres": 91715.72,
+        "date_established": "1994-10-14T05:00:00Z"
+    }]
+)
+
+# Response:
+[
+  {
+    "errors": [],
+    "id": "park_rocky-mountain"
+  },
+  {
+    "errors": [],
+    "id": "park_saguaro"
+  }
+]
+---------------
+
+==== List Documents
+
+Both of our new documents indexed without errors. 
+
+Now we can look at our indexed documents in the engine:
+
+[source,python]
+---------------
+# Request:
+app_search.list_documents(engine_name="national-parks")
+
+# Response:
+{
+  "meta": {
+    "page": {
+      "current": 1,
+      "size": 100,
+      "total_pages": 1,
+      "total_results": 2
+    }
+  },
+  "results": [
+    {
+      "acres": "91715.72",
+      "date_established": "1994-10-14T05:00:00Z",
+      "id": "park_saguaro",
+      "location": "32.25,-110.5",
+      "nps_link": "https://www.nps.gov/sagu/index.htm",
+      "states": [
+        "Arizona"
+      ],
+      "title": "Saguaro",
+      "visitors": "820426",
+      "world_heritage_site": "false"
+    },
+    {
+      "acres": "265795.2",
+      "date_established": "1915-01-26T06:00:00Z",
+      "id": "park_rocky-mountain",
+      "location": "40.4,-105.58",
+      "nps_link": "https://www.nps.gov/romo/index.htm",
+      "states": [
+        "Colorado"
+      ],
+      "title": "Rocky Mountain",
+      "visitors": "4517585",
+      "world_heritage_site": "false"
+    }
+  ]
+}
+---------------
+
+==== Get Documents by ID
+
+and retrieve a set of documents by their `id`:
+
+[source,python]
+---------------
+# Request:
+app_search.get_documents(
+    engine_name="national-parks",
+    body=["park_rocky-mountain"]
+)
+
+# Response:
+[
+  {
+    "acres": "265795.2",
+    "date_established": "1915-01-26T06:00:00Z",
+    "id": "park_rocky-mountain",
+    "location": "40.4,-105.58",
+    "nps_link": "https://www.nps.gov/romo/index.htm",
+    "states": [
+      "Colorado"
+    ],
+    "title": "Rocky Mountain",
+    "visitors": "4517585",
+    "world_heritage_site": "false"
+  }
+]
+---------------
+
+==== Update and Delete Documents
+
+You can also update documents and delete them from the Engine:
+
+[source,python]
+---------------
+# Request:
+resp = app_search.put_documents(
+    engine_name="national-parks",
+    body=[{
+        "id": "park_rocky-mountain",
+        "visitors": 10000000
+    }]
+)
+
+# Response:
+[
+  {
+    "errors": [],
+    "id": "park_rocky-mountain"
+  }
+]
+
+# Request:
+resp = app_search.delete_documents(
+    engine_name="national-parks",
+    body=["park_rocky-mountain"]
+)
+
+# Response:
+[
+  {
+    "deleted": True,
+    "id": "park_rocky-mountain"
+  }
+]
+---------------
+
+=== Schemas
+
+Now that we've indexed some data we should take a look
+at the way the data is being indexed by our Engine.
+
+==== Get Schema
+
+First take a look at the existing Schema inferred from our data:
+
+[source,python]
+---------------
+# Request:
+resp = app_search.get_schema(
+    engine_name="national-parks"
+)
+
+# Response:
+{
+  "acres": "text",
+  "date_established": "text",
+  "location": "text",
+  "nps_link": "text",
+  "states": "text",
+  "title": "text",
+  "visitors": "text",
+  "world_heritage_site": "text"
+}
+---------------
+
+==== Update Schema
+
+Looks like the `date_established` field wasn't indexed
+as a `date` as desired. Update the type of the `date_established` field:
+
+[source,python]
+---------------
+# Request:
+resp = app_search.put_schema(
+    engine_name="national-parks",
+    body={
+        "date_established": "date"
+    }
+)
+
+# Response:
+{
+  "acres": "number",
+  "date_established": "date",  # Type has been updated!
+  "location": "geolocation",
+  "nps_link": "text",
+  "square_km": "number",
+  "states": "text",
+  "title": "text",
+  "visitors": "number",
+  "world_heritage_site": "text"
+}
+---------------
+
+=== Searching for Documents
+
+Once documents are ingested and the Schema is set properly
+you can use the `search()` method to search through an Engine
+for matching documents.
+
+The Search API has many options, read the
+https://www.elastic.co/guide/en/app-search/current/search.html[Search API documentation] for a list of all options.
+
+[source,python]
+---------------
+# Request:
+resp = app_search.search(
+    engine_name="national-parks",
+    body={
+        "query": "rock"
+    }
+)
+
+# Response:
+{
+  "meta": {
+    "alerts": [],
+    "engine": {
+      "name": "national-parks-demo",
+      "type": "default"
+    },
+    "page": {
+      "current": 1,
+      "size": 10,
+      "total_pages": 2,
+      "total_results": 15
+    },
+    "request_id": "6266df8b-8b19-4ff0-b1ca-3877d867eb7d",
+    "warnings": []
+  },
+  "results": [
+    {
+      "_meta": {
+        "engine": "national-parks-demo",
+        "id": "park_rocky-mountain",
+        "score": 6776379.0
+      },
+      "acres": {
+        "raw": 265795.2
+      },
+      "date_established": {
+        "raw": "1915-01-26T06:00:00+00:00"
+      },
+      "id": {
+        "raw": "park_rocky-mountain"
+      },
+      "location": {
+        "raw": "40.4,-105.58"
+      },
+      "nps_link": {
+        "raw": "https://www.nps.gov/romo/index.htm"
+      },
+      "square_km": {
+        "raw": 1075.6
+      },
+      "states": {
+        "raw": [
+          "Colorado"
+        ]
+      },
+      "title": {
+        "raw": "Rocky Mountain"
+      },
+      "visitors": {
+        "raw": 4517585.0
+      },
+      "world_heritage_site": {
+        "raw": "false"
+      }
+    }
+  ]
+}
+---------------
+
+=== Curations
+
+Curations hide or promote result content from pre-defined search queries.
+
+==== Create Curation
+
+[source,python]
+---------------
+# Request:
+resp = app_search.create_curation(
+    engine_name="national-parks",
+    queries=["rocks", "rock", "hills"],
+    promoted_doc_ids=["park_rocky-mountains"],
+    hidden_doc_ids=["park_saguaro"]
+)
+
+# Response:
+{
+  "id": "cur-6011f5b57cef06e6c883814a"
+}
+---------------
+
+==== Get Curation
+
+[source,python]
+---------------
+# Request:
+resp = app_search.get_curation(
+    engine_name="national-parks",
+    curation_id="cur-6011f5b57cef06e6c883814a"
+)
+{
+  "hidden": [
+    "park_saguaro"
+  ],
+  "id": "cur-6011f5b57cef06e6c883814a",
+  "promoted": [
+    "park_rocky-mountains"
+  ],
+  "queries": [
+    "rocks",
+    "rock",
+    "hills"
+  ]
+}
+---------------
+
+==== List Curations
+
+[source,python]
+---------------
+# Request:
+app_search.list_curations(
+    engine_name="national-parks"
+)
+---------------
+
+==== Get Curation
+
+[source,python]
+---------------
+# Request:
+app_search.delete_curation(
+    engine_name="national-parks",
+    curation_id="cur-6011f5b57cef06e6c883814a"
+)
+---------------
+
+=== Meta Engines
+
+https://www.elastic.co/guide/en/app-search/current/meta-engines-guide.html[Meta Engines] is
+an Engine that has no documents of its own, instead it combines multiple other Engines
+so that they can be searched together as if they were a single Engine.
+
+The Engines that comprise a Meta Engine are referred to as "Source Engines".
+
+==== Create Meta Engine
+
+Creating a Meta Engine uses the `create_engine()` method
+and set the `type` parameter to `"meta"`.
+
+[source,python]
+---------------
+# Request:
+app_search.create_engine(
+    engine_name="meta-engine",
+    type="meta",
+    source_engines=["national-parks"]
+)
+
+# Response:
+{
+  "document_count": 1,
+  "name": "meta-engine",
+  "source_engines": [
+    "national-parks"
+  ],
+  "type": "meta"
+}
+---------------
+
+==== Searching Documents from a Meta Engine
+
+[source,python]
+---------------
+# Request:
+app_search.search(
+    engine_name="meta-engine",
+    body={
+        "query": "rock"
+    }
+)
+
+# Response:
+{
+  "meta": {
+    "alerts": [],
+    "engine": {
+      "name": "meta-engine",
+      "type": "meta"
+    },
+    "page": {
+      "current": 1,
+      "size": 10,
+      "total_pages": 1,
+      "total_results": 1
+    },
+    "request_id": "aef3d3d3-331c-4dab-8e77-f42e4f46789c",
+    "warnings": []
+  },
+  "results": [
+    {
+      "_meta": {
+        "engine": "national-parks",
+        "id": "park_black-canyon-of-the-gunnison",
+        "score": 2.43862
+      },
+      "id": {
+        "raw": "national-parks|park_black-canyon-of-the-gunnison"
+      },
+      "nps_link": {
+        "raw": "https://www.nps.gov/blca/index.htm"
+      },
+      "square_km": {
+        "raw": 124.4
+      },
+      "states": {
+        "raw": [
+          "Colorado"
+        ]
+      },
+      "title": {
+        "raw": "Black Canyon of the Gunnison"
+      },
+      "world_heritage_site": {
+        "raw": "false"
+      }
+    }
+  ]
+}
+---------------
+
+Notice how the `id` of the result we receive (`national-parks|park_black-canyon-of-the-gunnison`)
+includes a prefix of the Source Engine that the result is from to distinguish them from
+results with the same `id` but different Source Engine within a search result.
+
+==== Adding Source Engines to existing Meta Engine
+
+If we have an existing Meta Engine named `meta-engine`
+we can add additional Source Engines to it with the
+`add_meta_engine_source()` method. Here we add the
+`state-parks` Engine:
+
+[source,python]
+---------------
+# Request:
+app_search.add_meta_engine_source(
+    engine_name="meta-engine",
+    body=["state-parks"]
+)
+
+# Response:
+{
+  "document_count": 1,
+  "name": "meta-engine",
+  "source_engines": [
+    "national-parks",
+    "state-parks"
+  ],
+  "type": "meta"
+}
+---------------
+
+==== Removing Source Engines from a Meta Engine
+
+If we change our mind about `state-parks` being a Source Engine for
+`meta-engine` we can use the `delete_meta_source_engines()` method:
+
+[source,python]
+---------------
+# Request:
+app_search.delete_meta_engine_source(
+    engine_name="meta-engine",
+    body=["state-parks"]
+)
+
+# Response:
+{
+  "document_count": 1,
+  "name": "meta-engine",
+  "source_engines": [
+    "national-parks"
+  ],
+  "type": "meta"
+}
+---------------
