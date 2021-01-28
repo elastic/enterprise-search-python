@@ -16,7 +16,7 @@ enterprise_search = EnterpriseSearch(
 )
 ---------------
 
-=== Health
+=== Deployment Health
 
 Checks the status and health of the Enterprise Search deployment
 using the `get_health()` method:
@@ -129,7 +129,7 @@ enterprise_search.put_read_only(body={"enabled": True})
 
 ---------------
 
-=== Stats
+=== Deployment Stats
 
 Gets stats about internal processes and data structures used within
 your Enterprise Search deployment using the `get_stats()` method:

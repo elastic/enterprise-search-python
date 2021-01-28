@@ -37,7 +37,7 @@ ent_search.app_search.search(...)
 
 Using the APIs require a key with `read`, `write` or `search` access
 depending on the action. If you're receiving an `UnauthorizedError`
-make sure the key  you're using in `http_auth` has the proper privileges.
+make sure the key you're using in `http_auth` has the proper privileges.
 
 === Engines
 
