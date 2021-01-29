@@ -51,7 +51,10 @@ if not re.match(r"^[0-9.]+$", version):
 
 setup(
     name="elastic-enterprise-search",
-    description="Python Elastic Enterprise Search Client",
+    description=(
+        "Official Python client for Elastic Enterprise "
+        "Search, App Search, and Workplace Search"
+    ),
     long_description=long_description,
     long_description_content_type="text/markdown",
     version=version,
@@ -61,6 +64,7 @@ setup(
     maintainer_email="seth.larson@elastic.co",
     url="https://github.com/elastic/enterprise-search-python",
     project_urls={
+        "Documentation": "https://www.elastic.co/guide/en/enterprise-search-clients/python/current/index.html",
         "Source Code": "https://github.com/elastic/enterprise-search-python",
         "Issue Tracker": "https://github.com/elastic/enterprise-search-python/issues",
     },
