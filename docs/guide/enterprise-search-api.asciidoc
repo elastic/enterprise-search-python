@@ -1,5 +1,15 @@
-[[enterprise-search-api]]
-== Enterprise Search API
+[[enterprise-search-apis]]
+== Enterprise Search APIs
+
+**On this page**
+
+* <<enterprise-search-initializing>>
+* <<enterprise-search-health-api>>
+* <<enterprise-search-read-only-api>>
+* <<enterprise-search-stats-api>>
+
+[[enterprise-search-initializing]]
+=== Initializing the Client
 
 Enterprise Search APIs are used for managing the Enterprise Search deployment.
 
@@ -16,7 +26,8 @@ enterprise_search = EnterpriseSearch(
 )
 ---------------
 
-=== Deployment Health
+[[enterprise-search-health-api]]
+=== Deployment Health API
 
 Checks the status and health of the Enterprise Search deployment
 using the `get_health()` method:
@@ -104,7 +115,8 @@ enterprise_search.get_health()
 }
 ---------------
 
-=== Read-Only Mode
+[[enterprise-search-read-only-api]]
+=== Read-Only Mode APIs
 
 You can get and set https://www.elastic.co/guide/en/enterprise-search/current/read-only-api.html[Read-Only Mode]
 with the `get_read_only()` and `put_read_only()` methods:
@@ -129,7 +141,8 @@ enterprise_search.put_read_only(body={"enabled": True})
 
 ---------------
 
-=== Deployment Stats
+[[enterprise-search-stats-api]]
+=== Deployment Stats API
 
 Gets stats about internal processes and data structures used within
 your Enterprise Search deployment using the `get_stats()` method:

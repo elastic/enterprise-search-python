@@ -12,14 +12,7 @@
 <a href="https://github.com/elastic/enterprise-search-python/blob/master/LICENSE"><img src="https://img.shields.io/pypi/l/elastic-enterprise-search.svg" alt="License"></a>
 </p>
 
-## Table of Contents
-
-- [Installation](https://github.com/elastic/enterprise-search-python#installation)
-- [Getting Started](https://github.com/elastic/enterprise-search-python#getting-started)
-  - [Authentication](https://github.com/elastic/enterprise-search-python#authentication)
-  - [App Search Signed Search Keys](https://github.com/elastic/enterprise-search-python#app-search-signed-search-keys)
-- [API Reference](https://github.com/elastic/enterprise-search-python#api-reference)
-- [License](https://github.com/elastic/enterprise-search-python#license)
+Official Python client for Elastic Enterprise Search, App Search, and Workplace Search
 
 ## Installation
 
@@ -36,38 +29,10 @@ with Enterprise Search released in Elastic Stack 7.10.
 > only 'Elastic Workplace Search' before the product was renamed. When installing
 > make sure you receive a version greater than 7.10.0.**
 
-## Getting Started
+## Documentation
 
-Here's how you can get started:
-
-```python
->>> from elastic_enterprise_search import EnterpriseSearch
-
-# Connecting to an instance on Elastic Cloud w/ username and password
->>> ent = EnterpriseSearch(
-    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
-    http_auth=("elastic", "<password>"),
-)
->>> ent.get_version()
-{'number': '7.10.0', 'build_hash': '9d6eb9f067b7d7090c541890c21f6a1e15f29c48', 'build_date': '2020-10-05T16:19:16Z'}
-
-# If you're only planning on using App Search you
-# can instantiate App Search namespaced client by itself:
->>> from elastic_enterprise_search import AppSearch
-
-# Connecting to an instance on Elastic Cloud w/ an App Search private key
->>> app_search = AppSearch(
-    "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
-    http_auth="private-<private key>",
-)
->>> app_search.index_documents(
-    engine_name="national-parks",
-    body=[{
-        "id": "yellowstone",
-        "title": "Yellowstone National Park"
-    }]
-)
-```
+Documentation on compatibility, configuring, and an API reference
+is available on [elastic.co/guide](https://www.elastic.co/guide/en/enterprise-search-clients/python/current/index.html).
 
 ### Authentication
 
