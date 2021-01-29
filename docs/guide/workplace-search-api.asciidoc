@@ -1,6 +1,13 @@
-[[workplace-search-api]]
-== Workplace Search API
+== Workplace Search APIs
 
+**On this page**
+
+* <<workplace-search-initializing>>
+* <<workplace-search-document-apis>>
+* <<workplace-search-search-apis>>
+* <<workplace-search-permissions-apis>>
+
+[[workplace-search-initializing]]
 === Initializing the Client
 
 The `WorkplaceSearch` client can either be configured directly:
@@ -29,7 +36,8 @@ ent_search = EnterpriseSearch("http://localhost:3002")
 ent_search.workplace_search.search(..., http_auth="<oauth-access-token>")
 ---------------
 
-=== Documents
+[[workplace-search-document-apis]]
+=== Document APIs
 
 To ingest documents into Workplace Search with the API you must first
 create a https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-api-sources.html#create-custom-source[Custom Content Source]
@@ -38,7 +46,7 @@ and get the Content Source ID and Content Source Access Token.
 In the examples below assume that `CONTENT_SOURCE_ID` is the Content Source ID
 and `CONTENT_SOURCE_ACCESS_TOKEN` is the Content Source Access Token from above.
 
-==== Index Documents
+==== Create or update Documents
 
 To create new documents or update existing documents use the `index_documents()` method.
 
@@ -50,8 +58,8 @@ for more information on Permissions.
 ---------------
 # Request:
 workplace_search.index_documents(
-    http_auth=CONTENT_SOURCE_ACCESS_TOKEN,
-    content_source_id=CONTENT_SOURCE_ID,
+    http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>",
+    content_source_id="<CONTENT_SOURCE_ID>",
     body=[
       {
         "_allow_permissions": ["permission1"],
@@ -100,8 +108,8 @@ and supply a list of document IDs to `body`:
 ---------------
 # Request:
 workplace_search.delete_documents(
-    http_auth=CONTENT_SOURCE_ACCESS_TOKEN,
-    content_source_id=CONTENT_SOURCE_ID,
+    http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>",
+    content_source_id="<CONTENT_SOURCE_ID>",
     body=[1234, 1235]
 )
 
@@ -120,7 +128,8 @@ workplace_search.delete_documents(
 }
 ---------------
 
-=== Search
+[[workplace-search-search-apis]]
+=== Search APIs
 
 Search requires an https://www.elastic.co/guide/en/workplace-search/current/workplace-search-search-oauth.html[OAuth access token]
 in the `http_auth` parameter to authenticate.
@@ -168,7 +177,8 @@ workplace_search.search(
 }
 ---------------
 
-=== Permissions
+[[workplace-search-permissions-apis]]
+=== Permissions APIs
 
 Permissions can be set per-user and then applied  to documents either
 by `_allow_permissions` or `_deny_permissions` to control access to documents.
@@ -182,8 +192,8 @@ use the `add_user_permissions()` method:
 ---------------
 # Request:
 workplace_search.add_user_permissions(
-    content_source_id=CONTENT_SOURCE_ID,
-    http_auth=CONTENT_SOURCE_ACCESS_TOKEN,
+    content_source_id="<CONTENT_SOURCE_ID>",
+    http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>",
     user="example.user",
     body={
         "permissions": ["permission1", "permission2"]
@@ -208,8 +218,8 @@ To view a users permissions use the `get_permissions()` method:
 ---------------
 # Request:
 workplace_search.get_user_permissions(
-    content_source_id=CONTENT_SOURCE_ID,
-    http_auth=CONTENT_SOURCE_ACCESS_TOKEN,
+    content_source_id="<CONTENT_SOURCE_ID>",
+    http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>",
     user="example.user"
 )
 
@@ -231,8 +241,8 @@ To view all users permissions for a custom content source use the `list_permissi
 ---------------
 # Request:
 workplace_search.list_permissions(
-    content_source_id=CONTENT_SOURCE_ID,
-    http_auth=CONTENT_SOURCE_ACCESS_TOKEN
+    content_source_id="<CONTENT_SOURCE_ID>",
+    http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>"
 )
 
 # Response:
@@ -255,8 +265,8 @@ To remove one or more permissions from a user use the `delete_user_permissions()
 ---------------
 # Request:
 workplace_search.delete_user_permissions(
-    content_source_id=CONTENT_SOURCE_ID,
-    http_auth=CONTENT_SOURCE_ACCESS_TOKEN,
+    content_source_id="<CONTENT_SOURCE_ID>",
+    http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>",
     user="example.user",
     body={
         "permissions": ["permission2"]

@@ -1,6 +1,17 @@
 [[app-search-api]]
-== App Search API
+== App Search APIs
 
+**On this page**
+
+* <<app-search-initializing>>
+* <<app-search-engine-apis>>
+* <<app-search-document-apis>>
+* <<app-search-schema-apis>>
+* <<app-search-search-apis>>
+* <<app-search-curation-apis>>
+* <<app-search-meta-engine-apis>>
+
+[[app-search-initializing]]
 === Initializing the Client
 
 The `AppSearch` client can either be configured directly:
@@ -33,13 +44,14 @@ ent_search.app_search.http_auth = "private-..."
 ent_search.app_search.search(...)
 ---------------
 
-=== API Key Privileges
+==== API Key Privileges
 
 Using the APIs require a key with `read`, `write` or `search` access
 depending on the action. If you're receiving an `UnauthorizedError`
 make sure the key you're using in `http_auth` has the proper privileges.
 
-=== Engines
+[[app-search-engine-apis]]
+=== Engine APIs
 
 Engines index documents and perform search functions.
 To use App Search you must first create an Engine.
@@ -129,11 +141,13 @@ app_search.delete_engine(engine_name="national-parks")
 }
 ---------------
 
-=== Documents
+[[app-search-document-apis]]
+=== Document APIs
 
-==== Index Documents
+==== Create and index Documents
 
-Once you've created an Engine you can start indexing documents into it:
+Once you've created an Engine you can start adding documents
+with the `index_documents()` method:
 
 [source,python]
 ---------------
@@ -234,7 +248,8 @@ app_search.list_documents(engine_name="national-parks")
 
 ==== Get Documents by ID
 
-and retrieve a set of documents by their `id`:
+You can also retrieve a set of documents by their `id` with
+the `get_documents()` method:
 
 [source,python]
 ---------------
@@ -262,9 +277,9 @@ app_search.get_documents(
 ]
 ---------------
 
-==== Update and Delete Documents
+==== Update existing Documents
 
-You can also update documents and delete them from the Engine:
+You can update documents with the `put_documents()` method:
 
 [source,python]
 ---------------
@@ -284,7 +299,14 @@ resp = app_search.put_documents(
     "id": "park_rocky-mountain"
   }
 ]
+---------------
 
+==== Delete Documents
+
+You can delete documents from an Engine with the `delete_documents()` method:
+
+[source,python]
+---------------
 # Request:
 resp = app_search.delete_documents(
     engine_name="national-parks",
@@ -300,7 +322,8 @@ resp = app_search.delete_documents(
 ]
 ---------------
 
-=== Schemas
+[[app-search-schema-apis]]
+=== Schema APIs
 
 Now that we've indexed some data we should take a look
 at the way the data is being indexed by our Engine.
@@ -358,7 +381,8 @@ resp = app_search.put_schema(
 }
 ---------------
 
-=== Searching for Documents
+[[app-search-search-apis]]
+=== Search APIs
 
 Once documents are ingested and the Schema is set properly
 you can use the `search()` method to search through an Engine
@@ -438,9 +462,10 @@ resp = app_search.search(
 }
 ---------------
 
-=== Curations
+[[app-search-curation-apis]]
+=== Curation APIs
 
-Curations hide or promote result content from pre-defined search queries.
+Curations hide or promote result content for pre-defined search queries.
 
 ==== Create Curation
 
@@ -506,7 +531,8 @@ app_search.delete_curation(
 )
 ---------------
 
-=== Meta Engines
+[[app-search-meta-engine-apis]]
+=== Meta Engine APIs
 
 https://www.elastic.co/guide/en/app-search/current/meta-engines-guide.html[Meta Engines] is
 an Engine that has no documents of its own, instead it combines multiple other Engines
@@ -604,7 +630,7 @@ Notice how the `id` of the result we receive (`national-parks|park_black-canyon-
 includes a prefix of the Source Engine that the result is from to distinguish them from
 results with the same `id` but different Source Engine within a search result.
 
-==== Adding Source Engines to existing Meta Engine
+==== Adding Source Engines to an existing Meta Engine
 
 If we have an existing Meta Engine named `meta-engine`
 we can add additional Source Engines to it with the
