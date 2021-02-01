@@ -31,8 +31,7 @@ with Enterprise Search released in Elastic Stack 7.10.
 
 ## Documentation
 
-Documentation on compatibility, configuring, and an API reference
-is available on [elastic.co/guide](https://www.elastic.co/guide/en/enterprise-search-clients/python/current/index.html).
+[See the documentation](https://github.com/elastic/enterprise-search-python/tree/master/docs/guide) for compatibility info, configuring, and an API reference.
 
 ## License
 
