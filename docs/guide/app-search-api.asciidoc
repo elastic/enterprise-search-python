@@ -154,7 +154,7 @@ with the `index_documents()` method:
 # Request:
 app_search.index_documents(
     engine_name="national-parks",
-    body=[{
+    documents=[{
         "id": "park_rocky-mountain",
         "title": "Rocky Mountain",
         "nps_link": "https://www.nps.gov/romo/index.htm",
@@ -256,7 +256,7 @@ the `get_documents()` method:
 # Request:
 app_search.get_documents(
     engine_name="national-parks",
-    body=["park_rocky-mountain"]
+    document_ids=["park_rocky-mountain"]
 )
 
 # Response:
@@ -286,7 +286,7 @@ You can update documents with the `put_documents()` method:
 # Request:
 resp = app_search.put_documents(
     engine_name="national-parks",
-    body=[{
+    documents=[{
         "id": "park_rocky-mountain",
         "visitors": 10000000
     }]
@@ -310,7 +310,7 @@ You can delete documents from an Engine with the `delete_documents()` method:
 # Request:
 resp = app_search.delete_documents(
     engine_name="national-parks",
-    body=["park_rocky-mountain"]
+    document_ids=["park_rocky-mountain"]
 )
 
 # Response:
@@ -362,7 +362,7 @@ as a `date` as desired. Update the type of the `date_established` field:
 # Request:
 resp = app_search.put_schema(
     engine_name="national-parks",
-    body={
+    schema={
         "date_established": "date"
     }
 )
@@ -642,7 +642,7 @@ we can add additional Source Engines to it with the
 # Request:
 app_search.add_meta_engine_source(
     engine_name="meta-engine",
-    body=["state-parks"]
+    source_engines=["state-parks"]
 )
 
 # Response:
@@ -667,7 +667,7 @@ If we change our mind about `state-parks` being a Source Engine for
 # Request:
 app_search.delete_meta_engine_source(
     engine_name="meta-engine",
-    body=["state-parks"]
+    source_engines=["state-parks"]
 )
 
 # Response:
