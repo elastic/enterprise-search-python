@@ -3,7 +3,7 @@
         {% for param in api.required_params %}
         {{ param.param_name }},
         {% endfor %}{% if api.has_body %}
-        body{% if not api.body_required %}=None{% endif %},
+        {{ api.body_param_name }}{% if not api.body_required %}=None{% endif %},
         {% endif %}{% for param in api.optional_params %}
         {{ param.param_name }}=None,
         {% endfor %}
@@ -19,7 +19,7 @@
         `<{{ api.docs_url }}>`_
 {% endif %}{% if api.all_params|list|length or api.has_body %}{% for param in api.all_params %}
         {% filter wordwrap(72, wrapstring="\n            ") %}:arg {{ param.param_name }}: {{ param.description }}{% endfilter %}{% endfor %}{% if api.has_body %}
-        :arg body: {{ api.body_description }}{% endif %}{% endif %}
+        :arg {{ api.body_param_name }}: {{ api.body_description }}{% endif %}{% endif %}
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -53,7 +53,7 @@
                 {% endif %}
             {% endfor %}){% else %}"{% for part in api.path_parts %}/{{ part }}{% endfor %}"{% endif %},
             {% if api.has_body %}
-            body=body,
+            body={{ api.body_param_name }},
             {% endif %}
             params=params,
             headers=headers,
