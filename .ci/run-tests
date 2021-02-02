@@ -5,12 +5,12 @@
 # - Add `$RUNSCRIPTS` env var for running Elasticsearch dependent products
 script_path=$(dirname $(realpath -s $0))
 source $script_path/functions/imports.sh
-
-# Enterprise Search requires a licensed Elasticsearch instance
-export TEST_SUITE=xpack
-export RUNSCRIPTS=enterprise-search
-
 set -euo pipefail
+
+# Default environment variables
+export PYTHON_VERSION=${PYTHON_VERSION-3.9}
+export TEST_SUITE=platinum
+export RUNSCRIPTS=enterprise-search
 
 echo -e "\033[1m>>>>> Start [$STACK_VERSION container] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>\033[0m"
 DETACH=true bash .ci/run-elasticsearch.sh
