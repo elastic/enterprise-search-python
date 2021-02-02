@@ -29,6 +29,7 @@ until [ "$docker_pull_attempts" -ge 5 ]
 do
    docker pull docker.elastic.co/enterprise-search/enterprise-search:"$STACK_VERSION" && break
    docker_pull_attempts=$((docker_pull_attempts+1))
+   echo "Failed to pull image, retrying in 10 seconds (retry $docker_pull_attempts/5)..."
    sleep 10
 done
 
@@ -40,6 +41,7 @@ docker run \
   --env "elasticsearch.host=$elasticsearch_url" \
   --env "elasticsearch.username=elastic" \
   --env "elasticsearch.password=$elastic_password" \
+  --env "ENT_SEARCH_DEFAULT_PASSWORD=$elastic_password" \
   --env "secret_management.encryption_keys=[$APP_SEARCH_SECRET_SESSION_KEY]" \
   --env "enterprise_search.listen_port=$http_port" \
   --env "log_level=info" \
