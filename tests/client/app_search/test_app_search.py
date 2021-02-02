@@ -88,7 +88,7 @@ def test_list_documents(app_search):
 def test_delete_documents(app_search):
     resp = app_search.delete_documents(
         engine_name="national-parks-demo",
-        body=[
+        document_ids=[
             "park_yellowstone",
             "park_zion",
         ],
@@ -104,7 +104,7 @@ def test_delete_documents(app_search):
 def test_index_documents(app_search):
     resp = app_search.index_documents(
         engine_name="national-parks-demo",
-        body=[
+        documents=[
             {
                 "nps_link": "https://www.nps.gov/zion/index.htm",
                 "title": "Zion",
@@ -276,7 +276,7 @@ def test_meta_engine(app_search):
     # Use the add_meta_engine_source() API
     app_search.create_engine(engine_name="source-engine-added")
     resp = app_search.add_meta_engine_source(
-        engine_name="meta-engine", body=["source-engine-added"]
+        engine_name="meta-engine", source_engines=["source-engine-added"]
     )
     assert resp.status == 200
     assert resp == {
