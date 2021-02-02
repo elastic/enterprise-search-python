@@ -16,14 +16,14 @@ Official Python client for Elastic Enterprise Search, App Search, and Workplace 
 
 ## Installation
 
-The package can be installed from PyPI:
+The package can be installed from [PyPI](https://pypi.org/project/elastic-enterprise-search):
 
 ```bash
 $ python -m pip install elastic-enterprise-search
 ```
 
-The version follows the Elastic Stack version so `7.10` is compatible
-with Enterprise Search released in Elastic Stack 7.10.
+The version follows the Elastic Stack version so `7.11` is compatible
+with Enterprise Search released in Elastic Stack 7.11.
 
 > **NOTE: The package `elastic-enterprise-search` was previously used as a client for
 > only 'Elastic Workplace Search' before the product was renamed. When installing
@@ -32,6 +32,12 @@ with Enterprise Search released in Elastic Stack 7.10.
 ## Documentation
 
 [See the documentation](https://github.com/elastic/enterprise-search-python/tree/master/docs/guide) for compatibility info, configuring, and an API reference.
+
+## Contributing
+
+If you'd like to make a contribution to `enterprise-search-python` we 
+provide [contributing documentation](https://github.com/elastic/enterprise-search-python/tree/master/CONTRIBUTING.md)
+to ensure your first contribution goes smoothly.
 
 ## License
 
