@@ -1,0 +1,122 @@
+interactions:
+- request:
+    body: '{"enabled":true}'
+    headers:
+      authorization:
+      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: PUT
+    uri: http://localhost:3002/api/ent/v1/internal/read_only_mode
+  response:
+    body:
+      string: '{"enabled":true}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"ebd28baaaa212dca587bc607653bbaf0"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 788bdbb8-5b4e-4033-8a53-9f50ab9a309f
+      X-Runtime:
+      - '0.023845'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      authorization:
+      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: GET
+    uri: http://localhost:3002/api/ent/v1/internal/read_only_mode
+  response:
+    body:
+      string: '{"enabled":true}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"ebd28baaaa212dca587bc607653bbaf0"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 4be35df3-e551-48f7-8dfa-bd291a4f75bd
+      X-Runtime:
+      - '0.023486'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"enabled":false}'
+    headers:
+      authorization:
+      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: PUT
+    uri: http://localhost:3002/api/ent/v1/internal/read_only_mode
+  response:
+    body:
+      string: '{"enabled":false}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"d987f50e402ceb8f1a41643a6c665ef0"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - f226e990-69cf-46fa-a8ab-f7f8791b1c9e
+      X-Runtime:
+      - '0.213871'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1

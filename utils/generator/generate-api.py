@@ -260,6 +260,10 @@ class API:
         return "requestBody" in self.spec
 
     @property
+    def body_param_name(self) -> str:
+        return to_python_param(self.spec.get("x-codegen-request-body-name", "body"))
+
+    @property
     def body_required(self) -> bool:
         # TODO: OpenAPI actually should default to 'False' but
         # the Enterprise Search specs seem to default to 'True' so
