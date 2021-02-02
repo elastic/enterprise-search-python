@@ -1,0 +1,46 @@
+interactions:
+- request:
+    body: null
+    headers:
+      authorization:
+      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: GET
+    uri: http://localhost:3002/api/ent/v1/internal/health
+  response:
+    body:
+      string: '{"name":"f1b653d1bbd8","version":{"number":"7.12.0","build_hash":"3a6edf8029dd285b60f1a6d63c741f46df7f195f","build_date":"2021-01-06T15:24:44Z"},"jvm":{"gc":{"collection_count":43,"collection_time":2360,"garbage_collectors":{"PS
+        Scavenge":{"collection_count":38,"collection_time":1095},"PS MarkSweep":{"collection_count":5,"collection_time":1265}}},"pid":6,"uptime":5017178,"memory_usage":{"heap_init":1073741824,"heap_used":494383704,"heap_committed":1803026432,"heap_max":1908932608,"object_pending_finalization_count":0,"non_heap_init":2555904,"non_heap_committed":365125632},"memory_pools":["Code
+        Cache","Metaspace","Compressed Class Space","PS Eden Space","PS Survivor Space","PS
+        Old Gen"],"threads":{"thread_count":38,"peak_thread_count":45,"total_started_thread_count":154,"daemon_thread_count":12},"vm_version":"25.252-b09","vm_vendor":"AdoptOpenJDK","vm_name":"OpenJDK
+        64-Bit Server VM"},"filebeat":{"pid":134,"alive":true,"restart_count":0,"seconds_since_last_restart":-1},"esqueues_me":{},"system":{"java_version":"1.8.0_252","jruby_version":"9.2.13.0","os_name":"Linux","os_version":"5.4.0-54-generic"}}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"6115c2e4940f91264c10b0639bd40710"
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - ec81436b-2c78-4374-a4c0-1fa9c89866d1
+      X-Runtime:
+      - '0.033051'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1
