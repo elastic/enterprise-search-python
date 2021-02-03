@@ -4,7 +4,7 @@
   </a>
 </p>
 <p align="center">
-<a href="https://pypi.org/project/elastic-enterprise-search"><img src="https://img.shields.io/badge/pypi-v7.10.0b1-orange" alt="PyPI Version"></a>
+<a href="https://pypi.org/project/elastic-enterprise-search"><img src="https://img.shields.io/pypi/v/elastic-enterprise-search" alt="PyPI Version"></a>
 <a href="https://pypi.org/project/elastic-enterprise-search"><img src="https://img.shields.io/badge/python-2.7%20%7C%203.6%20%7C%203.7%20%7C%203.8%20%7C%203.9-blue" alt="Supported Python Versions"></a>
 <a href="https://pepy.tech/project/elastic-enterprise-search"><img src="https://pepy.tech/badge/elastic-enterprise-search" alt="Downloads"></a>
 <a href="https://github.com/elastic/enterprise-search-python/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/elastic/enterprise-search-python/CI?label=tests" alt="GitHub Actions Status"></a>
