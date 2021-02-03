@@ -36,7 +36,7 @@ def test_index_documents(workplace_search):
     dt = datetime.datetime(year=2019, month=6, day=1, hour=12, tzinfo=tz.UTC)
     resp = workplace_search.index_documents(
         content_source_id=content_source_id,
-        body=[
+        documents=[
             {
                 "id": 1234,
                 "title": "The Meaning of Time",
@@ -64,7 +64,7 @@ def test_index_documents_content_source_not_found(workplace_search):
     with pytest.raises(NotFoundError) as e:
         workplace_search.index_documents(
             content_source_id=content_source_id + "a",
-            body=[
+            documents=[
                 {
                     "id": 1234,
                     "title": "The Meaning of Time",
