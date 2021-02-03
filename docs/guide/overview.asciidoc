@@ -97,5 +97,4 @@ serializer to return incorrect results.
 [discrete]
 === License
 
-`enterprise-search-python` is available under the Apache-2.0 license.
-For more details see [LICENSE](https://github.com/elastic/enterprise-search-python/blob/master/LICENSE).
+`enterprise-search-python` is available under the https://github.com/elastic/enterprise-search-python/blob/master/LICENSE[Apache-2.0 license].
