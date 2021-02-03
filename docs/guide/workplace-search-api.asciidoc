@@ -60,7 +60,7 @@ for more information on Permissions.
 workplace_search.index_documents(
     http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>",
     content_source_id="<CONTENT_SOURCE_ID>",
-    body=[
+    documents=[
       {
         "_allow_permissions": ["permission1"],
         "_deny_permissions": [],

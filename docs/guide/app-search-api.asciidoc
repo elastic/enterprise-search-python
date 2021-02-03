@@ -391,6 +391,8 @@ for matching documents.
 The Search API has many options, read the
 https://www.elastic.co/guide/en/app-search/current/search.html[Search API documentation] for a list of all options.
 
+==== Single Search
+
 [source,python]
 ---------------
 # Request:
@@ -460,6 +462,86 @@ resp = app_search.search(
     }
   ]
 }
+---------------
+
+==== Multi Search
+
+Multiple searches can be executed at the same time with the `multi_search()` method:
+
+[source,python]
+---------------
+# Request:
+resp = app_search.multi_search(
+    engine_name="national-parks",
+    body={
+        "queries": [
+            {"query": "rock"},
+            {"query": "lake"}
+        ]
+    }
+)
+
+# Response:
+[
+  {
+    "meta": {
+      "alerts": [],
+      "engine": {
+        "name": "national-parks-demo",
+        "type": "default"
+      },
+      "page": {
+        "current": 1,
+        "size": 1,
+        "total_pages": 15,
+        "total_results": 15
+      },
+      "warnings": []
+    },
+    "results": [
+      {
+        "_meta": {
+          "engine": "national-parks",
+          "id": "park_rocky-mountain",
+          "score": 6776379.0
+        },
+        "acres": {
+          "raw": 265795.2
+        },
+        "date_established": {
+          "raw": "1915-01-26T06:00:00+00:00"
+        },
+        "id": {
+          "raw": "park_rocky-mountain"
+        },
+        "location": {
+          "raw": "40.4,-105.58"
+        },
+        "nps_link": {
+          "raw": "https://www.nps.gov/romo/index.htm"
+        },
+        "square_km": {
+          "raw": 1075.6
+        },
+        "states": {
+          "raw": [
+            "Colorado"
+          ]
+        },
+        "title": {
+          "raw": "Rocky Mountain"
+        },
+        "visitors": {
+          "raw": 4517585.0
+        },
+        "world_heritage_site": {
+          "raw": "false"
+        }
+      }
+    ]
+  },
+  ...
+]
 ---------------
 
 [[app-search-curation-apis]]

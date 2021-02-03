@@ -116,7 +116,7 @@ class WorkplaceSearch(BaseClient):
     def index_documents(
         self,
         content_source_id,
-        body,
+        documents,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -131,7 +131,7 @@ class WorkplaceSearch(BaseClient):
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
-        :arg body: HTTP request body
+        :arg documents: HTTP request body
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -159,7 +159,7 @@ class WorkplaceSearch(BaseClient):
                 "documents",
                 "bulk_create",
             ),
-            body=body,
+            body=documents,
             params=params,
             headers=headers,
             http_auth=http_auth,
