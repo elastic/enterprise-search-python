@@ -314,6 +314,92 @@ def test_query_suggestions(app_search):
     }
 
 
+@pytest.mark.vcr()
+def test_multi_search(app_search):
+    resp = app_search.multi_search(
+        engine_name="national-parks-demo",
+        body={
+            "queries": [
+                {"query": "rock", "page": {"size": 1}},
+                {"query": "lake", "page": {"size": 1}},
+            ]
+        },
+    )
+    assert resp.status == 200
+    assert resp == [
+        {
+            "meta": {
+                "alerts": [],
+                "warnings": [],
+                "page": {
+                    "current": 1,
+                    "total_pages": 15,
+                    "total_results": 15,
+                    "size": 1,
+                },
+                "engine": {"name": "national-parks-demo", "type": "default"},
+            },
+            "results": [
+                {
+                    "nps_link": {"raw": "https://www.nps.gov/romo/index.htm"},
+                    "title": {"raw": "Rocky Mountain"},
+                    "date_established": {"raw": "1915-01-26T06:00:00+00:00"},
+                    "world_heritage_site": {"raw": "false"},
+                    "states": {"raw": ["Colorado"]},
+                    "description": {
+                        "raw": "Bisected north to south by the Continental Divide, this portion of the Rockies has ecosystems varying from over 150 riparian lakes to montane and subalpine forests to treeless alpine tundra. Wildlife including mule deer, bighorn sheep, black bears, and cougars inhabit its igneous mountains and glacial valleys. Longs Peak, a classic Colorado fourteener, and the scenic Bear Lake are popular destinations, as well as the historic Trail Ridge Road, which reaches an elevation of more than 12,000 feet (3,700 m)."
+                    },
+                    "visitors": {"raw": 4517585.0},
+                    "_meta": {
+                        "id": "park_rocky-mountain",
+                        "engine": "national-parks-demo",
+                        "score": 6776379.0,
+                    },
+                    "id": {"raw": "park_rocky-mountain"},
+                    "location": {"raw": "40.4,-105.58"},
+                    "square_km": {"raw": 1075.6},
+                    "acres": {"raw": 265795.2},
+                }
+            ],
+        },
+        {
+            "meta": {
+                "alerts": [],
+                "warnings": [],
+                "page": {
+                    "current": 1,
+                    "total_pages": 17,
+                    "total_results": 17,
+                    "size": 1,
+                },
+                "engine": {"name": "national-parks-demo", "type": "default"},
+            },
+            "results": [
+                {
+                    "nps_link": {"raw": "https://www.nps.gov/romo/index.htm"},
+                    "title": {"raw": "Rocky Mountain"},
+                    "date_established": {"raw": "1915-01-26T06:00:00+00:00"},
+                    "world_heritage_site": {"raw": "false"},
+                    "states": {"raw": ["Colorado"]},
+                    "description": {
+                        "raw": "Bisected north to south by the Continental Divide, this portion of the Rockies has ecosystems varying from over 150 riparian lakes to montane and subalpine forests to treeless alpine tundra. Wildlife including mule deer, bighorn sheep, black bears, and cougars inhabit its igneous mountains and glacial valleys. Longs Peak, a classic Colorado fourteener, and the scenic Bear Lake are popular destinations, as well as the historic Trail Ridge Road, which reaches an elevation of more than 12,000 feet (3,700 m)."
+                    },
+                    "visitors": {"raw": 4517585.0},
+                    "_meta": {
+                        "id": "park_rocky-mountain",
+                        "engine": "national-parks-demo",
+                        "score": 6776381.5,
+                    },
+                    "id": {"raw": "park_rocky-mountain"},
+                    "location": {"raw": "40.4,-105.58"},
+                    "square_km": {"raw": 1075.6},
+                    "acres": {"raw": 265795.2},
+                }
+            ],
+        },
+    ]
+
+
 def test_create_signed_search_key():
     private_key = "private-"
     signed_key = AppSearch.create_signed_search_key(

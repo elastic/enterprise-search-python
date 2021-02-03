@@ -1032,7 +1032,7 @@ class AppSearch(BaseClient):
     def multi_search(
         self,
         engine_name,
-        queries,
+        body,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -1045,7 +1045,7 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/7.11/search.html#search-multi>`_
 
         :arg engine_name: Name of the engine
-        :arg queries: Search queries
+        :arg body: One or more queries to execute in parallel
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -1053,17 +1053,10 @@ class AppSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         """
-        for param in (
-            engine_name,
-            queries,
-        ):
-            if param in SKIP_IN_PATH:
-                raise ValueError("Empty value passed for a required argument")
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
-        if queries is not None:
-            for val in to_array(queries, param="queries"):
-                params.add("queries[]", val)
 
         return self.perform_request(
             "POST",
@@ -1075,6 +1068,7 @@ class AppSearch(BaseClient):
                 engine_name,
                 "multi_search",
             ),
+            body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,

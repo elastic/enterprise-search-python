@@ -302,15 +302,34 @@ class OpenAPI:
     def __init__(self, namespace, components, apis):
         self.namespace = namespace
         self.components = components
-        self.apis = apis
-
-    @property
-    def asciidoc_fragment(self) -> str:
-        return re.sub(r"[^a-zA-Z0-9]+", "-", self.namespace).strip("-")
+        self.apis = [self.process_api(api) for api in apis]
 
     @property
     def client_class_name(self):
         return snake_to_camel(self.namespace)
+
+    def process_api(self, api):
+        # type: (API) -> API
+        """Called once per API to do final processing if any"""
+
+        # app_search.multi_search() has the 'queries' parameter in the URL query
+        # when it should be in the body due to it's size and complexity.
+        # Updating this here so it's available in 7.11:
+        if (
+            current_branch == "7.11"
+            and self.namespace == "_app_search"
+            and api.func_name == "multi_search"
+        ):
+            # Remove 'queries' parameter, add a 'requestBody' parameter
+            api.spec["requestBody"] = {
+                "required": True,
+                "description": "One or more queries to execute in parallel",
+            }
+            api.spec["parameters"] = [
+                param for param in api.spec["parameters"] if param["name"] != "queries"
+            ]
+
+        return api
 
     @classmethod
     def from_schema(cls, filepath: pathlib.Path):
@@ -358,6 +377,7 @@ class OpenAPI:
             for api in apis:
                 if api.path == path_key:
                     api.spec.setdefault("parameters", []).extend(path_parameters)
+
         apis = sorted(apis, key=API.sorted_key)
         return OpenAPI(namespace, components=components, apis=apis)
 
@@ -383,7 +403,6 @@ def main():
         with spec_filepath.open(mode="w") as f:
             f.truncate()
             f.write(env.get_template("client").render(spec=spec))
-        print(env.get_template("asciidoc").render(spec=spec))
 
     os.system(f"cd {base_dir} && nox -rs format")
 
