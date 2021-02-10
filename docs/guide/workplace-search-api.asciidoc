@@ -110,7 +110,7 @@ and supply a list of document IDs to `body`:
 workplace_search.delete_documents(
     http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>",
     content_source_id="<CONTENT_SOURCE_ID>",
-    body=[1234, 1235]
+    document_ids=[1234, 1235]
 )
 
 # Response:
