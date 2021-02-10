@@ -1,0 +1,36 @@
+[[release-notes-7-10-0]]
+=== 7.10.0-beta1 Release Notes
+
+[discrete]
+==== General
+
+- Updated APIs to the 7.10 specification
+
+[discrete]
+==== App Search
+
+- Added `get_api_logs()`, `get_count_analytics()`, `create_curation()`,
+  `delete_curation()`, `get_curation()`, `put_curation()`, `list_curations()`,
+  `delete_documents()`, `get_documents()`, `index_documents()`, `list_documents()`,
+  `put_documents()`, `create_engine()`, `delete_engine()`, `get_engine()`, `list_engines()`,
+  `log_clickthrough()`, `add_meta_engine_source()`, `delete_meta_engine_source()`,
+  `multi_search()`, `query_suggestion()`, `get_schema()`, `put_schema()`, `search`
+  `get_search_settings()`, `put_search_settings()`, `reset_search_settings()`,
+  `create_synonym_set()`, `delete_synonym_set()`, `get_synonym_set()`, `put_synonym_set()`,
+  `list_synonym_sets()`, `get_top_clicks_analytics()`, and `get_top_queries_analytics` APIs
+- Added `create_signed_search_key()` method for creating Signed Search keys
+
+[discrete]
+==== Workplace Search
+
+- Added `delete_documents()`, `index_documents()`, `list_external_identities()`,
+  `create_external_identity()`, `delete_external_identity()`, `get_external_identity()`,
+  `put_external_identity()`, `list_permissions()`, `add_user_permissions()`,
+  `get_user_permissions()`, `put_user_permissions()`, `remove_user_permissions()`,
+  and `search()` APIs
+
+[discrete]
+==== Enterprise Search
+
+- Added `get_health()`, `get_read_only()`, `put_read_only()`,
+  `get_stats()`, and `get_version()` APIs

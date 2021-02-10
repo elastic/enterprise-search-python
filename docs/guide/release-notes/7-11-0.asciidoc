@@ -1,0 +1,34 @@
+[[release-notes-7-11-0]]
+=== 7.11.0 Release Notes
+
+[discrete]
+==== General
+
+- Changed stability of the package to Generally Available, was Beta.
+- Updated APIs to the 7.11 specification
+- Documentation moved from the README to elastic.co/guide
+- Fixed encoding of arrays in query string to match Ruby on Rails
+- Changed `body` parameter to describe the content of the body for multiple APIs
+- Added the `X-Elastic-Client-Meta` HTTP header controlled by `meta_header` parameter
+
+[discrete]
+==== App Search
+
+- Changed `body` parameter to `document_ids` for
+  `delete_documents()` and `get_documents()` APIs
+- Changed `body` parameter to `documents` for
+  `index_documents()` and `put_documents()` APIs
+- Changed `body` parameter to `source_engines` for
+  `add_meta_engine_source()` and `delete_meta_engine_source()` APIs
+- Changed `queries` parameter to `body` for `multi_search()` API
+- Changed `body` parameter to `schema` for `put_schema()` API
+- Changed `synonyms` parameter to `body` for `create_synonym_set()`
+  and `put_synonym_set()` APIs
+
+[discrete]
+==== Workplace Search
+
+- Added `create_analytics_event()` API
+- Changed `content_source_key` parameter of all APIs to `content_source_id`
+- Changed `body` parameter to `documents` for `index_documents()` API
+- Changed `body` parameter to `document_ids` for `delete_documents()` API
