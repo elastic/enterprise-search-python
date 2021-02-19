@@ -26,7 +26,7 @@ with Enterprise Search released in Elastic Stack 7.11.
 
 ## Documentation
 
-[See the documentation](https://github.com/elastic/enterprise-search-python/tree/master/docs/guide) for how to get started,
+[See the documentation](https://www.elastic.co/guide/en/enterprise-search-clients/python) for how to get started,
 compatibility info, configuring, and an API reference.
 
 ## Contributing
