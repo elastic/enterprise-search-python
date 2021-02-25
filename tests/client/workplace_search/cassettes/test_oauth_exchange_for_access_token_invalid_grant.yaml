@@ -1,0 +1,45 @@
+interactions:
+- request:
+    body: null
+    headers:
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: POST
+    uri: http://localhost:3002/ws/oauth/token?grant_type=authorization_code&client_id=1f87f8f6df473c06af79f88d1747afcb92e530295fad0fde340487673bec6ca6&client_secret=d26a2c9aaa5870e8d6bdf8169aaf21ce2d66ec2e0180ffc34a0390d254135311&redirect_uri=http:%2F%2Flocalhost:8000&code=7186fec34911a182606d2ab7fc36ea0ed4b8c32fef9929235cd80294422204ca
+  response:
+    body:
+      string: '{"error":"invalid_grant","error_description":"The provided authorization
+        grant is invalid, expired, revoked, does not match the redirection URI used
+        in the authorization request, or was issued to another client."}'
+    headers:
+      Cache-Control:
+      - no-store
+      Content-Type:
+      - application/json;charset=utf-8
+      Pragma:
+      - no-cache
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      WWW-Authenticate:
+      - Bearer realm="Workplace Search", error="invalid_grant", error_description="The
+        provided authorization grant is invalid, expired, revoked, does not match
+        the redirection URI used in the authorization request, or was issued to another
+        client."
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - a8afa4c2-a6ab-42d7-9bcb-b505b7850b31
+      X-Runtime:
+      - '0.015063'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 401
+      message: Unauthorized
+version: 1

@@ -6,6 +6,7 @@
 * <<workplace-search-document-apis>>
 * <<workplace-search-search-apis>>
 * <<workplace-search-permissions-apis>>
+* <<oauth-apps>>
 
 [[workplace-search-initializing]]
 === Initializing the Client
@@ -280,4 +281,68 @@ workplace_search.delete_user_permissions(
     "permission1"
   ]
 }
+---------------
+
+[discrete]
+[[oauth-apps]]
+==== OAuth Applications with Workplace Search
+
+Workplace Search supports https://www.elastic.co/guide/en/workplace-search/current/workplace-search-search-oauth.html[creating an OAuth Application]
+and authenticating users via OAuth. The Workplace Search Python client
+has helper methods that make using OAuth easier.
+
+The below example uses the recommended **Confidential Flow** and assumes
+an OAuth application has already been created and the values for
+`Client ID`, `Client Secret`, and `Redirect URI` have been gathered:
+
+[source,python]
+---------------
+from elastic_enterprise_search import WorkplaceSearch
+
+workplace_search = WorkplaceSearch(
+    "https://<...>.ent-search.us-central1.gcp.cloud.es.io"
+)
+url = workplace_search.oauth_authorize_url(
+    response_type="code",
+    client_id="<client_id>",
+    redirect_uri="<redirect_uri>"
+)
+# Redirect user via HTTP redirect with 'Location: <url>'
+
+# ...When user is redirected back to <redirect_uri>
+# get the '?code=...' from the request query parameters:
+code = "<code>"
+
+# Exchange the 'code' for an 'access_token':
+resp = workplace_search.oauth_exchange_for_access_token(
+    client_id="<client_id>",
+    client_secret="<client_secret>",
+    redirect_uri="<redirect_uri>",
+    code=code
+)
+
+# Store these values somewhere for this user:
+access_token = resp["access_token"]
+refresh_token = resp["refresh_token"]
+
+# Use the 'access_token' to make search requests
+results = workplace_search.search(
+    body={
+        "query": "Things I want to find"
+    },
+    http_auth=access_token
+)
+
+# When the access token eventually expires, use the
+# 'refresh_token' to get a new access token:
+resp = workplace_search.oauth_exchange_for_access_token(
+    client_id="<client_id>",
+    client_secret="<client_secret>",
+    redirect_uri="<redirect_uri>",
+    refresh_token=refresh_token
+)
+
+# Update the stored values with new ones:
+access_token = resp["access_token"]
+refresh_token = resp["refresh_token"]
 ---------------

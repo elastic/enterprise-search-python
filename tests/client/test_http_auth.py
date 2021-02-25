@@ -18,6 +18,7 @@
 
 import pytest
 
+from elastic_enterprise_search import WorkplaceSearch
 from elastic_enterprise_search._utils import DEFAULT
 from tests.conftest import DummyConnection
 
@@ -123,3 +124,32 @@ def test_http_auth_disable_with_none(client_class):
     calls = client.transport.get_connection().calls
     assert len(calls) == 3
     assert "authorization" not in calls[-1][1]["headers"]
+
+
+@pytest.mark.parametrize("http_auth", ["token", ("user", "pass")])
+def test_auth_not_sent_with_oauth_exchange(http_auth):
+    client = WorkplaceSearch(
+        connection_class=DummyConnection, meta_header=False, http_auth=http_auth
+    )
+    client.oauth_exchange_for_access_token(
+        client_id="client-id",
+        client_secret="client-secret",
+        redirect_uri="redirect-uri",
+        code="code",
+    )
+
+    calls = client.transport.get_connection().calls
+    assert calls == [
+        (
+            (
+                "POST",
+                "/ws/oauth/token?grant_type=authorization_code&client_id=client-id&client_secret=client-secret&redirect_uri=redirect-uri&code=code",
+                None,
+            ),
+            {
+                "headers": {"user-agent": client._user_agent_header},
+                "ignore_status": (),
+                "request_timeout": DEFAULT,
+            },
+        )
+    ]
