@@ -16,7 +16,9 @@
 #  under the License.
 
 import jwt
+from elastic_transport import QueryParams
 from six import ensure_str
+from six.moves.urllib_parse import urlencode
 
 from .._utils import DEFAULT
 from ._app_search import AppSearch as _AppSearch
@@ -73,6 +75,93 @@ class WorkplaceSearch(_WorkplaceSearch):
 
     `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-api-overview.html>`_
     """
+
+    def oauth_authorize_url(self, response_type, client_id, redirect_uri):
+        """Constructs an OAuth authorize URL to start either the Confidential flow
+        (response_type='code') or Implicit flow (response_type='token')
+
+        :param response_type: Either 'code' for the confidential flow or 'token'
+            for the implicit flow.
+        :param client_id: Client ID as generated when setting up an OAuth application
+        :param redirect_uri: Location to redirect user once the OAuth process is completed.
+            Must match one of the URIs configured in the OAuth application
+        :returns: URL to redirect the user to visit in a browser
+        """
+        if response_type not in ("token", "code"):
+            raise ValueError(
+                "'response_type' must be either 'code' for confidential flow"
+                "or 'token' for implicit flow"
+            )
+        if not all(
+            isinstance(param, str) for param in (response_type, client_id, redirect_uri)
+        ):
+            raise TypeError("All parameters must be of type 'str'")
+
+        base_url = self.transport.get_connection().base_url.rstrip("/")
+        query = urlencode(
+            [
+                ("response_type", response_type),
+                ("client_id", client_id),
+                ("redirect_uri", redirect_uri),
+            ]
+        )
+        return "%s/ws/oauth/authorize?%s" % (base_url, query)
+
+    def oauth_exchange_for_access_token(
+        self, client_id, client_secret, redirect_uri, code=None, refresh_token=None
+    ):
+        """Exchanges either an authorization code or refresh token for
+        an access token via the confidential OAuth flow.
+
+        :param client_id: Client ID as generated when setting up an OAuth application
+        :param client_secret: Client secret as generated when setting up an OAuth application
+        :param redirect_uri: Location to redirect user once the OAuth process is completed.
+            Must match one of the URIs configured in the OAuth application
+        :param code: Authorization code as returned by the '/ws/oauth/authorize' endpoint
+        :param refresh_token: Refresh token returned at the same time as receiving an access token
+        :returns: The HTTP response containing the access_token and refresh_token
+            along with other token-related metadata
+        """
+        values = [client_id, client_secret, redirect_uri]
+
+        # Check that 'code' and 'refresh_token' are mutually exclusive
+        if code is None and refresh_token is None:
+            raise ValueError(
+                "Either the 'code' or 'refresh_token' parameter must be used"
+            )
+        elif code is not None and refresh_token is not None:
+            raise ValueError(
+                "'code' and 'refresh_token' parameters are mutually exclusive"
+            )
+        elif code is not None:
+            values.append(code)
+            grant_type = "authorization_code"
+        else:
+            assert refresh_token is not None
+            values.append(refresh_token)
+            grant_type = "refresh_token"
+
+        if not all(isinstance(value, str) for value in values):
+            raise TypeError("All parameters must be of type 'str'")
+
+        params = QueryParams()
+        params.add("grant_type", grant_type)
+        params.add("client_id", client_id)
+        params.add("client_secret", client_secret)
+        params.add("redirect_uri", redirect_uri)
+        if code is not None:
+            params.add("code", code)
+        else:
+            params.add("refresh_token", refresh_token)
+
+        return self.perform_request(
+            method="POST",
+            path="/ws/oauth/token",
+            params=params,
+            # Note that we don't want any authentication on this
+            # request, the 'code'/'refresh_token' is enough!
+            http_auth=None,
+        )
 
 
 class EnterpriseSearch(_EnterpriseSearch):
