@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: null
+    headers:
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: POST
+    uri: http://localhost:3002/ws/oauth/token?grant_type=refresh_token&client_id=1f87f8f6df473c06af79f88d1747afcb92e530295fad0fde340487673bec6ca6&client_secret=d26a2c9aaa5870e8d6bdf8169aaf21ce2d66ec2e0180ffc34a0390d254135311&redirect_uri=http:%2F%2Flocalhost:8000&refresh_token=57297c5f3a7fdf9dd63d03910c49c231d869e55e2e5934835c1ffa89c3c3b704
+  response:
+    body:
+      string: '{"access_token":"494c72a1acaab2ac1dcf06882d874f5e54ce50c82d6b7183374597c2aceaddd6","token_type":"Bearer","expires_in":7200,"refresh_token":"43fb836d0600ce7a6e18087d4a674277493ec7be03b88756fe531b266db997f4","scope":"search"}'
+    headers:
+      Cache-Control:
+      - no-store
+      Content-Type:
+      - application/json;charset=utf-8
+      ETag:
+      - W/"105b62ee6736d644f7bc8e55bb8a31d8"
+      Pragma:
+      - no-cache
+      Server:
+      - Jetty(9.4.33.v20201020)
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding, User-Agent
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - 0f1e23b7-baf7-42ea-ae22-21b317fdb1a1
+      X-Runtime:
+      - '0.079740'
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 200
+      message: OK
+version: 1
