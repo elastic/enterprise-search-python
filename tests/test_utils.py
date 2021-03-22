@@ -106,6 +106,14 @@ def test_make_path():
     )
 
 
+def test_to_deep_object():
+    assert _utils.to_deep_object("key", {"field": [1, False, {"val": 2}]}) == [
+        ("key[field][]", "1"),
+        ("key[field][]", "false"),
+        ("key[field][][val]", "2"),
+    ]
+
+
 def test_datetime_with_timezone():
     # Hawaii Standard Time is UTC-10 and doesn't observe
     # daylight savings so this should continue to pass :)

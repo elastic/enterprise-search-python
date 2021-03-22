@@ -21,7 +21,7 @@ from datetime import date, datetime
 
 from dateutil import parser, tz
 from elastic_transport import QueryParams  # noqa: F401
-from elastic_transport.compat import quote, urlencode, urlparse
+from elastic_transport.compat import Mapping, quote, urlencode, urlparse
 from elastic_transport.utils import DEFAULT as DEFAULT
 from six import ensure_str
 
@@ -34,6 +34,7 @@ __all__ = [
     "parse_datetime",
     "string_types",
     "to_array",
+    "to_deep_object",
     "to_path",
     "typing",
     "urlencode",
@@ -106,6 +107,28 @@ def to_array(value, param=None):
             % (repr(param) + " " if param else "",)
         )
     return value
+
+
+def to_deep_object(param, value):
+    # type: (str, typing.Mapping[str, typing.Any]) -> typing.Sequence[typing.Tuple[str, str]]
+    """Converts a complex object into query parameter key values"""
+    if not isinstance(value, Mapping):
+        raise TypeError("Parameter %r must be a mapping" % (param,))
+
+    def inner(prefix, obj):
+        if isinstance(obj, Mapping):
+            for key, val in obj.items():
+                for ret in inner("%s[%s]" % (prefix, key), val):
+                    yield ret
+
+        elif isinstance(obj, (tuple, list)):
+            for item in obj:
+                for ret in inner(prefix + "[]", item):
+                    yield ret
+        else:
+            yield prefix, to_param(obj)
+
+    return list(inner(param, value))
 
 
 def format_datetime(value):
