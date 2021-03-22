@@ -17,7 +17,13 @@
 
 from elastic_transport import QueryParams
 
-from .._utils import DEFAULT, SKIP_IN_PATH, to_array, to_path  # noqa: F401
+from .._utils import (  # noqa: F401
+    DEFAULT,
+    SKIP_IN_PATH,
+    to_array,
+    to_deep_object,
+    to_path,
+)
 from ._base import BaseClient
 
 
@@ -63,7 +69,7 @@ class WorkplaceSearch(BaseClient):
     def delete_documents(
         self,
         content_source_id,
-        body,
+        document_ids,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -73,11 +79,11 @@ class WorkplaceSearch(BaseClient):
         """
         Deletes a list of documents from a custom content source
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#destroy>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-custom-sources-api.html#destroy>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
-        :arg body: HTTP request body
+        :arg document_ids: HTTP request body
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -105,7 +111,7 @@ class WorkplaceSearch(BaseClient):
                 "documents",
                 "bulk_destroy",
             ),
-            body=body,
+            body=document_ids,
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -127,7 +133,7 @@ class WorkplaceSearch(BaseClient):
         Indexes one or more new documents into a custom content source, or updates one
         or more existing documents
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#index-and-update>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-custom-sources-api.html#index-and-update>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
@@ -181,7 +187,7 @@ class WorkplaceSearch(BaseClient):
         """
         Retrieves all external identities
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#list-external-identities>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-external-identities-api.html#list-external-identities>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
@@ -235,7 +241,7 @@ class WorkplaceSearch(BaseClient):
         """
         Adds a new external identity
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#add-external-identity>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-external-identities-api.html#add-external-identity>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
@@ -286,7 +292,7 @@ class WorkplaceSearch(BaseClient):
         """
         Deletes an external identity
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#remove-external-identity>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-external-identities-api.html#remove-external-identity>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
@@ -340,7 +346,7 @@ class WorkplaceSearch(BaseClient):
         """
         Retrieves an external identity
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#show-external-identity>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-external-identities-api.html#show-external-identity>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
@@ -395,7 +401,7 @@ class WorkplaceSearch(BaseClient):
         """
         Updates an external identity
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-external-identities-api.html#update-external-identity>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-external-identities-api.html#update-external-identity>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
@@ -453,7 +459,7 @@ class WorkplaceSearch(BaseClient):
         """
         Lists all permissions for all users
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#list>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-document-permissions-api.html#list>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
@@ -510,7 +516,7 @@ class WorkplaceSearch(BaseClient):
         """
         Removes one or more permissions from an existing set of permissions
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#remove-one>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-document-permissions-api.html#remove-one>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
@@ -568,7 +574,7 @@ class WorkplaceSearch(BaseClient):
         """
         Search across available sources with various query tuning options
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-search-api.html>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-search-api.html>`_
 
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
@@ -608,7 +614,7 @@ class WorkplaceSearch(BaseClient):
         """
         Adds one or more new permissions atop existing permissions
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#add-one>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-document-permissions-api.html#add-one>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
@@ -667,7 +673,7 @@ class WorkplaceSearch(BaseClient):
         """
         Lists all permissions for one user
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#list-one>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-document-permissions-api.html#list-one>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
@@ -723,7 +729,7 @@ class WorkplaceSearch(BaseClient):
         """
         Creates a new set of permissions or over-writes all existing permissions
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-document-permissions-api.html#add-all>`_
+        `<https://www.elastic.co/guide/en/workplace-search/7.12/workplace-search-document-permissions-api.html#add-all>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source

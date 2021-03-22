@@ -26,7 +26,7 @@ import jinja2
 import urllib3
 
 http = urllib3.PoolManager()
-current_branch = "7.x"
+current_branch = "7.12"
 base_dir = pathlib.Path(__file__).absolute().parent.parent.parent
 schemas_dir = base_dir.parent / "ent-search/swagger/v1"
 templates_dir = str(pathlib.Path(__file__).absolute().parent / "templates")
@@ -94,7 +94,12 @@ class Parameter:
         # If there's an unstyled array with explode=True (or default 'True')
         # then we add '[]' after the spec wire name to comply with Ruby on Rails
         # query parameter arrays.
-        if self.type == "array" and self.style is None and self.explode:
+        if (
+            self.type == "array"
+            and self.style in (None, "form")
+            and self.explode
+            and not wire_name.endswith("[]")
+        ):
             wire_name += "[]"
 
         return wire_name
