@@ -94,7 +94,12 @@ class Parameter:
         # If there's an unstyled array with explode=True (or default 'True')
         # then we add '[]' after the spec wire name to comply with Ruby on Rails
         # query parameter arrays.
-        if self.type == "array" and self.style is None and self.explode:
+        if (
+            self.type == "array"
+            and self.style in (None, "form")
+            and self.explode
+            and not wire_name.endswith("[]")
+        ):
             wire_name += "[]"
 
         return wire_name
