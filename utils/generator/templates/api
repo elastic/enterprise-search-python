@@ -39,8 +39,10 @@
 
         params = QueryParams(params){% for param in api.query_params %}
         if {{ param.param_name}} is not None:{% if param.type == "array" and param.explode %}
-            for val in to_array({{ param.param_name }}, param="{{ param.param_name }}"):
-                params.add("{{ param.wire_name }}", val){% else %}
+            for v in to_array({{ param.param_name }}, param="{{ param.param_name }}"):
+                params.add("{{ param.wire_name }}", v){% elif param.style == 'deepObject' %}
+            for k, v in to_deep_object("{{ param.wire_name }}", {{ param.param_name }}):
+                params.add(k, v){% else %}
             params.add("{{ param.wire_name }}", {{ param.param_name}}){% endif %}{% endfor %}
 
         return self.perform_request(
