@@ -17,7 +17,13 @@
 
 from elastic_transport import QueryParams
 
-from .._utils import DEFAULT, SKIP_IN_PATH, to_array, to_path  # noqa: F401
+from .._utils import (  # noqa: F401
+    DEFAULT,
+    SKIP_IN_PATH,
+    to_array,
+    to_deep_object,
+    to_path,
+)
 from ._base import BaseClient
 
 
@@ -60,10 +66,146 @@ class WorkplaceSearch(BaseClient):
             ignore_status=ignore_status,
         )
 
+    def delete_content_source(
+        self,
+        content_source_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Deletes a content source by ID
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-content-sources-api.html#remove-content-source-api>`_
+
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if content_source_id in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "DELETE",
+            to_path(
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_content_source(
+        self,
+        content_source_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieves a content source by ID
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-content-sources-api.html#get-content-source-api>`_
+
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if content_source_id in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def list_content_sources(
+        self,
+        current_page=None,
+        page_size=None,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieves all content sources
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-content-sources-api.html#list-content-sources-api>`_
+
+        :arg current_page: Which page of results to request
+        :arg page_size: The number of results to return in a page
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+
+        params = QueryParams(params)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+
+        return self.perform_request(
+            "GET",
+            "/api/ws/v1/sources",
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
     def delete_documents(
         self,
         content_source_id,
-        body,
+        document_ids,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -73,11 +215,11 @@ class WorkplaceSearch(BaseClient):
         """
         Deletes a list of documents from a custom content source
 
-        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#destroy>`_
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#delete-by-id>`_
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
-        :arg body: HTTP request body
+        :arg document_ids: HTTP request body
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -105,7 +247,54 @@ class WorkplaceSearch(BaseClient):
                 "documents",
                 "bulk_destroy",
             ),
-            body=body,
+            body=document_ids,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def delete_all_documents(
+        self,
+        content_source_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Deletes all documents in a custom content source
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-custom-sources-api.html#delete-all-documents>`_
+
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if content_source_id in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "DELETE",
+            to_path(
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_id,
+                "documents",
+            ),
             params=params,
             headers=headers,
             http_auth=http_auth,
