@@ -17,7 +17,13 @@
 
 from elastic_transport import QueryParams
 
-from .._utils import DEFAULT, SKIP_IN_PATH, to_array, to_path  # noqa: F401
+from .._utils import (  # noqa: F401
+    DEFAULT,
+    SKIP_IN_PATH,
+    to_array,
+    to_deep_object,
+    to_path,
+)
 from ._base import BaseClient
 
 

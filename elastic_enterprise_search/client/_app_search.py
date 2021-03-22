@@ -17,7 +17,13 @@
 
 from elastic_transport import QueryParams
 
-from .._utils import DEFAULT, SKIP_IN_PATH, to_array, to_path  # noqa: F401
+from .._utils import (  # noqa: F401
+    DEFAULT,
+    SKIP_IN_PATH,
+    to_array,
+    to_deep_object,
+    to_path,
+)
 from ._base import BaseClient
 
 
@@ -140,8 +146,8 @@ class AppSearch(BaseClient):
 
         params = QueryParams(params)
         if filters is not None:
-            for val in to_array(filters, param="filters"):
-                params.add("filters[]", val)
+            for k, v in to_deep_object("filters", filters):
+                params.add(k, v)
         if interval is not None:
             params.add("interval", interval)
 
@@ -200,14 +206,14 @@ class AppSearch(BaseClient):
 
         params = QueryParams(params)
         if queries is not None:
-            for val in to_array(queries, param="queries"):
-                params.add("queries[]", val)
+            for v in to_array(queries, param="queries"):
+                params.add("queries[]", v)
         if promoted_doc_ids is not None:
-            for val in to_array(promoted_doc_ids, param="promoted_doc_ids"):
-                params.add("promoted[]", val)
+            for v in to_array(promoted_doc_ids, param="promoted_doc_ids"):
+                params.add("promoted[]", v)
         if hidden_doc_ids is not None:
-            for val in to_array(hidden_doc_ids, param="hidden_doc_ids"):
-                params.add("hidden[]", val)
+            for v in to_array(hidden_doc_ids, param="hidden_doc_ids"):
+                params.add("hidden[]", v)
 
         return self.perform_request(
             "POST",
@@ -368,14 +374,14 @@ class AppSearch(BaseClient):
 
         params = QueryParams(params)
         if queries is not None:
-            for val in to_array(queries, param="queries"):
-                params.add("queries[]", val)
+            for v in to_array(queries, param="queries"):
+                params.add("queries[]", v)
         if promoted_doc_ids is not None:
-            for val in to_array(promoted_doc_ids, param="promoted_doc_ids"):
-                params.add("promoted[]", val)
+            for v in to_array(promoted_doc_ids, param="promoted_doc_ids"):
+                params.add("promoted[]", v)
         if hidden_doc_ids is not None:
-            for val in to_array(hidden_doc_ids, param="hidden_doc_ids"):
-                params.add("hidden[]", val)
+            for v in to_array(hidden_doc_ids, param="hidden_doc_ids"):
+                params.add("hidden[]", v)
 
         return self.perform_request(
             "PUT",
@@ -727,8 +733,8 @@ class AppSearch(BaseClient):
         if type is not None:
             params.add("type", type)
         if source_engines is not None:
-            for val in to_array(source_engines, param="source_engines"):
-                params.add("source_engines[]", val)
+            for v in to_array(source_engines, param="source_engines"):
+                params.add("source_engines[]", v)
 
         return self.perform_request(
             "POST",
@@ -915,8 +921,8 @@ class AppSearch(BaseClient):
         if request_id is not None:
             params.add("request_id", request_id)
         if tags is not None:
-            for val in to_array(tags, param="tags"):
-                params.add("tags[]", val)
+            for v in to_array(tags, param="tags"):
+                params.add("tags[]", v)
 
         return self.perform_request(
             "POST",
@@ -1117,8 +1123,8 @@ class AppSearch(BaseClient):
         if query is not None:
             params.add("query", query)
         if fields is not None:
-            for val in to_array(fields, param="fields"):
-                params.add("types[documents][fields][]", val)
+            for v in to_array(fields, param="fields"):
+                params.add("types[documents][fields][]", v)
         if size is not None:
             params.add("size", size)
 
@@ -1243,10 +1249,10 @@ class AppSearch(BaseClient):
         """
         Allows you to search over, facet and filter your data
 
-        `<https://www.elastic.co/guide/en/app-search/current/search.html#search-single>`_
+        `<https://www.elastic.co/guide/en/app-search/current/search.html>`_
 
         :arg engine_name: Name of the engine
-        :arg body: Search request parameters
+        :arg body: Search options including query text, pages, sorting, facets, and filters
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -1709,8 +1715,8 @@ class AppSearch(BaseClient):
         if page_size is not None:
             params.add("page[size]", page_size)
         if filters is not None:
-            for val in to_array(filters, param="filters"):
-                params.add("filters[]", val)
+            for k, v in to_deep_object("filters[]", filters):
+                params.add(k, v)
 
         return self.perform_request(
             "GET",
@@ -1767,8 +1773,8 @@ class AppSearch(BaseClient):
         if page_size is not None:
             params.add("page[size]", page_size)
         if filters is not None:
-            for val in to_array(filters, param="filters"):
-                params.add("filters[]", val)
+            for k, v in to_deep_object("filters[]", filters):
+                params.add(k, v)
 
         return self.perform_request(
             "GET",
