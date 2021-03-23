@@ -1,0 +1,14 @@
+[[release-notes-7-12-0]]
+=== 7.12.0 Release Notes
+
+[discrete]
+==== General
+
+- Updated APIs to the 7.12 specification
+- Fixed encoding of objects in query string to match Ruby on Rails
+
+[discrete]
+==== Workplace Search
+
+- Added `oauth_authorize_url()` and `oauth_exchange_for_access_token()`
+  helper methods for implementing OAuth authentication.
