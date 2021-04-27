@@ -87,7 +87,7 @@ def test_dist(dist):
 
 
 def main():
-    run("rm", "-rf", "build/", "dist/", "*.egg-info", ".eggs")
+    run("rm", "-rf", "build/", "dist/*", "*.egg-info", ".eggs")
 
     # Grab the major version to be used as a suffix.
     version_path = os.path.join(base_dir, "elastic_enterprise_search/_version.py")
