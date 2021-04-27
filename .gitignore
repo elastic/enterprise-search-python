@@ -139,3 +139,6 @@ cython_debug/
 
 # JUnit
 junit/
+
+# CI output
+.ci/output
