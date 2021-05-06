@@ -16,6 +16,7 @@
 #  under the License.
 
 import pytest
+import urllib3
 from elastic_transport import Connection
 
 from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSearch
@@ -29,6 +30,22 @@ def vcr_config():
 @pytest.fixture(params=[EnterpriseSearch, AppSearch, WorkplaceSearch])
 def client_class(request):
     return request.param
+
+
+@pytest.fixture(scope="session")
+def ent_search_url():
+    host = "localhost"
+    for try_host in ("enterprise-search", "localhost", "127.0.0.1"):
+        try:
+            http = urllib3.PoolManager()
+            http.request("GET", "http://%s:3002" % try_host)
+            host = try_host
+            break
+        except Exception:
+            continue
+    else:
+        pytest.skip("No Enterprise Search instance running on 'localhost:3002'")
+    return "http://%s:3002" % host
 
 
 class DummyConnection(Connection):
