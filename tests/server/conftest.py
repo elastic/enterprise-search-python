@@ -16,25 +16,12 @@
 #  under the License.
 
 import pytest
-import urllib3
 
 from elastic_enterprise_search import EnterpriseSearch
 
 
 @pytest.fixture(scope="session")
-def ent_search():
-    host = "localhost"
-    for try_host in ("enterprise-search", "localhost", "127.0.0.1"):
-        try:
-            http = urllib3.PoolManager()
-            http.request("GET", "http://%s:3002" % try_host)
-            host = try_host
-            break
-        except Exception:
-            continue
-    else:
-        pytest.skip("No Enterprise Search instance running on 'localhost:3002'")
-
+def ent_search(ent_search_url):
     # TODO: Add authentication to this client
-    with EnterpriseSearch("http://%s:3002" % host) as client:
+    with EnterpriseSearch(ent_search_url) as client:
         yield client
