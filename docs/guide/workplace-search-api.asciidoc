@@ -4,6 +4,7 @@
 
 * <<workplace-search-initializing>>
 * <<workplace-search-document-apis>>
+* <<workplace-search-content-source-apis>>
 * <<workplace-search-search-apis>>
 * <<workplace-search-permissions-apis>>
 * <<oauth-apps>>
@@ -100,6 +101,33 @@ workplace_search.index_documents(
 }
 ---------------
 
+==== Get Document
+
+To get a single document by ID use the `get_document()` method:
+
+[source,python]
+---------------
+# Request:
+workplace_search.get_document(
+    content_source_id="<CONTENT_SOURCE_ID>",
+    document_id="<DOCUMENT_ID>"
+)
+
+# Response:
+{
+  "id":  "<DOCUMENT_ID>",
+  "source": "custom",
+  "content_source_id": "<CONTENT_SOURCE_ID>",
+  "last_updated": "2021-03-02T22:41:16+00:00",
+  "text_field": "some text value",
+  "number_field": 42,
+  "date_field": "2021-03-02T22:41:16+00:00",
+  "geolocation_field": "44.35,-68.21",
+  "_allow_permissions": ["perm1", "perm2"],
+  "_deny_permissions": ["perm3", "perm4"]
+}
+---------------
+
 ==== Delete Documents
 
 To remove documents from a custom content source use the `delete_documents()` method
@@ -111,7 +139,7 @@ and supply a list of document IDs to `body`:
 workplace_search.delete_documents(
     http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>",
     content_source_id="<CONTENT_SOURCE_ID>",
-    body=[1234, 1235]
+    document_ids=[1234, 1235]
 )
 
 # Response:
@@ -127,6 +155,98 @@ workplace_search.delete_documents(
     }
   ]
 }
+---------------
+
+[[workplace-search-content-source-apis]]
+=== Content Source APIs
+
+==== Create Content Source
+
+[source,python]
+---------------
+workplace_search.create_content_source(
+    body={
+        "name": "Content Source Name",
+        "schema": {
+            "title": "text",
+            "body": "text",
+            "url": "text"
+        },
+        "display": {
+            "title_field": "title",
+            "url_field": "url",
+            "color": "#f00f00"
+        },
+        "is_searchable": True
+    }
+)
+---------------
+
+==== Get Content Source
+
+[source,python]
+---------------
+workplace_search.get_content_source(
+    content_source_id="<CONTENT_SOURCE_ID>"
+)
+---------------
+
+==== List Content Sources
+
+[source,python]
+---------------
+# Request:
+workplace_search.list_content_sources()
+
+# Response:
+{
+  "meta": {
+    "page": {
+      "current": 1,
+      "total_pages": 1,
+      "total_results": 4,
+      "size": 25
+    }
+  },
+  "results": [
+    { <CONTENT SOURCE> },
+    ...
+  ]
+}
+
+
+---------------
+
+==== Update Content Source
+
+[source,python]
+---------------
+workplace_search.put_content_source(
+    content_source_id="<CONTENT_SOURCE_ID>",
+    body={
+        "name": "Content Source Name",
+        "schema": {
+            "title": "text",
+            "body": "text",
+            "url": "text"
+        },
+        "display": {
+            "title_field": "title",
+            "url_field": "url",
+            "color": "#f00f00"
+        },
+        "is_searchable": True
+    }
+)
+---------------
+
+==== Delete Content Source
+
+[source,python]
+---------------
+workplace_search.delete_content_source(
+    content_source_id="<CONTENT_SOURCE_ID>"
+)
 ---------------
 
 [[workplace-search-search-apis]]
