@@ -66,6 +66,101 @@ class WorkplaceSearch(BaseClient):
             ignore_status=ignore_status,
         )
 
+    def create_batch_synonym_sets(
+        self,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Create a batch of synonym sets
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-synonyms-api.html#create-synonyms>`_
+
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        """
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            "/api/ws/v1/synonyms",
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def command_sync_jobs(
+        self,
+        content_source_id,
+        body,
+        job_type=None,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Issue commands to a Content Source's sync jobs
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-sync-jobs-api.html#command-sync-jobs-api>`_
+
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
+        :arg job_type: The type of sync job to consider
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if content_source_id in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+        if job_type is not None:
+            for v in to_array(job_type, param="job_type"):
+                params.add("job_type[]", v)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_id,
+                "sync",
+                "jobs",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
     def create_content_source(
         self,
         body,
@@ -284,6 +379,46 @@ class WorkplaceSearch(BaseClient):
         return self.perform_request(
             "GET",
             "/api/ws/v1/sources",
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_current_user(
+        self,
+        get_token=None,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Get the authenticated user
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-user-api.html#get-current-user-api>`_
+
+        :arg get_token: Whether or not to include an access token in the
+            response.
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+
+        params = QueryParams(params)
+        if get_token is not None:
+            params.add("get_token", get_token)
+
+        return self.perform_request(
+            "GET",
+            "/api/ws/v1/whoami",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -919,6 +1054,186 @@ class WorkplaceSearch(BaseClient):
         return self.perform_request(
             "POST",
             "/api/ws/v1/search",
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def delete_synonym_set(
+        self,
+        synonym_set_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Delete a synonym set
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-synonyms-api.html#delete-synonym>`_
+
+        :arg synonym_set_id: Unique ID for a content source document. Provided
+            upon or returned at creation.
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if synonym_set_id in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "DELETE",
+            to_path(
+                "api",
+                "ws",
+                "v1",
+                "synonyms",
+                synonym_set_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_synonym_set(
+        self,
+        synonym_set_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieve a synonym set by ID
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-synonyms-api.html#show-synonym>`_
+
+        :arg synonym_set_id: Unique ID for a content source document. Provided
+            upon or returned at creation.
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if synonym_set_id in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "ws",
+                "v1",
+                "synonyms",
+                synonym_set_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def put_synonym_set(
+        self,
+        synonym_set_id,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Update a synonym set
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-synonyms-api.html#update-synonym>`_
+
+        :arg synonym_set_id: Unique ID for a content source document. Provided
+            upon or returned at creation.
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if synonym_set_id in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "PUT",
+            to_path(
+                "api",
+                "ws",
+                "v1",
+                "synonyms",
+                synonym_set_id,
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def list_synonym_sets(
+        self,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieves all synonym sets
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/workplace-synonyms-api.html#list-synonyms>`_
+
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        """
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            "/api/ws/v1/synonyms",
             body=body,
             params=params,
             headers=headers,
