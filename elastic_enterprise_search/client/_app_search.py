@@ -28,6 +28,215 @@ from ._base import BaseClient
 
 
 class AppSearch(BaseClient):
+    def create_api_key(
+        self,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Create an API key
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-create>`_
+
+        :arg body: API key details
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        """
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            "/api/as/v1/credentials",
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def delete_api_key(
+        self,
+        api_key_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Delete an API key
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-destroy>`_
+
+        :arg api_key_name: Name of an API key
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        """
+        if api_key_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "DELETE",
+            to_path(
+                "api",
+                "as",
+                "v1",
+                "credentials",
+                api_key_name,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_api_key(
+        self,
+        api_key_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Get the details of an API key
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-single>`_
+
+        :arg api_key_name: Name of an API key
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        """
+        if api_key_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v1",
+                "credentials",
+                api_key_name,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def put_api_key(
+        self,
+        api_key_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Update an API key
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-update>`_
+
+        :arg api_key_name: Name of an API key
+        :arg body: API key details
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        """
+        if api_key_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "PUT",
+            to_path(
+                "api",
+                "as",
+                "v1",
+                "credentials",
+                api_key_name,
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def list_api_keys(
+        self,
+        current_page=None,
+        page_size=None,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        List the details of all API keys
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-all>`_
+
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        """
+
+        params = QueryParams(params)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
+
+        return self.perform_request(
+            "GET",
+            "/api/as/v1/credentials",
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
     def get_api_logs(
         self,
         engine_name,

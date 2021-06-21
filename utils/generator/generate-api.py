@@ -292,7 +292,7 @@ class API:
             ref = resp["content"]["application/json"]["schema"]["$ref"]
         if ref:
             return re.match(
-                r"^#/components/(?:schemas|responses|requestBodies)/(.+)$", ref
+                r"^#/?components/(?:schemas|responses|requestBodies)/(.+)$", ref
             ).group(1)
 
     @property
@@ -348,7 +348,7 @@ class OpenAPI:
                 if "$ref" in x or ("schema" in x and tuple(x["schema"]) == ("$ref",)):
                     keys = (
                         re.match(
-                            r"^#/(.*)$",
+                            r"^#/?(.*)$",
                             x["$ref"] if "$ref" in x else x["schema"]["$ref"],
                         )
                         .group(1)
