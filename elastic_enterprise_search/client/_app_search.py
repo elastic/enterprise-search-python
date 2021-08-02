@@ -40,7 +40,7 @@ class AppSearch(BaseClient):
         """
         Create an API key
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/credentials.html#credentials-create>`_
 
         :arg body: API key details
         :arg params: Additional query params to send with the request
@@ -76,7 +76,7 @@ class AppSearch(BaseClient):
         """
         Delete an API key
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-destroy>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/credentials.html#credentials-destroy>`_
 
         :arg api_key_name: Name of an API key
         :arg params: Additional query params to send with the request
@@ -119,7 +119,7 @@ class AppSearch(BaseClient):
         """
         Get the details of an API key
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-single>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/credentials.html#credentials-single>`_
 
         :arg api_key_name: Name of an API key
         :arg params: Additional query params to send with the request
@@ -163,7 +163,7 @@ class AppSearch(BaseClient):
         """
         Update an API key
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/credentials.html#credentials-update>`_
 
         :arg api_key_name: Name of an API key
         :arg body: API key details
@@ -209,7 +209,7 @@ class AppSearch(BaseClient):
         """
         List the details of all API keys
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-all>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/credentials.html#credentials-all>`_
 
         :arg current_page: The page to fetch. Defaults to 1
         :arg page_size: The number of results per page
@@ -257,7 +257,7 @@ class AppSearch(BaseClient):
         """
         The API Log displays API request and response data at the Engine level
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/api-logs.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/api-logs.html>`_
 
         :arg engine_name: Name of the engine
         :arg from_date: Filter date from
@@ -337,7 +337,7 @@ class AppSearch(BaseClient):
         """
         Returns the number of clicks and total number of queries over a period
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/counts.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/counts.html>`_
 
         :arg engine_name: Name of the engine
         :arg filters: Analytics filters
@@ -393,7 +393,7 @@ class AppSearch(BaseClient):
         """
         Create a new curation
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/curations.html#curations-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/curations.html#curations-create>`_
 
         :arg engine_name: Name of the engine
         :arg queries: List of affected search queries
@@ -454,7 +454,7 @@ class AppSearch(BaseClient):
         """
         Delete a curation by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/curations.html#curations-destroy>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/curations.html#curations-destroy>`_
 
         :arg engine_name: Name of the engine
         :arg curation_id: Curation ID
@@ -505,7 +505,7 @@ class AppSearch(BaseClient):
         """
         Retrieve a curation by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/curations.html#curations-read>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/curations.html#curations-read>`_
 
         :arg engine_name: Name of the engine
         :arg curation_id: Curation ID
@@ -559,7 +559,7 @@ class AppSearch(BaseClient):
         """
         Update an existing curation
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/curations.html#curations-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/curations.html#curations-update>`_
 
         :arg engine_name: Name of the engine
         :arg curation_id: Curation ID
@@ -624,7 +624,7 @@ class AppSearch(BaseClient):
         """
         Retrieve available curations for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/curations.html#curations-read>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/curations.html#curations-read>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
@@ -675,7 +675,7 @@ class AppSearch(BaseClient):
         """
         Delete documents by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/documents.html#documents-delete>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/documents.html#documents-delete>`_
 
         :arg engine_name: Name of the engine
         :arg document_ids: List of document IDs
@@ -722,7 +722,7 @@ class AppSearch(BaseClient):
         """
         Retrieves one or more documents by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/documents.html#documents-get>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/documents.html#documents-get>`_
 
         :arg engine_name: Name of the engine
         :arg document_ids: List of document IDs
@@ -769,7 +769,7 @@ class AppSearch(BaseClient):
         """
         Create or update documents
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/documents.html#documents-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/documents.html#documents-create>`_
 
         :arg engine_name: Name of the engine
         :arg documents: List of document to index
@@ -817,7 +817,7 @@ class AppSearch(BaseClient):
         """
         List all available documents with optional pagination support
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/documents.html#documents-list>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/documents.html#documents-list>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
@@ -869,7 +869,7 @@ class AppSearch(BaseClient):
         """
         Partial update of documents
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/documents.html#documents-partial>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/documents.html#documents-partial>`_
 
         :arg engine_name: Name of the engine
         :arg documents: List of documents to update
@@ -918,7 +918,7 @@ class AppSearch(BaseClient):
         """
         Creates a new engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/engines.html#engines-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/engines.html#engines-create>`_
 
         :arg engine_name: Engine name
         :arg language: Engine language (null for universal)
@@ -967,7 +967,7 @@ class AppSearch(BaseClient):
         """
         Delete an engine by name
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/engines.html#engines-delete>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/engines.html#engines-delete>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -1010,7 +1010,7 @@ class AppSearch(BaseClient):
         """
         Retrieves an engine by name
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/engines.html#engines-get>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/engines.html#engines-get>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -1054,7 +1054,7 @@ class AppSearch(BaseClient):
         """
         Retrieves all engines with optional pagination support
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/engines.html#engines-list>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/engines.html#engines-list>`_
 
         :arg current_page: The page to fetch. Defaults to 1
         :arg page_size: The number of results per page
@@ -1098,7 +1098,7 @@ class AppSearch(BaseClient):
         """
         Send data about clicked results
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/clickthrough.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/clickthrough.html>`_
 
         :arg engine_name: Name of the engine
         :arg query_text: Search query text
@@ -1163,7 +1163,7 @@ class AppSearch(BaseClient):
         """
         Add a source engine to an existing meta engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/meta-engines.html#meta-engines-add-source-engines>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/meta-engines.html#meta-engines-add-source-engines>`_
 
         :arg engine_name: Name of the engine
         :arg source_engines: List of engine names
@@ -1210,7 +1210,7 @@ class AppSearch(BaseClient):
         """
         Delete a source engine from a meta engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/meta-engines.html#meta-engines-remove-source-engines>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/meta-engines.html#meta-engines-remove-source-engines>`_
 
         :arg engine_name: Name of the engine
         :arg source_engines: List of engine names
@@ -1257,7 +1257,7 @@ class AppSearch(BaseClient):
         """
         Run several search in the same request
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/multi-search.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/multi-search.html>`_
 
         :arg engine_name: Name of the engine
         :arg body: One or more queries to execute in parallel
@@ -1306,7 +1306,7 @@ class AppSearch(BaseClient):
         """
         Provide relevant query suggestions for incomplete queries
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/query-suggestion.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/query-suggestion.html>`_
 
         :arg engine_name: Name of the engine
         :arg query: A partial query for which to receive suggestions
@@ -1366,7 +1366,7 @@ class AppSearch(BaseClient):
         """
         Retrieve current schema for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/schema.html#schema-read>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/schema.html#schema-read>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -1411,7 +1411,7 @@ class AppSearch(BaseClient):
         """
         Update schema for the current engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/schema.html#schema-patch>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/schema.html#schema-patch>`_
 
         :arg engine_name: Name of the engine
         :arg schema: Schema description
@@ -1458,7 +1458,7 @@ class AppSearch(BaseClient):
         """
         Allows you to search over, facet and filter your data
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/search.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/search.html>`_
 
         :arg engine_name: Name of the engine
         :arg body: Search options including query text, pages, sorting, facets, and filters
@@ -1504,7 +1504,7 @@ class AppSearch(BaseClient):
         """
         Retrieve current search settings for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/search-settings.html#search-settings-show>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/search-settings.html#search-settings-show>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -1549,7 +1549,7 @@ class AppSearch(BaseClient):
         """
         Update search settings for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/search-settings.html#search-settings-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/search-settings.html#search-settings-update>`_
 
         :arg engine_name: Name of the engine
         :arg body: Search settings
@@ -1595,7 +1595,7 @@ class AppSearch(BaseClient):
         """
         Reset search settings for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/search-settings.html#search-settings-reset>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/search-settings.html#search-settings-reset>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -1641,7 +1641,7 @@ class AppSearch(BaseClient):
         """
         Create a new synonym set
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/synonyms.html#synonyms-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/synonyms.html#synonyms-create>`_
 
         :arg engine_name: Name of the engine
         :arg body: Synonym set description
@@ -1688,7 +1688,7 @@ class AppSearch(BaseClient):
         """
         Delete a synonym set by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/synonyms.html#synonyms-delete>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/synonyms.html#synonyms-delete>`_
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
@@ -1739,7 +1739,7 @@ class AppSearch(BaseClient):
         """
         Retrieve a synonym set by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/synonyms.html#synonyms-list-one>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/synonyms.html#synonyms-list-one>`_
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
@@ -1791,7 +1791,7 @@ class AppSearch(BaseClient):
         """
         Update a synonym set by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/synonyms.html#synonyms-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/synonyms.html#synonyms-update>`_
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
@@ -1845,7 +1845,7 @@ class AppSearch(BaseClient):
         """
         Retrieve available synonym sets for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/synonyms.html#synonyms-get>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/synonyms.html#synonyms-get>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
@@ -1899,7 +1899,7 @@ class AppSearch(BaseClient):
         """
         Returns the number of clicks received by a document in descending order
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/clicks.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/clicks.html>`_
 
         :arg engine_name: Name of the engine
         :arg query: Filter clicks over a search query
@@ -1960,7 +1960,7 @@ class AppSearch(BaseClient):
         """
         Returns queries analytics by usage count
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/queries.html#queries-top-queries>`_
+        `<https://www.elastic.co/guide/en/app-search/7.14/queries.html#queries-top-queries>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
