@@ -1,0 +1,21 @@
+[[release-notes-7-14-0]]
+=== 7.14.0 Release Notes
+
+[discrete]
+==== General
+
+- Updated APIs to the 7.14 specification
+
+[discrete]
+==== App Search
+
+- Added the `create_api_key`, `delete_api_key`, `get_api_key`, `put_api_key`,
+  and `list_api_keys` APIs
+
+
+[discrete]
+==== Workplace Search
+
+- Added the `create_batch_synonym_sets`, `command_sync_jobs`, `put_content_source_icons`,
+  `get_current_user`, and `delete_documents_by_query`, `delete_synonym_set`,
+  `get_synonym_set`, `put_synonym_set`, and `list_synonym_sets` APIs
