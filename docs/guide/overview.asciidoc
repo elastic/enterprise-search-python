@@ -7,7 +7,7 @@ Enterprise Search, App Search, and Workplace Search.
 [discrete]
 === Compatibility
 
-Current development happens in the `master` branch.
+Current development happens in the `main` branch.
 
 The library is compatible with all Elastic Enterprise Search versions since `7.x`
 but you **have to use a matching major version**:
@@ -97,4 +97,4 @@ serializer to return incorrect results.
 [discrete]
 === License
 
-`enterprise-search-python` is available under the https://github.com/elastic/enterprise-search-python/blob/master/LICENSE[Apache-2.0 license].
+`enterprise-search-python` is available under the https://github.com/elastic/enterprise-search-python/blob/main/LICENSE[Apache-2.0 license].

@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/elastic/enterprise-search-python">
-    <img src="https://raw.githubusercontent.com/elastic/enterprise-search-python/master/assets/elastic-enterprise-search-logo.png" width="70%" alt="Elastic Enterprise Search" />
+    <img src="https://raw.githubusercontent.com/elastic/enterprise-search-python/main/assets/elastic-enterprise-search-logo.png" width="70%" alt="Elastic Enterprise Search" />
   </a>
 </p>
 <p align="center">
@@ -8,7 +8,7 @@
 <a href="https://pypi.org/project/elastic-enterprise-search"><img src="https://img.shields.io/badge/python-2.7%20%7C%203.6%20%7C%203.7%20%7C%203.8%20%7C%203.9-blue" alt="Supported Python Versions"></a>
 <a href="https://pepy.tech/project/elastic-enterprise-search"><img src="https://pepy.tech/badge/elastic-enterprise-search" alt="Downloads"></a>
 <a href="https://github.com/elastic/enterprise-search-python/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/elastic/enterprise-search-python/CI?label=tests" alt="GitHub Actions Status"></a>
-<a href="https://clients-ci.elastic.co/view/Python/job/elastic+enterprise-search-python+master"><img src="https://clients-ci.elastic.co/view/Python/job/elastic+enterprise-search-python+master/badge/icon?subject=intergration" alt="Jenkins Status"></a>
+<a href="https://clients-ci.elastic.co/view/Python/job/elastic+enterprise-search-python+main"><img src="https://clients-ci.elastic.co/view/Python/job/elastic+enterprise-search-python+main/badge/icon?subject=intergration" alt="Jenkins Status"></a>
 </p>
 
 Official Python client for Elastic Enterprise Search, App Search, and Workplace Search
@@ -32,10 +32,10 @@ compatibility info, configuring, and an API reference.
 ## Contributing
 
 If you'd like to make a contribution to `enterprise-search-python` we 
-provide [contributing documentation](https://github.com/elastic/enterprise-search-python/tree/master/CONTRIBUTING.md)
+provide [contributing documentation](https://github.com/elastic/enterprise-search-python/tree/main/CONTRIBUTING.md)
 to ensure your first contribution goes smoothly.
 
 ## License
 
 `enterprise-search-python` is available under the Apache-2.0 license.
-For more details see [LICENSE](https://github.com/elastic/enterprise-search-python/blob/master/LICENSE).
+For more details see [LICENSE](https://github.com/elastic/enterprise-search-python/blob/main/LICENSE).
