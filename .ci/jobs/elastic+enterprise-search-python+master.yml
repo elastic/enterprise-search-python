@@ -1,12 +1,12 @@
 ---
 - job:
-    name: elastic+enterprise-search-python+master
-    display-name: 'elastic / enterprise-search-python # master'
-    description: Testing the enterprise-search-python master branch.
+    name: elastic+enterprise-search-python+main
+    display-name: 'elastic / enterprise-search-python # main'
+    description: Testing the enterprise-search-python main branch.
     junit_results: "junit/*-junit.xml"
     parameters:
     - string:
         name: branch_specifier
-        default: refs/heads/master
+        default: refs/heads/main
         description: the Git branch specifier to build (&lt;branchName&gt;, &lt;tagName&gt;,
           &lt;commitId&gt;, etc.)
