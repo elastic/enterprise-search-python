@@ -21,13 +21,6 @@ import pytest
 from elastic_enterprise_search import AppSearch, UnauthorizedError
 
 
-@pytest.fixture()
-def app_search():
-    yield AppSearch(
-        "http://localhost:3002", http_auth="private-k3ra4bqu12vgnhe3wibdw69f"
-    )
-
-
 @pytest.mark.vcr()
 def test_list_engines(app_search):
     resp = app_search.list_engines()
