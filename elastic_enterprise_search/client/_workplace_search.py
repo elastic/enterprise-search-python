@@ -66,6 +66,53 @@ class WorkplaceSearch(BaseClient):
             ignore_status=ignore_status,
         )
 
+    def get_auto_query_refinement_details(
+        self,
+        content_source_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieves a content source's automatic query refinement details
+
+        `<https://www.elastic.co/guide/en/workplace-search/7.x/workplace-search-content-sources-api.html#get-automatic-query-refinement-details-api>`_
+
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if content_source_id in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_id,
+                "automatic_query_refinement",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
     def create_batch_synonym_sets(
         self,
         body,
@@ -132,6 +179,7 @@ class WorkplaceSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.BadRequestError:
         :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.PaymentRequiredError:
         :raises elastic_enterprise_search.NotFoundError:
         """
         if content_source_id in SKIP_IN_PATH:
@@ -1131,8 +1179,7 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-synonyms-api.html#delete-synonym>`_
 
-        :arg synonym_set_id: Unique ID for a content source document. Provided
-            upon or returned at creation.
+        :arg synonym_set_id: Synonym Set ID
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -1177,8 +1224,7 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-synonyms-api.html#show-synonym>`_
 
-        :arg synonym_set_id: Unique ID for a content source document. Provided
-            upon or returned at creation.
+        :arg synonym_set_id: Synonym Set ID
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -1224,8 +1270,7 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-synonyms-api.html#update-synonym>`_
 
-        :arg synonym_set_id: Unique ID for a content source document. Provided
-            upon or returned at creation.
+        :arg synonym_set_id: Synonym Set ID
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -1290,6 +1335,77 @@ class WorkplaceSearch(BaseClient):
             "GET",
             "/api/ws/v1/synonyms",
             body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_triggers_blocklist(
+        self,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Get current triggers blocklist
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/automatic-query-refinement-blocklist.html>`_
+
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            "/api/ws/v1/automatic_query_refinement",
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def put_triggers_blocklist(
+        self,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Update current triggers blocklist
+
+        `<https://www.elastic.co/guide/en/workplace-search/current/automatic-query-refinement-blocklist.html>`_
+
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "PUT",
+            "/api/ws/v1/automatic_query_refinement",
             params=params,
             headers=headers,
             http_auth=http_auth,

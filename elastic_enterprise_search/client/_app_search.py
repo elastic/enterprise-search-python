@@ -378,6 +378,1670 @@ class AppSearch(BaseClient):
             ignore_status=ignore_status,
         )
 
+    def delete_crawler_active_crawl_request(
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Cancel an active crawl request
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-crawler-crawl-requests-active-cancel>`_
+
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "crawl_requests",
+                "active",
+                "cancel",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_active_crawl_request(
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Get active crawl request details
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests-active>`_
+
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "crawl_requests",
+                "active",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def create_crawler_crawl_request(
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Create a crawl request
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-crawler-crawl-requests>`_
+
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "crawl_requests",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_crawl_request(
+        self,
+        engine_name,
+        crawl_request_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Get crawl request details
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests-id>`_
+
+        :arg engine_name: Name of the engine
+        :arg crawl_request_id: Crawl Request ID
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            crawl_request_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "crawl_requests",
+                crawl_request_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def list_crawler_crawl_requests(
+        self,
+        engine_name,
+        limit=None,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        List crawl requests
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests>`_
+
+        :arg engine_name: Name of the engine
+        :arg limit: The number of results
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+        if limit is not None:
+            params.add("limit", limit)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "crawl_requests",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def create_crawler_crawl_rule(
+        self,
+        engine_name,
+        domain_id,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Create a crawl rule
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-crawl-rules>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+                "crawl_rules",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def delete_crawler_crawl_rule(
+        self,
+        engine_name,
+        domain_id,
+        crawl_rule_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Delete a crawl rule
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-delete-crawl-rule>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg crawl_rule_id: Crawl Rule ID
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+            crawl_rule_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "DELETE",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+                "crawl_rules",
+                crawl_rule_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def put_crawler_crawl_rule(
+        self,
+        engine_name,
+        domain_id,
+        crawl_rule_id,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Update a crawl rule
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-put-crawl-rule>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg crawl_rule_id: Crawl Rule ID
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+            crawl_rule_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "PUT",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+                "crawl_rules",
+                crawl_rule_id,
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def delete_crawler_crawl_schedule(
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Delete a crawl schedule
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-delete-crawler-crawl-schedule>`_
+
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "DELETE",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "crawl_schedule",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_crawl_schedule(
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Get crawl schedule
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-schedule>`_
+
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "crawl_schedule",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def put_crawler_crawl_schedule(
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Set crawl schedule
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-put-crawler-crawl-schedule>`_
+
+        :arg engine_name: Name of the engine
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "PUT",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "crawl_schedule",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def create_crawler_domain(
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Create a crawler domain
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-crawler-domains>`_
+
+        :arg engine_name: Name of the engine
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def delete_crawler_domain(
+        self,
+        engine_name,
+        domain_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Delete domain configuration
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-delete-crawler-domain>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "DELETE",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_domain(
+        self,
+        engine_name,
+        domain_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Get domain configuration
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-domain>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def put_crawler_domain(
+        self,
+        engine_name,
+        domain_id,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Update domain configuration
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-put-crawler-domain>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "PUT",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_domain_validation_result(
+        self,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Validate Domain with Crawler
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        """
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            "/api/as/v0/crawler/validate_url",
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def create_crawler_entry_point(
+        self,
+        engine_name,
+        domain_id,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Create a crawler entry point
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-entry-points>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+                "entry_points",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def delete_crawler_entry_point(
+        self,
+        engine_name,
+        domain_id,
+        entry_point_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Delete an entry point
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-delete-crawler-domain>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg entry_point_id: Crawler Entry Point identifier
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+            entry_point_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "DELETE",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+                "entry_points",
+                entry_point_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def put_crawler_entry_point(
+        self,
+        engine_name,
+        domain_id,
+        entry_point_id,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Update a crawler entry point
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-put-entry-point>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg entry_point_id: Crawler Entry Point identifier
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+            entry_point_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "PUT",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+                "entry_points",
+                entry_point_id,
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_metrics(
+        self,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieve a snapshot of crawler metrics
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        """
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            "/api/as/v0/crawler/metrics",
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_overview(
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieve crawler configuration overview
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler>`_
+
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def create_crawler_process_crawl(
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Create a process crawl
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+
+        :arg engine_name: Name of the engine
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "process_crawls",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_process_crawl_denied_urls(
+        self,
+        engine_name,
+        process_crawl_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        View denied urls for Process Crawl
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+
+        :arg engine_name: Name of the engine
+        :arg process_crawl_id: Process Crawl identifier
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            process_crawl_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "process_crawls",
+                process_crawl_id,
+                "denied_urls",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_process_crawl(
+        self,
+        engine_name,
+        process_crawl_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Get process crawl details
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+
+        :arg engine_name: Name of the engine
+        :arg process_crawl_id: Process Crawl identifier
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            process_crawl_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "process_crawls",
+                process_crawl_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def list_crawler_process_crawls(
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        List process crawls
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "process_crawls",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def create_crawler_sitemap(
+        self,
+        engine_name,
+        domain_id,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Create a crawler sitemap
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-sitemaps>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+                "sitemaps",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def delete_crawler_sitemap(
+        self,
+        engine_name,
+        domain_id,
+        sitemap_id,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Delete a sitemap
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-delete-sitemap>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg sitemap_id: Sitemap ID
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+            sitemap_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "DELETE",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+                "sitemaps",
+                sitemap_id,
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def put_crawler_sitemap(
+        self,
+        engine_name,
+        domain_id,
+        sitemap_id,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Update a sitemap
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-put-sitemap>`_
+
+        :arg engine_name: Name of the engine
+        :arg domain_id: Crawler Domain ID
+        :arg sitemap_id: Sitemap ID
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            domain_id,
+            sitemap_id,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "PUT",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "domains",
+                domain_id,
+                "sitemaps",
+                sitemap_id,
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_url_extraction_result(
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Extract content from a URL
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+
+        :arg engine_name: Name of the engine
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "extract_url",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_url_tracing_result(
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Trace a history of a crawled URL
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+
+        :arg engine_name: Name of the engine
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "trace_url",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_url_validation_result(
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Validate URL with Crawler
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+
+        :arg engine_name: Name of the engine
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "crawler",
+                "validate_url",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_crawler_user_agent(
+        self,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Get the User-Agent header value for the crawler
+
+        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-user-agent>`_
+
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        """
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            "/api/as/v0/crawler/user_agent",
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
     def create_curation(
         self,
         engine_name,
@@ -1483,6 +3147,113 @@ class AppSearch(BaseClient):
                 "engines",
                 engine_name,
                 "search",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_search_relevance_suggestions(
+        self,
+        engine_name,
+        search_suggestion_query,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieve search relevance suggestions
+
+        `<https://www.elastic.co/guide/en/app-search/current/search-relevance-suggestions.html#search-relevance-suggestions-query>`_
+
+        :arg engine_name: Name of the engine
+        :arg search_suggestion_query: Query to obtain suggestions
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            search_suggestion_query,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "search_relevance_suggestions",
+                search_suggestion_query,
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def list_search_relevance_suggestions(
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieve search relevance suggestions
+
+        `<https://www.elastic.co/guide/en/app-search/current/search-relevance-suggestions.html#search-relevance-suggestions-list>`_
+
+        :arg engine_name: Name of the engine
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "search_relevance_suggestions",
             ),
             body=body,
             params=params,
