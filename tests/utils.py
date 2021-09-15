@@ -15,19 +15,20 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import pytest
 
-from elastic_enterprise_search import EnterpriseSearch
-
-
-@pytest.fixture(scope="session")
-def ent_search(ent_search_url):
-    with EnterpriseSearch(ent_search_url, http_auth=("elastic", "changeme")) as client:
-        yield client
-
-
-@pytest.fixture(scope="session")
-def app_search(ent_search):
-    client = ent_search.app_search
-    client.http_auth = ("elastic", "7XdP3UGdKcFq4D6JfZC4VPzB")
-    yield client
+def pop_nested_json(from_, nested_key):
+    """Utility function that pops a nested+dotted JSON key"""
+    key_parts = nested_key.split(".")
+    if len(key_parts) > 1:
+        for i, key_part in enumerate(key_parts[:-1]):
+            if key_part == "*":
+                assert isinstance(from_, list)
+                for item in from_:
+                    pop_nested_json(item, ".".join(key_parts[i + 1 :]))
+                break
+            else:
+                from_ = from_[key_part]
+        else:
+            from_.pop(key_parts[-1])
+    else:
+        from_.pop(nested_key)
