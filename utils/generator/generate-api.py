@@ -322,7 +322,7 @@ class OpenAPI:
         # Updating this here so it's available in 7.11:
         if (
             current_branch == "7.11"
-            and self.namespace == "_app_search"
+            and self.namespace.startswith("_app_search")
             and api.func_name == "multi_search"
         ):
             # Remove 'queries' parameter, add a 'requestBody' parameter
@@ -333,6 +333,20 @@ class OpenAPI:
             api.spec["parameters"] = [
                 param for param in api.spec["parameters"] if param["name"] != "queries"
             ]
+
+        # Rename 'app_search.get_denied_urls' -> 'app_search.get_crawler_process_crawl_denied_urls'
+        # and 'app_search.delete_active_crawl_request' -> 'app_search.delete_crawler_active_crawl_request'
+        # to fit in better with the rest of the Crawl APIs.
+        if (
+            self.namespace.startswith("_app_search")
+            and api.func_name == "get_denied_urls"
+        ):
+            api.spec["operationId"] = "getCrawlerProcessCrawlDeniedUrls"
+        if (
+            self.namespace.startswith("_app_search")
+            and api.func_name == "delete_active_crawl_request"
+        ):
+            api.spec["operationId"] = "deleteCrawlerActiveCrawlRequest"
 
         return api
 
@@ -400,6 +414,59 @@ def main():
     specs = []
     for filepath in schemas_dir.iterdir():
         specs.append(OpenAPI.from_schema(filepath))
+
+    # Opt-in to these APIs from the new App Search specification
+    new_app_search_apis = [
+        "create_crawler_crawl_request",
+        "create_crawler_crawl_rule",
+        "create_crawler_domain",
+        "create_crawler_entry_point",
+        "create_crawler_process_crawl",
+        "create_crawler_sitemap",
+        "delete_active_crawl_request",
+        "delete_crawler_active_crawl_request",
+        "delete_crawler_crawl_rule",
+        "delete_crawler_crawl_schedule",
+        "delete_crawler_domain",
+        "delete_crawler_entry_point",
+        "delete_crawler_sitemap",
+        "get_crawler_active_crawl_request",
+        "get_crawler_crawl_request",
+        "get_crawler_crawl_schedule",
+        "get_crawler_domain",
+        "get_crawler_domain_validation_result",
+        "get_crawler_metrics",
+        "get_crawler_overview",
+        "get_crawler_process_crawl",
+        "get_crawler_process_crawl_denied_urls",
+        "get_crawler_url_extraction_result",
+        "get_crawler_url_tracing_result",
+        "get_crawler_url_validation_result",
+        "get_crawler_user_agent",
+        "get_denied_urls",
+        "get_search_relevance_suggestions",
+        "list_crawler_crawl_requests",
+        "list_crawler_process_crawls",
+        "list_search_relevance_suggestions",
+        "put_crawler_crawl_rule",
+        "put_crawler_crawl_schedule",
+        "put_crawler_domain",
+        "put_crawler_entry_point",
+        "put_crawler_sitemap",
+    ]
+    new_app_search_spec = [
+        spec for spec in specs if spec.namespace == "_app_search_new"
+    ][0]
+    old_app_search_spec = [spec for spec in specs if spec.namespace == "_app_search"][0]
+
+    for api in new_app_search_spec.apis:
+        if api.func_name in new_app_search_apis:
+            old_app_search_spec.apis.append(api)
+    old_app_search_spec.apis = sorted(old_app_search_spec.apis, key=API.sorted_key)
+
+    # Remove the new App Search spec from the list of generated specs.
+    # For now we'll use the old one as a base and
+    specs = [spec for spec in specs if spec.namespace != "_app_search_new"]
 
     for spec in specs:
         spec_filepath = (
