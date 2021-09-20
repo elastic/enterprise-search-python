@@ -129,7 +129,7 @@ workplace_search.get_document(
 }
 ---------------
 
-==== Delete Documents
+==== Delete documents
 
 To remove documents from a custom content source use the `delete_documents()` method
 and supply a list of document IDs to `body`:
@@ -158,7 +158,7 @@ workplace_search.delete_documents(
 }
 ---------------
 
-==== Delete Documents by Query
+==== Delete documents by Query
 
 Deletes documents that match a query or filters
 
@@ -180,14 +180,15 @@ workplace_search.delete_documents_by_query(
 {"total": 100, "deleted": 100, "failures": []}
 ---------------
 
-==== Delete all Documents
+==== Delete all documents
 
 Deletes all the documents in a Content Source
 
 [source,python]
 ---------------
-workplace_search.delete_all_documents(
-    content_source_id="<CONTENT_SOURCE_ID>"
+workplace_search.delete_documents_by_query(
+    content_source_id="<CONTENT_SOURCE_ID>",
+    body={}
 )
 ---------------
 
