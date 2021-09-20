@@ -8,6 +8,7 @@
 * <<app-search-document-apis>>
 * <<app-search-schema-apis>>
 * <<app-search-search-apis>>
+* <<app-search-crawler-apis>>
 * <<app-search-curation-apis>>
 * <<app-search-meta-engine-apis>>
 
@@ -761,4 +762,159 @@ app_search.delete_meta_engine_source(
   ],
   "type": "meta"
 }
+---------------
+
+[[app-search-crawler-apis]]
+=== Web Crawler APIs
+
+==== Domains
+
+[source,python]
+---------------
+# Create a domain
+resp = app_search.create_crawler_domain(
+  engine_name="crawler-engine",
+  body={
+    "name": "https://example.com"
+  }
+)
+domain_id = resp["id"]
+
+# Get a domain
+app_search.get_crawler_domain(
+  engine_name="crawler-engine",
+  domain_id=domain_id
+)
+
+# Update a domain
+app_search.put_crawler_domain(
+  engine_name="crawler-engine",
+  domain_id=domain_id,
+  body={
+    ...
+  }
+)
+
+# Delete a domain
+app_search.delete_crawler_domain(
+  engine_name="crawler-engine",
+  domain_id=domain_id
+)
+
+# Validate a domain
+app_search.get_crawler_domain_validation_result(
+  body={
+    "url": "https://example.com",
+    "checks": [
+      "dns",
+      "robots_txt",
+      "tcp",
+      "url",
+      "url_content",
+      "url_request"
+    ]
+  }
+)
+
+# Extract content from a URL
+app_search.get_crawler_url_extraction_result(
+  engine_name="crawler-engine",
+  body={
+    "url": "https://example.com"
+  }
+)
+
+# Trace a URL
+app_search.get_crawler_url_tracing_result(
+  engine_name="crawler-engine",
+  body={
+    "url": "https://example.com"
+  }
+)
+---------------
+
+==== Crawls
+
+[source,python]
+---------------
+# Get the active crawl
+app_search.get_crawler_active_crawl_request(
+  engine_name="crawler-engine",
+)
+
+# Start a crawl
+app_search.create_crawler_crawl_request(
+  engine_name="crawler-engine"
+)
+
+# Cancel the active crawl
+app_search.delete_crawler_active_crawl_request(
+  engine_name="crawler-engine"
+)
+---------------
+
+==== Entry Points
+
+[source,python]
+---------------
+# Create an entry point
+resp = app_search.create_crawler_entry_point(
+  engine_name="crawler-engine",
+  body={
+    "value": "/blog"
+  }
+)
+entry_point_id = resp["id"]
+
+# Delete an entry point
+app_search.delete_crawler_entry_point(
+  engine_name="crawler-engine",
+  entry_point_id=entry_point_id
+)
+---------------
+
+==== Crawl Rules
+
+[source,python]
+---------------
+# Create a crawl rule
+resp = app_search.create_crawler_crawl_rule(
+  engine_name="crawler-engine",
+  domain_id=domain_id,
+  body={
+    "policy": "deny",
+    "rule": "ends",
+    "pattern": "/dont-crawl"
+  }
+)
+crawl_rule_id = resp["id"]
+
+# Delete a crawl rule
+app_search.delete_crawler_crawl_rule(
+  engine_name="crawler-engine",
+  domain_id=domain_id,
+  crawl_rule_id=crawl_rule_id
+)
+---------------
+
+==== Sitemaps
+
+[source,python]
+---------------
+# Create a sitemap
+resp = app_search.create_crawler_sitemap(
+  engine_name="crawler-engine",
+  domain_id=domain_id,
+  body={
+    "url": "https://example.com/sitemap.xml"
+  }
+)
+sitemap_id = resp["id"]
+
+# Delete a sitemap
+app_search.delete_crawler_sitemap(
+  engine_name="crawler-engine",
+  domain_id=domain_id,
+  sitemap_id=sitemap_id
+)
 ---------------
