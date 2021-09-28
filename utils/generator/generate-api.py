@@ -334,20 +334,6 @@ class OpenAPI:
                 param for param in api.spec["parameters"] if param["name"] != "queries"
             ]
 
-        # Rename 'app_search.get_denied_urls' -> 'app_search.get_crawler_process_crawl_denied_urls'
-        # and 'app_search.delete_active_crawl_request' -> 'app_search.delete_crawler_active_crawl_request'
-        # to fit in better with the rest of the Crawl APIs.
-        if (
-            self.namespace.startswith("_app_search")
-            and api.func_name == "get_denied_urls"
-        ):
-            api.spec["operationId"] = "getCrawlerProcessCrawlDeniedUrls"
-        if (
-            self.namespace.startswith("_app_search")
-            and api.func_name == "delete_active_crawl_request"
-        ):
-            api.spec["operationId"] = "deleteCrawlerActiveCrawlRequest"
-
         return api
 
     @classmethod
@@ -423,7 +409,6 @@ def main():
         "create_crawler_entry_point",
         "create_crawler_process_crawl",
         "create_crawler_sitemap",
-        "delete_active_crawl_request",
         "delete_crawler_active_crawl_request",
         "delete_crawler_crawl_rule",
         "delete_crawler_crawl_schedule",
@@ -443,7 +428,6 @@ def main():
         "get_crawler_url_tracing_result",
         "get_crawler_url_validation_result",
         "get_crawler_user_agent",
-        "get_denied_urls",
         "get_search_relevance_suggestions",
         "list_crawler_crawl_requests",
         "list_crawler_process_crawls",
