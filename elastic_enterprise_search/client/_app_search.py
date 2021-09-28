@@ -1482,7 +1482,7 @@ class AppSearch(BaseClient):
         """
         Create a process crawl
 
-        `<https://www.elastic.co/guide/en/app-search/7.15/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.15/web-crawler-api-reference.html#web-crawler-apis-post-crawler-process-crawls>`_
 
         :arg engine_name: Name of the engine
         :arg body: HTTP request body
@@ -1532,7 +1532,7 @@ class AppSearch(BaseClient):
         """
         View denied urls for Process Crawl
 
-        `<https://www.elastic.co/guide/en/app-search/7.15/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.15/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls-id-denied-urls>`_
 
         :arg engine_name: Name of the engine
         :arg process_crawl_id: Process Crawl identifier
@@ -1587,7 +1587,7 @@ class AppSearch(BaseClient):
         """
         Get process crawl details
 
-        `<https://www.elastic.co/guide/en/app-search/7.15/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.15/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls-id>`_
 
         :arg engine_name: Name of the engine
         :arg process_crawl_id: Process Crawl identifier
@@ -1640,7 +1640,7 @@ class AppSearch(BaseClient):
         """
         List process crawls
 
-        `<https://www.elastic.co/guide/en/app-search/7.15/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.15/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
