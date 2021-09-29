@@ -1,0 +1,32 @@
+[[release-notes-7-15-0]]
+=== 7.15.0 Release Notes
+
+[discrete]
+==== General
+
+- Updated APIs to the 7.15 specification
+
+[discrete]
+==== App Search
+
+- Added the `delete_crawler_active_crawl_request`, `get_crawler_active_crawl_request`,
+  `create_crawler_crawl_request`, `get_crawler_crawl_request`, `list_crawler_crawl_requests`,
+  `create_crawler_crawl_rule`, `delete_crawler_crawl_rule`, `put_crawler_crawl_rule`,
+  `delete_crawler_crawl_schedule`, `get_crawler_crawl_schedule`, `put_crawler_crawl_schedule`,
+  `create_crawler_domain`, `delete_crawler_domain`, `get_crawler_domain`, `put_crawler_domain`,
+  `get_crawler_domain_validation_result`, `create_crawler_entry_point`, `delete_crawler_entry_point`,
+  `put_crawler_entry_point`, `get_crawler_metrics`, `get_crawler_overview`,
+  `create_crawler_process_crawl`, `get_crawler_process_crawl_denied_urls`,
+  `get_crawler_process_crawl`, `list_crawler_process_crawls`, `create_crawler_sitemap`,
+  `delete_crawler_sitemap`, `put_crawler_sitemap`, `get_crawler_url_extraction_result`,
+  `get_crawler_url_tracing_result`, `get_crawler_url_validation_result`,
+  `get_crawler_user_agent` APIs
+
+
+[discrete]
+==== Workplace Search
+
+- Added the `get_auto_query_refinement_details`, `delete_documents_by_query`,
+  `get_triggers_blocklist`, `put_triggers_blocklist` APIs
+- Removed `delete_all_documents` API in favor of the `delete_documents_by_query`
+  API without filters.
