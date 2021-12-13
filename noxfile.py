@@ -30,7 +30,7 @@ SOURCE_FILES = (
 
 @nox.session()
 def format(session):
-    session.install("black", "isort")
+    session.install("black", "isort", "flynt")
     session.run(
         "black", "--target-version=py27", "--target-version=py37", *SOURCE_FILES
     )

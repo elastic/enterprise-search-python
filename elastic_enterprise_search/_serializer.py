@@ -32,4 +32,4 @@ class JSONSerializer(_JSONSerializer):
     def default(self, data):
         if isinstance(data, datetime.datetime):
             return format_datetime(data)
-        return super(JSONSerializer, self).default(data)
+        return super().default(data)

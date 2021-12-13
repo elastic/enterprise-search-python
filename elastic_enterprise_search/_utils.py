@@ -103,8 +103,7 @@ def to_array(value, param=None):
     """Ensures that a parameter is an array"""
     if not isinstance(value, (tuple, list)):
         raise TypeError(
-            "Parameter %smust be a tuple or list"
-            % (repr(param) + " " if param else "",)
+            f"Parameter {repr(param) + ' ' if param else ''}must be a tuple or list"
         )
     return value
 
@@ -113,18 +112,16 @@ def to_deep_object(param, value):
     # type: (str, typing.Mapping[str, typing.Any]) -> typing.Sequence[typing.Tuple[str, str]]
     """Converts a complex object into query parameter key values"""
     if not isinstance(value, Mapping):
-        raise TypeError("Parameter %r must be a mapping" % (param,))
+        raise TypeError(f"Parameter {param!r} must be a mapping")
 
     def inner(prefix, obj):
         if isinstance(obj, Mapping):
             for key, val in obj.items():
-                for ret in inner("%s[%s]" % (prefix, key), val):
-                    yield ret
+                yield from inner(f"{prefix}[{key}]", val)
 
         elif isinstance(obj, (tuple, list)):
             for item in obj:
-                for ret in inner(prefix + "[]", item):
-                    yield ret
+                yield from inner(prefix + "[]", item)
         else:
             yield prefix, to_param(obj)
 
@@ -148,7 +145,7 @@ def format_datetime(value):
         offset_secs = int(abs(offset_secs))
         hours = offset_secs // 3600
         minutes = (offset_secs % 3600) // 60
-        timezone = "{}{:02}:{:02}".format(offset_sign, hours, minutes)
+        timezone = f"{offset_sign}{hours:02}:{minutes:02}"
     return value.strftime("%Y-%m-%dT%H:%M:%S") + timezone
 
 
@@ -180,5 +177,5 @@ def default_params_encoder(params):
             val = quote(to_param(val), ",*[]:-")
         to_encode.append((key, val))
     return "&".join(
-        ("%s=%s" % (key, val) if val is not None else key) for key, val in to_encode
+        (f"{key}={val}" if val is not None else key) for key, val in to_encode
     )
