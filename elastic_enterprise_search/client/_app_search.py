@@ -28,6 +28,264 @@ from ._base import BaseClient
 
 
 class AppSearch(BaseClient):
+    def get_adaptive_relevance_settings(
+        self,
+        engine_name,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieve adaptive relevance settings
+
+        `<https://www.elastic.co/guide/en/app-search/7.16/adaptive-relevance-api-reference.html#adaptive-relevance-api-get-engine-adaptive-relevance-settings>`_
+
+        :arg engine_name: Name of the engine
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "GET",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "adaptive_relevance",
+                "settings",
+            ),
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def put_adaptive_relevance_settings(
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Update adaptive relevance settings
+
+        `<https://www.elastic.co/guide/en/app-search/7.16/adaptive-relevance-api-reference.html#adaptive-relevance-api-put-engine-adaptive-relevance-settings>`_
+
+        :arg engine_name: Name of the engine
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "PUT",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "adaptive_relevance",
+                "settings",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def get_adaptive_relevance_suggestions(
+        self,
+        engine_name,
+        search_suggestion_query,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieve adaptive relevance
+
+        `<https://www.elastic.co/guide/en/app-search/7.16/adaptive-relevance-api-reference.html#adaptive-relevance-api-get-engine-adaptive-relevance-suggestions-query>`_
+
+        :arg engine_name: Name of the engine
+        :arg search_suggestion_query: Query to obtain suggestions
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        for param in (
+            engine_name,
+            search_suggestion_query,
+        ):
+            if param in SKIP_IN_PATH:
+                raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "adaptive_relevance",
+                "suggestions",
+                search_suggestion_query,
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def list_adaptive_relevance_suggestions(
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Retrieve adaptive relevance
+
+        `<https://www.elastic.co/guide/en/app-search/7.16/adaptive-relevance-api-reference.html#adaptive-relevance-api-get-engine-adaptive-relevance-suggestions>`_
+
+        :arg engine_name: Name of the engine
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "adaptive_relevance",
+                "suggestions",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
+    def put_adaptive_relevance_suggestions(
+        self,
+        engine_name,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Update adaptive relevance
+
+        `<https://www.elastic.co/guide/en/app-search/7.16/adaptive-relevance-api-reference.html#adaptive-relevance-api-put-engine-adaptive-relevance-suggestions>`_
+
+        :arg engine_name: Name of the engine
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.BadRequestError:
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "PUT",
+            to_path(
+                "api",
+                "as",
+                "v0",
+                "engines",
+                engine_name,
+                "adaptive_relevance",
+                "suggestions",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
     def create_api_key(
         self,
         body,
@@ -40,7 +298,7 @@ class AppSearch(BaseClient):
         """
         Create an API key
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/credentials.html#credentials-create>`_
 
         :arg body: API key details
         :arg params: Additional query params to send with the request
@@ -76,7 +334,7 @@ class AppSearch(BaseClient):
         """
         Delete an API key
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-destroy>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/credentials.html#credentials-destroy>`_
 
         :arg api_key_name: Name of an API key
         :arg params: Additional query params to send with the request
@@ -119,7 +377,7 @@ class AppSearch(BaseClient):
         """
         Get the details of an API key
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-single>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/credentials.html#credentials-single>`_
 
         :arg api_key_name: Name of an API key
         :arg params: Additional query params to send with the request
@@ -163,7 +421,7 @@ class AppSearch(BaseClient):
         """
         Update an API key
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/credentials.html#credentials-update>`_
 
         :arg api_key_name: Name of an API key
         :arg body: API key details
@@ -209,7 +467,7 @@ class AppSearch(BaseClient):
         """
         List the details of all API keys
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/credentials.html#credentials-all>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/credentials.html#credentials-all>`_
 
         :arg current_page: The page to fetch. Defaults to 1
         :arg page_size: The number of results per page
@@ -257,7 +515,7 @@ class AppSearch(BaseClient):
         """
         The API Log displays API request and response data at the Engine level
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/api-logs.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/api-logs.html>`_
 
         :arg engine_name: Name of the engine
         :arg from_date: Filter date from
@@ -337,7 +595,7 @@ class AppSearch(BaseClient):
         """
         Returns the number of clicks and total number of queries over a period
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/counts.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/counts.html>`_
 
         :arg engine_name: Name of the engine
         :arg filters: Analytics filters
@@ -390,7 +648,7 @@ class AppSearch(BaseClient):
         """
         Cancel an active crawl request
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-crawler-crawl-requests-active-cancel>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-post-crawler-crawl-requests-active-cancel>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -439,7 +697,7 @@ class AppSearch(BaseClient):
         """
         Get active crawl request details
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests-active>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests-active>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -487,7 +745,7 @@ class AppSearch(BaseClient):
         """
         Create a crawl request
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-crawler-crawl-requests>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-post-crawler-crawl-requests>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -536,7 +794,7 @@ class AppSearch(BaseClient):
         """
         Get crawl request details
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests-id>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests-id>`_
 
         :arg engine_name: Name of the engine
         :arg crawl_request_id: Crawl Request ID
@@ -589,7 +847,7 @@ class AppSearch(BaseClient):
         """
         List crawl requests
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -638,7 +896,7 @@ class AppSearch(BaseClient):
         """
         Create a crawl rule
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-crawl-rules>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-post-crawl-rules>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -697,7 +955,7 @@ class AppSearch(BaseClient):
         """
         Delete a crawl rule
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-delete-crawl-rule>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-delete-crawl-rule>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -757,7 +1015,7 @@ class AppSearch(BaseClient):
         """
         Update a crawl rule
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-put-crawl-rule>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-put-crawl-rule>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -817,7 +1075,7 @@ class AppSearch(BaseClient):
         """
         Delete a crawl schedule
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-delete-crawler-crawl-schedule>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-delete-crawler-crawl-schedule>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -864,7 +1122,7 @@ class AppSearch(BaseClient):
         """
         Get crawl schedule
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-schedule>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-schedule>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -912,7 +1170,7 @@ class AppSearch(BaseClient):
         """
         Set crawl schedule
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-put-crawler-crawl-schedule>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-put-crawler-crawl-schedule>`_
 
         :arg engine_name: Name of the engine
         :arg body: HTTP request body
@@ -963,7 +1221,7 @@ class AppSearch(BaseClient):
         """
         Create a crawler domain
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-crawler-domains>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-post-crawler-domains>`_
 
         :arg engine_name: Name of the engine
         :arg body: HTTP request body
@@ -1014,7 +1272,7 @@ class AppSearch(BaseClient):
         """
         Delete domain configuration
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-delete-crawler-domain>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-delete-crawler-domain>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -1068,7 +1326,7 @@ class AppSearch(BaseClient):
         """
         Get domain configuration
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-domain>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler-domain>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -1123,7 +1381,7 @@ class AppSearch(BaseClient):
         """
         Update domain configuration
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-put-crawler-domain>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-put-crawler-domain>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -1179,7 +1437,7 @@ class AppSearch(BaseClient):
         """
         Validate Domain with Crawler
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-post-crawler-validate-domain>`_
 
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
@@ -1218,7 +1476,7 @@ class AppSearch(BaseClient):
         """
         Create a crawler entry point
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-entry-points>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-post-entry-points>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -1277,7 +1535,7 @@ class AppSearch(BaseClient):
         """
         Delete an entry point
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-delete-crawler-domain>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-delete-crawler-domain>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -1337,7 +1595,7 @@ class AppSearch(BaseClient):
         """
         Update a crawler entry point
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-put-entry-point>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-put-entry-point>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -1396,7 +1654,7 @@ class AppSearch(BaseClient):
         """
         Retrieve a snapshot of crawler metrics
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html>`_
 
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -1431,7 +1689,7 @@ class AppSearch(BaseClient):
         """
         Retrieve crawler configuration overview
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -1478,7 +1736,7 @@ class AppSearch(BaseClient):
         """
         Create a process crawl
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-crawler-process-crawls>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-post-crawler-process-crawls>`_
 
         :arg engine_name: Name of the engine
         :arg body: HTTP request body
@@ -1528,7 +1786,7 @@ class AppSearch(BaseClient):
         """
         View denied urls for Process Crawl
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls-id-denied-urls>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls-id-denied-urls>`_
 
         :arg engine_name: Name of the engine
         :arg process_crawl_id: Process Crawl identifier
@@ -1583,7 +1841,7 @@ class AppSearch(BaseClient):
         """
         Get process crawl details
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls-id>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls-id>`_
 
         :arg engine_name: Name of the engine
         :arg process_crawl_id: Process Crawl identifier
@@ -1636,7 +1894,7 @@ class AppSearch(BaseClient):
         """
         List process crawls
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -1685,7 +1943,7 @@ class AppSearch(BaseClient):
         """
         Create a crawler sitemap
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-post-sitemaps>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-post-sitemaps>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -1744,7 +2002,7 @@ class AppSearch(BaseClient):
         """
         Delete a sitemap
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-delete-sitemap>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-delete-sitemap>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -1804,7 +2062,7 @@ class AppSearch(BaseClient):
         """
         Update a sitemap
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-put-sitemap>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-put-sitemap>`_
 
         :arg engine_name: Name of the engine
         :arg domain_id: Crawler Domain ID
@@ -1865,7 +2123,7 @@ class AppSearch(BaseClient):
         """
         Extract content from a URL
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html>`_
 
         :arg engine_name: Name of the engine
         :arg body: HTTP request body
@@ -1916,7 +2174,7 @@ class AppSearch(BaseClient):
         """
         Trace a history of a crawled URL
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-post-crawler-trace-url>`_
 
         :arg engine_name: Name of the engine
         :arg body: HTTP request body
@@ -1967,7 +2225,7 @@ class AppSearch(BaseClient):
         """
         Validate URL with Crawler
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-post-crawler-validate-url>`_
 
         :arg engine_name: Name of the engine
         :arg body: HTTP request body
@@ -2015,7 +2273,7 @@ class AppSearch(BaseClient):
         """
         Get the User-Agent header value for the crawler
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/web-crawler-api-reference.html#web-crawler-apis-user-agent>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-user-agent>`_
 
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -2053,7 +2311,7 @@ class AppSearch(BaseClient):
         """
         Create a new curation
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/curations.html#curations-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/curations.html#curations-create>`_
 
         :arg engine_name: Name of the engine
         :arg queries: List of affected search queries
@@ -2114,7 +2372,7 @@ class AppSearch(BaseClient):
         """
         Delete a curation by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/curations.html#curations-destroy>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/curations.html#curations-destroy>`_
 
         :arg engine_name: Name of the engine
         :arg curation_id: Curation ID
@@ -2165,7 +2423,7 @@ class AppSearch(BaseClient):
         """
         Retrieve a curation by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/curations.html#curations-read>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/curations.html#curations-read>`_
 
         :arg engine_name: Name of the engine
         :arg curation_id: Curation ID
@@ -2219,7 +2477,7 @@ class AppSearch(BaseClient):
         """
         Update an existing curation
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/curations.html#curations-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/curations.html#curations-update>`_
 
         :arg engine_name: Name of the engine
         :arg curation_id: Curation ID
@@ -2284,7 +2542,7 @@ class AppSearch(BaseClient):
         """
         Retrieve available curations for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/curations.html#curations-read>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/curations.html#curations-read>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
@@ -2335,7 +2593,7 @@ class AppSearch(BaseClient):
         """
         Delete documents by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/documents.html#documents-delete>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/documents.html#documents-delete>`_
 
         :arg engine_name: Name of the engine
         :arg document_ids: List of document IDs
@@ -2382,7 +2640,7 @@ class AppSearch(BaseClient):
         """
         Retrieves one or more documents by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/documents.html#documents-get>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/documents.html#documents-get>`_
 
         :arg engine_name: Name of the engine
         :arg document_ids: List of document IDs
@@ -2429,7 +2687,7 @@ class AppSearch(BaseClient):
         """
         Create or update documents
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/documents.html#documents-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/documents.html#documents-create>`_
 
         :arg engine_name: Name of the engine
         :arg documents: List of document to index
@@ -2477,7 +2735,7 @@ class AppSearch(BaseClient):
         """
         List all available documents with optional pagination support
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/documents.html#documents-list>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/documents.html#documents-list>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
@@ -2529,7 +2787,7 @@ class AppSearch(BaseClient):
         """
         Partial update of documents
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/documents.html#documents-partial>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/documents.html#documents-partial>`_
 
         :arg engine_name: Name of the engine
         :arg documents: List of documents to update
@@ -2578,7 +2836,7 @@ class AppSearch(BaseClient):
         """
         Creates a new engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/engines.html#engines-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/engines.html#engines-create>`_
 
         :arg engine_name: Engine name
         :arg language: Engine language (null for universal)
@@ -2627,7 +2885,7 @@ class AppSearch(BaseClient):
         """
         Delete an engine by name
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/engines.html#engines-delete>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/engines.html#engines-delete>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -2670,7 +2928,7 @@ class AppSearch(BaseClient):
         """
         Retrieves an engine by name
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/engines.html#engines-get>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/engines.html#engines-get>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -2714,7 +2972,7 @@ class AppSearch(BaseClient):
         """
         Retrieves all engines with optional pagination support
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/engines.html#engines-list>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/engines.html#engines-list>`_
 
         :arg current_page: The page to fetch. Defaults to 1
         :arg page_size: The number of results per page
@@ -2758,7 +3016,7 @@ class AppSearch(BaseClient):
         """
         Send data about clicked results
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/clickthrough.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/clickthrough.html>`_
 
         :arg engine_name: Name of the engine
         :arg query_text: Search query text
@@ -2823,7 +3081,7 @@ class AppSearch(BaseClient):
         """
         Add a source engine to an existing meta engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/meta-engines.html#meta-engines-add-source-engines>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/meta-engines.html#meta-engines-add-source-engines>`_
 
         :arg engine_name: Name of the engine
         :arg source_engines: List of engine names
@@ -2870,7 +3128,7 @@ class AppSearch(BaseClient):
         """
         Delete a source engine from a meta engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/meta-engines.html#meta-engines-remove-source-engines>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/meta-engines.html#meta-engines-remove-source-engines>`_
 
         :arg engine_name: Name of the engine
         :arg source_engines: List of engine names
@@ -2917,7 +3175,7 @@ class AppSearch(BaseClient):
         """
         Run several search in the same request
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/multi-search.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/multi-search.html>`_
 
         :arg engine_name: Name of the engine
         :arg body: One or more queries to execute in parallel
@@ -2966,7 +3224,7 @@ class AppSearch(BaseClient):
         """
         Provide relevant query suggestions for incomplete queries
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/query-suggestion.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/query-suggestion.html>`_
 
         :arg engine_name: Name of the engine
         :arg query: A partial query for which to receive suggestions
@@ -3026,7 +3284,7 @@ class AppSearch(BaseClient):
         """
         Retrieve current schema for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/schema.html#schema-read>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/schema.html#schema-read>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -3071,7 +3329,7 @@ class AppSearch(BaseClient):
         """
         Update schema for the current engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/schema.html#schema-patch>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/schema.html#schema-patch>`_
 
         :arg engine_name: Name of the engine
         :arg schema: Schema description
@@ -3118,7 +3376,7 @@ class AppSearch(BaseClient):
         """
         Allows you to search over, facet and filter your data
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/search.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/search.html>`_
 
         :arg engine_name: Name of the engine
         :arg body: Search options including query text, pages, sorting, facets, and filters
@@ -3152,113 +3410,6 @@ class AppSearch(BaseClient):
             ignore_status=ignore_status,
         )
 
-    def get_search_relevance_suggestions(
-        self,
-        engine_name,
-        search_suggestion_query,
-        body,
-        params=None,
-        headers=None,
-        http_auth=DEFAULT,
-        request_timeout=DEFAULT,
-        ignore_status=(),
-    ):
-        """
-        Retrieve search relevance suggestions
-
-        `<https://www.elastic.co/guide/en/app-search/current/search-relevance-suggestions.html#search-relevance-suggestions-query>`_
-
-        :arg engine_name: Name of the engine
-        :arg search_suggestion_query: Query to obtain suggestions
-        :arg body: HTTP request body
-        :arg params: Additional query params to send with the request
-        :arg headers: Additional headers to send with the request
-        :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request
-        :arg request_timeout: Timeout in seconds
-        :arg ignore_status: HTTP status codes to not raise an error
-        :raises elastic_enterprise_search.BadRequestError:
-        :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.NotFoundError:
-        """
-        for param in (
-            engine_name,
-            search_suggestion_query,
-        ):
-            if param in SKIP_IN_PATH:
-                raise ValueError("Empty value passed for a required argument")
-
-        params = QueryParams(params)
-
-        return self.perform_request(
-            "POST",
-            to_path(
-                "api",
-                "as",
-                "v0",
-                "engines",
-                engine_name,
-                "search_relevance_suggestions",
-                search_suggestion_query,
-            ),
-            body=body,
-            params=params,
-            headers=headers,
-            http_auth=http_auth,
-            request_timeout=request_timeout,
-            ignore_status=ignore_status,
-        )
-
-    def list_search_relevance_suggestions(
-        self,
-        engine_name,
-        body,
-        params=None,
-        headers=None,
-        http_auth=DEFAULT,
-        request_timeout=DEFAULT,
-        ignore_status=(),
-    ):
-        """
-        Retrieve search relevance suggestions
-
-        `<https://www.elastic.co/guide/en/app-search/current/search-relevance-suggestions.html#search-relevance-suggestions-list>`_
-
-        :arg engine_name: Name of the engine
-        :arg body: HTTP request body
-        :arg params: Additional query params to send with the request
-        :arg headers: Additional headers to send with the request
-        :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request
-        :arg request_timeout: Timeout in seconds
-        :arg ignore_status: HTTP status codes to not raise an error
-        :raises elastic_enterprise_search.BadRequestError:
-        :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.NotFoundError:
-        """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
-
-        params = QueryParams(params)
-
-        return self.perform_request(
-            "POST",
-            to_path(
-                "api",
-                "as",
-                "v0",
-                "engines",
-                engine_name,
-                "search_relevance_suggestions",
-            ),
-            body=body,
-            params=params,
-            headers=headers,
-            http_auth=http_auth,
-            request_timeout=request_timeout,
-            ignore_status=ignore_status,
-        )
-
     def get_search_settings(
         self,
         engine_name,
@@ -3271,7 +3422,7 @@ class AppSearch(BaseClient):
         """
         Retrieve current search settings for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/search-settings.html#search-settings-show>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/search-settings.html#search-settings-show>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -3316,7 +3467,7 @@ class AppSearch(BaseClient):
         """
         Update search settings for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/search-settings.html#search-settings-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/search-settings.html#search-settings-update>`_
 
         :arg engine_name: Name of the engine
         :arg body: Search settings
@@ -3362,7 +3513,7 @@ class AppSearch(BaseClient):
         """
         Reset search settings for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/search-settings.html#search-settings-reset>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/search-settings.html#search-settings-reset>`_
 
         :arg engine_name: Name of the engine
         :arg params: Additional query params to send with the request
@@ -3408,7 +3559,7 @@ class AppSearch(BaseClient):
         """
         Create a new synonym set
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/synonyms.html#synonyms-create>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/synonyms.html#synonyms-create>`_
 
         :arg engine_name: Name of the engine
         :arg body: Synonym set description
@@ -3455,7 +3606,7 @@ class AppSearch(BaseClient):
         """
         Delete a synonym set by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/synonyms.html#synonyms-delete>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/synonyms.html#synonyms-delete>`_
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
@@ -3506,7 +3657,7 @@ class AppSearch(BaseClient):
         """
         Retrieve a synonym set by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/synonyms.html#synonyms-list-one>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/synonyms.html#synonyms-list-one>`_
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
@@ -3558,7 +3709,7 @@ class AppSearch(BaseClient):
         """
         Update a synonym set by ID
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/synonyms.html#synonyms-update>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/synonyms.html#synonyms-update>`_
 
         :arg engine_name: Name of the engine
         :arg synonym_set_id: Synonym set ID
@@ -3612,7 +3763,7 @@ class AppSearch(BaseClient):
         """
         Retrieve available synonym sets for the engine
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/synonyms.html#synonyms-get>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/synonyms.html#synonyms-get>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
@@ -3666,7 +3817,7 @@ class AppSearch(BaseClient):
         """
         Returns the number of clicks received by a document in descending order
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/clicks.html>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/clicks.html>`_
 
         :arg engine_name: Name of the engine
         :arg query: Filter clicks over a search query
@@ -3727,7 +3878,7 @@ class AppSearch(BaseClient):
         """
         Returns queries analytics by usage count
 
-        `<https://www.elastic.co/guide/en/app-search/7.x/queries.html#queries-top-queries>`_
+        `<https://www.elastic.co/guide/en/app-search/7.16/queries.html#queries-top-queries>`_
 
         :arg engine_name: Name of the engine
         :arg current_page: The page to fetch. Defaults to 1
