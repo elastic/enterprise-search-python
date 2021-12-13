@@ -26,7 +26,7 @@ import jinja2
 import urllib3
 
 http = urllib3.PoolManager()
-current_branch = "7.x"
+current_branch = "7.16"
 base_dir = pathlib.Path(__file__).absolute().parent.parent.parent
 schemas_dir = base_dir.parent / "ent-search/swagger/v1"
 templates_dir = str(pathlib.Path(__file__).absolute().parent / "templates")
@@ -403,6 +403,7 @@ def main():
 
     # Opt-in to these APIs from the new App Search specification
     new_app_search_apis = [
+        # 7.15
         "create_crawler_crawl_request",
         "create_crawler_crawl_rule",
         "create_crawler_domain",
@@ -437,6 +438,12 @@ def main():
         "put_crawler_domain",
         "put_crawler_entry_point",
         "put_crawler_sitemap",
+        # 7.16
+        "get_adaptive_relevance_settings",
+        "put_adaptive_relevance_settings",
+        "list_adaptive_relevance_suggestions",
+        "put_adaptive_relevance_suggestions",
+        "get_adaptive_relevance_suggestions",
     ]
     new_app_search_spec = [
         spec for spec in specs if spec.namespace == "_app_search_new"
