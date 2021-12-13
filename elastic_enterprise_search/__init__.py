@@ -17,6 +17,9 @@
 
 """Python Elastic Enterprise Search Client"""
 
+import sys
+import warnings
+
 from elastic_transport import APIError as APIError
 from elastic_transport import BadGatewayError as BadGatewayError
 from elastic_transport import BadRequestError as BadRequestError
@@ -62,3 +65,12 @@ __all__ = [
     "UnauthorizedError",
     "WorkplaceSearch",
 ]
+
+# Python earlier than 3.6 is deprecated and will be removed in 8.0.0
+if sys.version_info < (3, 6):
+    warnings.warn(
+        "Support for Python 3.5 and earlier is deprecated and will be removed "
+        "in v8.0.0 (current instance is Python %d.%d)" % sys.version_info[:2],
+        category=DeprecationWarning,
+        stacklevel=2,
+    )
