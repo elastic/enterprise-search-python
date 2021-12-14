@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #  Licensed to Elasticsearch B.V. under one or more contributor
 #  license agreements. See the NOTICE file distributed with
 #  this work for additional information regarding copyright
@@ -60,7 +59,7 @@ def test_http_auth_none(client_class):
 
 
 @pytest.mark.parametrize(
-    "http_auth", ["this-is-a-token", ("user", "password"), (u"üser", u"pӓssword")]
+    "http_auth", ["this-is-a-token", ("user", "password"), ("üser", "pӓssword")]
 )
 def test_http_auth_set_and_get(client_class, http_auth):
     client = client_class(http_auth=http_auth, connection_class=DummyConnection)

@@ -32,7 +32,7 @@ from .._version import __version__
 __all__ = ["BaseClient"]
 
 
-class BaseClient(object):
+class BaseClient:
     def __init__(
         self,
         hosts=None,
@@ -129,9 +129,9 @@ class BaseClient(object):
         # Basic auth with (username, password)
         if isinstance(http_auth, (tuple, list)) and len(http_auth) == 2:
             basic_auth = ensure_str(
-                base64.b64encode((b":".join([ensure_binary(x) for x in http_auth])))
+                base64.b64encode(b":".join([ensure_binary(x) for x in http_auth]))
             )
-            return "Basic %s" % basic_auth
+            return f"Basic {basic_auth}"
 
         # If not a tuple/list or string raise an error.
         elif not isinstance(http_auth, str):
@@ -143,7 +143,7 @@ class BaseClient(object):
 
         # Bearer / Token auth
         else:
-            return "Bearer %s" % http_auth
+            return f"Bearer {http_auth}"
 
     def perform_request(
         self,
@@ -173,7 +173,7 @@ class BaseClient(object):
         if self.meta_header:
             client_meta = self._client_meta + client_meta
             headers["x-elastic-client-meta"] = ",".join(
-                "%s=%s" % (k, v) for k, v in client_meta
+                f"{k}={v}" for k, v in client_meta
             )
 
         if self._authorization_header is not None or http_auth is not DEFAULT:

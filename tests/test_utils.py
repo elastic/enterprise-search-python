@@ -51,7 +51,7 @@ def test_to_params():
     params = QueryParams(
         [
             ("a", 1),
-            ("b", u"z"),
+            ("b", "z"),
             ("c", ["d", 2]),
             ("e", datetime.date(year=2020, month=1, day=1)),
             (
