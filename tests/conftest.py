@@ -38,14 +38,14 @@ def ent_search_url():
     for try_host in ("enterprise-search", "localhost", "127.0.0.1"):
         try:
             http = urllib3.PoolManager()
-            http.request("GET", "http://%s:3002" % try_host)
+            http.request("GET", f"http://{try_host}:3002")
             host = try_host
             break
         except Exception:
             continue
     else:
         pytest.skip("No Enterprise Search instance running on 'localhost:3002'")
-    return "http://%s:3002" % host
+    return f"http://{host}:3002"
 
 
 class DummyConnection(Connection):
@@ -54,7 +54,7 @@ class DummyConnection(Connection):
         self.status, self.data = kwargs.pop("status", 200), kwargs.pop("data", "{}")
         self.headers = kwargs.pop("headers", {})
         self.calls = []
-        super(DummyConnection, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def perform_request(self, *args, **kwargs):
         self.calls.append((args, kwargs))
