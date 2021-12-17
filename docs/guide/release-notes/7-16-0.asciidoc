@@ -1,0 +1,20 @@
+[[release-notes-7-16-0]]
+=== 7.16.0 Release Notes
+
+[discrete]
+==== General
+
+- Deprecated support for Python 2.7, 3.4, and 3.5. Support will be removed in v8.0.0.
+- Updated APIs to the 7.16 specification
+
+[discrete]
+==== App Search
+
+- Added the `get_adaptive_relevance_settings`, `put_adaptive_relevance_settings`, `get_adaptive_relevance_suggestions`, `list_adaptive_relevance_suggestions`, `put_adaptive_relevance_suggestions`
+- Fixed the pagination parameters for `list_crawler_crawl_requests` and `list_crawler_process_crawls` APIs to `current_page` and `page_size`, were previously `limit`.
+
+
+[discrete]
+==== Workplace Search
+
+- Added the `list_documents` API
