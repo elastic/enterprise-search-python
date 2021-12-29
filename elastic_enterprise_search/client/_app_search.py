@@ -838,6 +838,8 @@ class AppSearch(BaseClient):
     def list_crawler_crawl_requests(
         self,
         engine_name,
+        current_page=None,
+        page_size=None,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -850,6 +852,8 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests>`_
 
         :arg engine_name: Name of the engine
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -863,6 +867,10 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
+        if current_page is not None:
+            params.add("current_page", current_page)
+        if page_size is not None:
+            params.add("page_size", page_size)
 
         return self.perform_request(
             "GET",
@@ -1885,6 +1893,8 @@ class AppSearch(BaseClient):
     def list_crawler_process_crawls(
         self,
         engine_name,
+        current_page=None,
+        page_size=None,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -1897,6 +1907,8 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/7.16/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls>`_
 
         :arg engine_name: Name of the engine
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -1910,6 +1922,10 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
+        if current_page is not None:
+            params.add("current_page", current_page)
+        if page_size is not None:
+            params.add("page_size", page_size)
 
         return self.perform_request(
             "GET",
