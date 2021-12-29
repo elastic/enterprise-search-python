@@ -11,6 +11,7 @@
 * <<app-search-crawler-apis>>
 * <<app-search-curation-apis>>
 * <<app-search-meta-engine-apis>>
+* <<app-search-adaptive-relevance-apis>>
 
 [[app-search-initializing]]
 === Initializing the Client
@@ -916,5 +917,126 @@ app_search.delete_crawler_sitemap(
   engine_name="crawler-engine",
   domain_id=domain_id,
   sitemap_id=sitemap_id
+)
+---------------
+
+[[app-search-adaptive-relevance-apis]]
+=== Adaptive Relevance APIs
+
+==== Settings
+
+[source,python]
+---------------
+# Get adaptive relevenace settings for an Engine
+app_search.get_adaptive_relevance_settings(
+  engine_name="adaptive-engine"
+)
+{
+  "curation": {
+    "enabled": True,
+    "mode": "manual",
+    "timeframe": 7,
+    "max_size": 3,
+    "min_clicks": 20,
+    "schedule_frequency": 1,
+    "schedule_unit": "day"
+  }
+}
+
+# Enable automatic adaptive relevance
+app_search.put_adaptive_relevance_settings(
+  engine_name="adaptive-engine",
+  body={
+    "curation": {
+      "mode": "automatic"
+    }
+  }
+)
+---------------
+
+==== Suggestions
+
+[source,python]
+---------------
+# List all adaptive relevance suggestions for an engine
+app_search.list_adaptive_relevance_suggestions(
+  engine_name="adaptive-engine"
+)
+{
+  "meta": {
+    "page": {
+      "current": 1,
+      "total_pages": 1,
+      "total_results": 2,
+      "size": 25
+    }
+  },
+  "results": [
+    {
+      "query": "forest",
+      "type": "curation",
+      "status": "pending",
+      "updated_at": "2021-09-02T07:22:23Z",
+      "created_at": "2021-09-02T07:22:23Z",
+      "promoted": [
+        "park_everglades",
+        "park_american-samoa",
+        "park_arches"
+      ],
+      "operation": "create"
+    },
+    {
+      "query": "park",
+      "type": "curation",
+      "status": "pending",
+      "updated_at": "2021-10-22T07:34:12Z",
+      "created_at": "2021-10-22T07:34:54Z",
+      "promoted": [
+        "park_yellowstone"
+      ],
+      "operation": "create",
+      "override_manual_curation": true
+    }
+  ]
+}
+
+# Get adaptive relevance suggestions for a query
+app_search.get_adaptive_relevance_suggestions(
+  engine_name="adaptive-engine",
+  query="forest",
+)
+{
+  "meta": {
+    "page": {
+      "current": 1,
+      "total_pages": 1,
+      "total_results": 1,
+      "size": 25
+    }
+  },
+  "results": [
+    {
+      "query": "forest",
+      "type": "curation",
+      "status": "pending",
+      "updated_at": "2021-09-02T07:22:23Z",
+      "created_at": "2021-09-02T07:22:23Z",
+      "promoted": [
+        "park_everglades",
+        "park_american-samoa",
+        "park_arches"
+      ],
+      "operation": "create"
+    }
+  ]
+}
+
+# Update status of adaptive relevance suggestions
+app_search.put_adaptive_relevance_suggestions(
+  engine_name="adaptive-engine",
+  suggestions=[
+    {"query": "forest", "type": "curation", "status": "applied"},
+    {"query": "mountain", "type": "curation", "status": "rejected"}
+  ]
 )
 ---------------
