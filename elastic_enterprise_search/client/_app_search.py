@@ -412,7 +412,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -461,7 +461,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -478,6 +478,7 @@ class AppSearch(BaseClient):
     def create_crawler_crawl_request(
         self,
         engine_name,
+        body,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -490,6 +491,7 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html#web-crawler-apis-post-crawler-crawl-requests>`_
 
         :arg engine_name: Name of the engine
+        :arg body: HTTP request body
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -510,12 +512,13 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
                 "crawl_requests",
             ),
+            body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -563,7 +566,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -580,7 +583,8 @@ class AppSearch(BaseClient):
     def list_crawler_crawl_requests(
         self,
         engine_name,
-        limit=None,
+        current_page=None,
+        page_size=None,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -593,7 +597,8 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html#web-crawler-apis-get-crawler-crawl-requests>`_
 
         :arg engine_name: Name of the engine
-        :arg limit: The number of results
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -607,15 +612,17 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
-        if limit is not None:
-            params.add("limit", limit)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
 
         return self.perform_request(
             "GET",
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -671,7 +678,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -730,7 +737,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -792,7 +799,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -843,7 +850,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -890,7 +897,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -940,7 +947,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -991,7 +998,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1045,7 +1052,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1099,7 +1106,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1156,7 +1163,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1183,7 +1190,7 @@ class AppSearch(BaseClient):
         """
         Validate Domain with Crawler
 
-        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html#web-crawler-apis-post-crawler-validate-domain>`_
 
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
@@ -1199,7 +1206,7 @@ class AppSearch(BaseClient):
 
         return self.perform_request(
             "POST",
-            "/api/as/v0/crawler/validate_url",
+            "/api/as/v1/crawler/validate_url",
             body=body,
             params=params,
             headers=headers,
@@ -1251,7 +1258,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1310,7 +1317,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1372,7 +1379,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1415,7 +1422,7 @@ class AppSearch(BaseClient):
 
         return self.perform_request(
             "GET",
-            "/api/as/v0/crawler/metrics",
+            "/api/as/v1/crawler/metrics",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -1457,7 +1464,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1482,7 +1489,7 @@ class AppSearch(BaseClient):
         """
         Create a process crawl
 
-        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html#web-crawler-apis-post-crawler-process-crawls>`_
 
         :arg engine_name: Name of the engine
         :arg body: HTTP request body
@@ -1505,7 +1512,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1532,7 +1539,7 @@ class AppSearch(BaseClient):
         """
         View denied urls for Process Crawl
 
-        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls-id-denied-urls>`_
 
         :arg engine_name: Name of the engine
         :arg process_crawl_id: Process Crawl identifier
@@ -1559,7 +1566,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1587,7 +1594,7 @@ class AppSearch(BaseClient):
         """
         Get process crawl details
 
-        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls-id>`_
 
         :arg engine_name: Name of the engine
         :arg process_crawl_id: Process Crawl identifier
@@ -1614,7 +1621,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1631,6 +1638,8 @@ class AppSearch(BaseClient):
     def list_crawler_process_crawls(
         self,
         engine_name,
+        current_page=None,
+        page_size=None,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -1640,9 +1649,11 @@ class AppSearch(BaseClient):
         """
         List process crawls
 
-        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html#web-crawler-apis-get-crawler-process-crawls>`_
 
         :arg engine_name: Name of the engine
+        :arg current_page: The page to fetch. Defaults to 1
+        :arg page_size: The number of results per page
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -1656,13 +1667,17 @@ class AppSearch(BaseClient):
             raise ValueError("Empty value passed for a required argument")
 
         params = QueryParams(params)
+        if current_page is not None:
+            params.add("page[current]", current_page)
+        if page_size is not None:
+            params.add("page[size]", page_size)
 
         return self.perform_request(
             "GET",
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1718,7 +1733,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1777,7 +1792,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1839,7 +1854,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1893,7 +1908,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1920,7 +1935,7 @@ class AppSearch(BaseClient):
         """
         Trace a history of a crawled URL
 
-        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html#web-crawler-apis-post-crawler-trace-url>`_
 
         :arg engine_name: Name of the engine
         :arg body: HTTP request body
@@ -1944,7 +1959,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -1971,7 +1986,7 @@ class AppSearch(BaseClient):
         """
         Validate URL with Crawler
 
-        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html>`_
+        `<https://www.elastic.co/guide/en/app-search/master/web-crawler-api-reference.html#web-crawler-apis-post-crawler-validate-url>`_
 
         :arg engine_name: Name of the engine
         :arg body: HTTP request body
@@ -1994,7 +2009,7 @@ class AppSearch(BaseClient):
             to_path(
                 "api",
                 "as",
-                "v0",
+                "v1",
                 "engines",
                 engine_name,
                 "crawler",
@@ -2034,7 +2049,7 @@ class AppSearch(BaseClient):
 
         return self.perform_request(
             "GET",
-            "/api/as/v0/crawler/user_agent",
+            "/api/as/v1/crawler/user_agent",
             params=params,
             headers=headers,
             http_auth=http_auth,
@@ -3147,113 +3162,6 @@ class AppSearch(BaseClient):
                 "engines",
                 engine_name,
                 "search",
-            ),
-            body=body,
-            params=params,
-            headers=headers,
-            http_auth=http_auth,
-            request_timeout=request_timeout,
-            ignore_status=ignore_status,
-        )
-
-    def get_search_relevance_suggestions(
-        self,
-        engine_name,
-        search_suggestion_query,
-        body,
-        params=None,
-        headers=None,
-        http_auth=DEFAULT,
-        request_timeout=DEFAULT,
-        ignore_status=(),
-    ):
-        """
-        Retrieve search relevance suggestions
-
-        `<https://www.elastic.co/guide/en/app-search/current/search-relevance-suggestions.html#search-relevance-suggestions-query>`_
-
-        :arg engine_name: Name of the engine
-        :arg search_suggestion_query: Query to obtain suggestions
-        :arg body: HTTP request body
-        :arg params: Additional query params to send with the request
-        :arg headers: Additional headers to send with the request
-        :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request
-        :arg request_timeout: Timeout in seconds
-        :arg ignore_status: HTTP status codes to not raise an error
-        :raises elastic_enterprise_search.BadRequestError:
-        :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.NotFoundError:
-        """
-        for param in (
-            engine_name,
-            search_suggestion_query,
-        ):
-            if param in SKIP_IN_PATH:
-                raise ValueError("Empty value passed for a required argument")
-
-        params = QueryParams(params)
-
-        return self.perform_request(
-            "POST",
-            to_path(
-                "api",
-                "as",
-                "v0",
-                "engines",
-                engine_name,
-                "search_relevance_suggestions",
-                search_suggestion_query,
-            ),
-            body=body,
-            params=params,
-            headers=headers,
-            http_auth=http_auth,
-            request_timeout=request_timeout,
-            ignore_status=ignore_status,
-        )
-
-    def list_search_relevance_suggestions(
-        self,
-        engine_name,
-        body,
-        params=None,
-        headers=None,
-        http_auth=DEFAULT,
-        request_timeout=DEFAULT,
-        ignore_status=(),
-    ):
-        """
-        Retrieve search relevance suggestions
-
-        `<https://www.elastic.co/guide/en/app-search/current/search-relevance-suggestions.html#search-relevance-suggestions-list>`_
-
-        :arg engine_name: Name of the engine
-        :arg body: HTTP request body
-        :arg params: Additional query params to send with the request
-        :arg headers: Additional headers to send with the request
-        :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request
-        :arg request_timeout: Timeout in seconds
-        :arg ignore_status: HTTP status codes to not raise an error
-        :raises elastic_enterprise_search.BadRequestError:
-        :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.NotFoundError:
-        """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
-
-        params = QueryParams(params)
-
-        return self.perform_request(
-            "POST",
-            to_path(
-                "api",
-                "as",
-                "v0",
-                "engines",
-                engine_name,
-                "search_relevance_suggestions",
             ),
             body=body,
             params=params,

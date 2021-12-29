@@ -360,7 +360,7 @@ class OpenAPI:
                 return [expand_refs(i) for i in x]
             elif isinstance(x, dict):
                 if "$ref" in x or ("schema" in x and tuple(x["schema"]) == ("$ref",)):
-                    keys = (
+                    keys = tuple(
                         re.match(
                             r"^#/?(.*)$",
                             x["$ref"] if "$ref" in x else x["schema"]["$ref"],
@@ -374,6 +374,14 @@ class OpenAPI:
                     base = base.copy()
                     x.pop("$ref" if "$ref" in x else "schema")
                     base.update(x)
+
+                    # These parameters should always be page[size] and page[current].
+                    # In some versions of the OpenAPI spec they aren't listed properly.
+                    if keys == ("components", "parameters", "current_page"):
+                        base["name"] = "page[current]"
+                    elif keys == ("components", "parameters", "page_size"):
+                        base["name"] = "page[size]"
+
                     return base
                 else:
                     return {k: expand_refs(v) for k, v in x.items()}
@@ -396,6 +404,10 @@ class OpenAPI:
             for api in apis:
                 if api.path == path_key:
                     api.spec.setdefault("parameters", []).extend(path_parameters)
+
+        for api in apis:
+            if api.func_name == "list_crawler_crawl_requests":
+                print(json.dumps(api.spec, indent=2))
 
         apis = sorted(apis, key=API.sorted_key)
         return OpenAPI(namespace, components=components, apis=apis)

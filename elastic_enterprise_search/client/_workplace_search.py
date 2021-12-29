@@ -232,7 +232,6 @@ class WorkplaceSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.BadRequestError:
         :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.NotFoundError:
         """
 
         params = QueryParams(params)
@@ -367,7 +366,6 @@ class WorkplaceSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.BadRequestError:
         :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.NotFoundError:
         """
         if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
@@ -418,7 +416,6 @@ class WorkplaceSearch(BaseClient):
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.BadRequestError:
         :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.NotFoundError:
         """
         if content_source_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for a required argument")
@@ -466,7 +463,6 @@ class WorkplaceSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.NotFoundError:
         """
 
         params = QueryParams(params)
@@ -487,7 +483,6 @@ class WorkplaceSearch(BaseClient):
 
     def get_current_user(
         self,
-        get_token=None,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -499,8 +494,6 @@ class WorkplaceSearch(BaseClient):
 
         `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-user-api.html#get-current-user-api>`_
 
-        :arg get_token: Whether or not to include an access token in the
-            response.
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -508,12 +501,9 @@ class WorkplaceSearch(BaseClient):
         :arg request_timeout: Timeout in seconds
         :arg ignore_status: HTTP status codes to not raise an error
         :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.NotFoundError:
         """
 
         params = QueryParams(params)
-        if get_token is not None:
-            params.add("get_token", get_token)
 
         return self.perform_request(
             "GET",
@@ -738,6 +728,56 @@ class WorkplaceSearch(BaseClient):
             ignore_status=ignore_status,
         )
 
+    def list_documents(
+        self,
+        content_source_id,
+        body,
+        params=None,
+        headers=None,
+        http_auth=DEFAULT,
+        request_timeout=DEFAULT,
+        ignore_status=(),
+    ):
+        """
+        Lists documents from a custom content source
+
+        `<https://www.elastic.co/guide/en/workplace-search/master/workplace-search-custom-sources-api.html#list-documents>`_
+
+        :arg content_source_id: Unique ID for a Custom API source, provided upon
+            creation of a Custom API Source
+        :arg body: HTTP request body
+        :arg params: Additional query params to send with the request
+        :arg headers: Additional headers to send with the request
+        :arg http_auth: Access token or HTTP basic auth username
+            and password to send with the request
+        :arg request_timeout: Timeout in seconds
+        :arg ignore_status: HTTP status codes to not raise an error
+        :raises elastic_enterprise_search.UnauthorizedError:
+        :raises elastic_enterprise_search.NotFoundError:
+        """
+        if content_source_id in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for a required argument")
+
+        params = QueryParams(params)
+
+        return self.perform_request(
+            "POST",
+            to_path(
+                "api",
+                "ws",
+                "v1",
+                "sources",
+                content_source_id,
+                "documents",
+            ),
+            body=body,
+            params=params,
+            headers=headers,
+            http_auth=http_auth,
+            request_timeout=request_timeout,
+            ignore_status=ignore_status,
+        )
+
     def list_external_identities(
         self,
         content_source_id,
@@ -847,7 +887,7 @@ class WorkplaceSearch(BaseClient):
     def delete_external_identity(
         self,
         content_source_id,
-        user,
+        external_user_id,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -861,7 +901,8 @@ class WorkplaceSearch(BaseClient):
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
-        :arg user: The username in context
+        :arg external_user_id: Unique identifier of an external user, such as
+            username or email address.
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -873,7 +914,7 @@ class WorkplaceSearch(BaseClient):
         """
         for param in (
             content_source_id,
-            user,
+            external_user_id,
         ):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
@@ -889,7 +930,7 @@ class WorkplaceSearch(BaseClient):
                 "sources",
                 content_source_id,
                 "external_identities",
-                user,
+                external_user_id,
             ),
             params=params,
             headers=headers,
@@ -901,7 +942,7 @@ class WorkplaceSearch(BaseClient):
     def get_external_identity(
         self,
         content_source_id,
-        user,
+        external_user_id,
         params=None,
         headers=None,
         http_auth=DEFAULT,
@@ -915,7 +956,8 @@ class WorkplaceSearch(BaseClient):
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
-        :arg user: The username in context
+        :arg external_user_id: Unique identifier of an external user, such as
+            username or email address.
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
         :arg http_auth: Access token or HTTP basic auth username
@@ -927,7 +969,7 @@ class WorkplaceSearch(BaseClient):
         """
         for param in (
             content_source_id,
-            user,
+            external_user_id,
         ):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
@@ -943,7 +985,7 @@ class WorkplaceSearch(BaseClient):
                 "sources",
                 content_source_id,
                 "external_identities",
-                user,
+                external_user_id,
             ),
             params=params,
             headers=headers,
@@ -955,7 +997,7 @@ class WorkplaceSearch(BaseClient):
     def put_external_identity(
         self,
         content_source_id,
-        user,
+        external_user_id,
         body,
         params=None,
         headers=None,
@@ -970,7 +1012,8 @@ class WorkplaceSearch(BaseClient):
 
         :arg content_source_id: Unique ID for a Custom API source, provided upon
             creation of a Custom API Source
-        :arg user: The username in context
+        :arg external_user_id: Unique identifier of an external user, such as
+            username or email address.
         :arg body: HTTP request body
         :arg params: Additional query params to send with the request
         :arg headers: Additional headers to send with the request
@@ -984,7 +1027,7 @@ class WorkplaceSearch(BaseClient):
         """
         for param in (
             content_source_id,
-            user,
+            external_user_id,
         ):
             if param in SKIP_IN_PATH:
                 raise ValueError("Empty value passed for a required argument")
@@ -1000,124 +1043,7 @@ class WorkplaceSearch(BaseClient):
                 "sources",
                 content_source_id,
                 "external_identities",
-                user,
-            ),
-            body=body,
-            params=params,
-            headers=headers,
-            http_auth=http_auth,
-            request_timeout=request_timeout,
-            ignore_status=ignore_status,
-        )
-
-    def list_permissions(
-        self,
-        content_source_id,
-        current_page=None,
-        page_size=None,
-        params=None,
-        headers=None,
-        http_auth=DEFAULT,
-        request_timeout=DEFAULT,
-        ignore_status=(),
-    ):
-        """
-        Lists all permissions for all users
-
-        `<https://www.elastic.co/guide/en/workplace-search/master/workplace-search-document-permissions-api.html#list>`_
-
-        :arg content_source_id: Unique ID for a Custom API source, provided upon
-            creation of a Custom API Source
-        :arg current_page: Which page of results to request
-        :arg page_size: The number of results to return in a page
-        :arg params: Additional query params to send with the request
-        :arg headers: Additional headers to send with the request
-        :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request
-        :arg request_timeout: Timeout in seconds
-        :arg ignore_status: HTTP status codes to not raise an error
-        :raises elastic_enterprise_search.BadRequestError:
-        :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.PaymentRequiredError:
-        :raises elastic_enterprise_search.NotFoundError:
-        """
-        if content_source_id in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for a required argument")
-
-        params = QueryParams(params)
-        if current_page is not None:
-            params.add("page[current]", current_page)
-        if page_size is not None:
-            params.add("page[size]", page_size)
-
-        return self.perform_request(
-            "GET",
-            to_path(
-                "api",
-                "ws",
-                "v1",
-                "sources",
-                content_source_id,
-                "permissions",
-            ),
-            params=params,
-            headers=headers,
-            http_auth=http_auth,
-            request_timeout=request_timeout,
-            ignore_status=ignore_status,
-        )
-
-    def remove_user_permissions(
-        self,
-        content_source_id,
-        user,
-        body,
-        params=None,
-        headers=None,
-        http_auth=DEFAULT,
-        request_timeout=DEFAULT,
-        ignore_status=(),
-    ):
-        """
-        Removes one or more permissions from an existing set of permissions
-
-        `<https://www.elastic.co/guide/en/workplace-search/master/workplace-search-document-permissions-api.html#remove-one>`_
-
-        :arg content_source_id: Unique ID for a Custom API source, provided upon
-            creation of a Custom API Source
-        :arg user: The username in context
-        :arg body: HTTP request body
-        :arg params: Additional query params to send with the request
-        :arg headers: Additional headers to send with the request
-        :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request
-        :arg request_timeout: Timeout in seconds
-        :arg ignore_status: HTTP status codes to not raise an error
-        :raises elastic_enterprise_search.BadRequestError:
-        :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.PaymentRequiredError:
-        :raises elastic_enterprise_search.NotFoundError:
-        """
-        for param in (
-            content_source_id,
-            user,
-        ):
-            if param in SKIP_IN_PATH:
-                raise ValueError("Empty value passed for a required argument")
-
-        params = QueryParams(params)
-
-        return self.perform_request(
-            "POST",
-            to_path(
-                "api",
-                "ws",
-                "v1",
-                "sources",
-                content_source_id,
-                "permissions",
-                user,
-                "remove",
+                external_user_id,
             ),
             body=body,
             params=params,
@@ -1406,180 +1332,6 @@ class WorkplaceSearch(BaseClient):
         return self.perform_request(
             "PUT",
             "/api/ws/v1/automatic_query_refinement",
-            params=params,
-            headers=headers,
-            http_auth=http_auth,
-            request_timeout=request_timeout,
-            ignore_status=ignore_status,
-        )
-
-    def add_user_permissions(
-        self,
-        content_source_id,
-        user,
-        body,
-        params=None,
-        headers=None,
-        http_auth=DEFAULT,
-        request_timeout=DEFAULT,
-        ignore_status=(),
-    ):
-        """
-        Adds one or more new permissions atop existing permissions
-
-        `<https://www.elastic.co/guide/en/workplace-search/master/workplace-search-document-permissions-api.html#add-one>`_
-
-        :arg content_source_id: Unique ID for a Custom API source, provided upon
-            creation of a Custom API Source
-        :arg user: The username in context
-        :arg body: HTTP request body
-        :arg params: Additional query params to send with the request
-        :arg headers: Additional headers to send with the request
-        :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request
-        :arg request_timeout: Timeout in seconds
-        :arg ignore_status: HTTP status codes to not raise an error
-        :raises elastic_enterprise_search.BadRequestError:
-        :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.PaymentRequiredError:
-        :raises elastic_enterprise_search.NotFoundError:
-        """
-        for param in (
-            content_source_id,
-            user,
-        ):
-            if param in SKIP_IN_PATH:
-                raise ValueError("Empty value passed for a required argument")
-
-        params = QueryParams(params)
-
-        return self.perform_request(
-            "POST",
-            to_path(
-                "api",
-                "ws",
-                "v1",
-                "sources",
-                content_source_id,
-                "permissions",
-                user,
-                "add",
-            ),
-            body=body,
-            params=params,
-            headers=headers,
-            http_auth=http_auth,
-            request_timeout=request_timeout,
-            ignore_status=ignore_status,
-        )
-
-    def get_user_permissions(
-        self,
-        content_source_id,
-        user,
-        params=None,
-        headers=None,
-        http_auth=DEFAULT,
-        request_timeout=DEFAULT,
-        ignore_status=(),
-    ):
-        """
-        Lists all permissions for one user
-
-        `<https://www.elastic.co/guide/en/workplace-search/master/workplace-search-document-permissions-api.html#list-one>`_
-
-        :arg content_source_id: Unique ID for a Custom API source, provided upon
-            creation of a Custom API Source
-        :arg user: The username in context
-        :arg params: Additional query params to send with the request
-        :arg headers: Additional headers to send with the request
-        :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request
-        :arg request_timeout: Timeout in seconds
-        :arg ignore_status: HTTP status codes to not raise an error
-        :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.PaymentRequiredError:
-        :raises elastic_enterprise_search.NotFoundError:
-        """
-        for param in (
-            content_source_id,
-            user,
-        ):
-            if param in SKIP_IN_PATH:
-                raise ValueError("Empty value passed for a required argument")
-
-        params = QueryParams(params)
-
-        return self.perform_request(
-            "GET",
-            to_path(
-                "api",
-                "ws",
-                "v1",
-                "sources",
-                content_source_id,
-                "permissions",
-                user,
-            ),
-            params=params,
-            headers=headers,
-            http_auth=http_auth,
-            request_timeout=request_timeout,
-            ignore_status=ignore_status,
-        )
-
-    def put_user_permissions(
-        self,
-        content_source_id,
-        user,
-        body,
-        params=None,
-        headers=None,
-        http_auth=DEFAULT,
-        request_timeout=DEFAULT,
-        ignore_status=(),
-    ):
-        """
-        Creates a new set of permissions or over-writes all existing permissions
-
-        `<https://www.elastic.co/guide/en/workplace-search/master/workplace-search-document-permissions-api.html#add-all>`_
-
-        :arg content_source_id: Unique ID for a Custom API source, provided upon
-            creation of a Custom API Source
-        :arg user: The username in context
-        :arg body: HTTP request body
-        :arg params: Additional query params to send with the request
-        :arg headers: Additional headers to send with the request
-        :arg http_auth: Access token or HTTP basic auth username
-            and password to send with the request
-        :arg request_timeout: Timeout in seconds
-        :arg ignore_status: HTTP status codes to not raise an error
-        :raises elastic_enterprise_search.BadRequestError:
-        :raises elastic_enterprise_search.UnauthorizedError:
-        :raises elastic_enterprise_search.PaymentRequiredError:
-        :raises elastic_enterprise_search.NotFoundError:
-        """
-        for param in (
-            content_source_id,
-            user,
-        ):
-            if param in SKIP_IN_PATH:
-                raise ValueError("Empty value passed for a required argument")
-
-        params = QueryParams(params)
-
-        return self.perform_request(
-            "PUT",
-            to_path(
-                "api",
-                "ws",
-                "v1",
-                "sources",
-                content_source_id,
-                "permissions",
-                user,
-            ),
-            body=body,
             params=params,
             headers=headers,
             http_auth=http_auth,
