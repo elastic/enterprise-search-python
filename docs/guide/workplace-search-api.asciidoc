@@ -129,6 +129,45 @@ workplace_search.get_document(
 }
 ---------------
 
+==== List Documents
+
+List documents inside a Content Source
+
+[source,python]
+---------------
+# Request:
+workplace_search.list_documents(
+    content_source_id="<CONTENT_SOURCE_ID>"
+)
+
+# Response:
+{
+  "meta": {
+    "page": {
+      "current": 1,
+      "total_pages": 1,
+      "total_results": 2,
+      "size": 10
+    },
+    "warnings": [],
+    "cursor": {
+      "current": null,
+      "next": "eyJzb3J0Ijp7Il9zY29yZSI6ImRlc2MifSwic2VhcmNoX2FmdGVyIjpbMS4wLCJkb2MtNjFiY2VkNjQ1MzU5OTEyMjlmNTM1MWEzIl19"
+    }
+  },
+  "results": [
+    {
+      "last_updated": "2021-12-17T20:04:37+00:00",
+      "updated_at": "2021-12-17T20:04:37+00:00",
+      "content_source_id": "61bced325359912c2f5351a0",
+      "source": "custom",
+      "id": "doc-61bced5553599152f25351a2"
+    },
+    ...
+  ]
+}
+---------------
+
 ==== Delete documents
 
 To remove documents from a custom content source use the `delete_documents()` method
