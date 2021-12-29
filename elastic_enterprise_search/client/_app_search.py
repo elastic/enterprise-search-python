@@ -868,9 +868,9 @@ class AppSearch(BaseClient):
 
         params = QueryParams(params)
         if current_page is not None:
-            params.add("current_page", current_page)
+            params.add("page[current]", current_page)
         if page_size is not None:
-            params.add("page_size", page_size)
+            params.add("page[size]", page_size)
 
         return self.perform_request(
             "GET",
@@ -1923,9 +1923,9 @@ class AppSearch(BaseClient):
 
         params = QueryParams(params)
         if current_page is not None:
-            params.add("current_page", current_page)
+            params.add("page[current]", current_page)
         if page_size is not None:
-            params.add("page_size", page_size)
+            params.add("page[size]", page_size)
 
         return self.perform_request(
             "GET",
