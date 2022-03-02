@@ -35,12 +35,20 @@ from elastic_transport import ServiceUnavailableError as ServiceUnavailableError
 from elastic_transport import TransportError as TransportError
 from elastic_transport import UnauthorizedError as UnauthorizedError
 
+from ._async.client import AsyncAppSearch as AsyncAppSearch
+from ._async.client import AsyncEnterpriseSearch as AsyncEnterpriseSearch
+from ._async.client import AsyncWorkplaceSearch as AsyncWorkplaceSearch
 from ._serializer import JSONSerializer
+from ._sync.client import AppSearch as AppSearch
+from ._sync.client import EnterpriseSearch as EnterpriseSearch
+from ._sync.client import WorkplaceSearch as WorkplaceSearch
 from ._version import __version__  # noqa: F401
-from .client import AppSearch, EnterpriseSearch, WorkplaceSearch
 
 __all__ = [
     "APIError",
+    "AsyncAppSearch",
+    "AsyncEnterpriseSearch",
+    "AsyncWorkplaceSearch",
     "AppSearch",
     "BadGatewayError",
     "BadRequestError",

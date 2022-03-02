@@ -15,33 +15,32 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import typing as t
+
 import jwt
-from elastic_transport import QueryParams
-from six import ensure_str
-from six.moves.urllib_parse import urlencode
+from elastic_transport.client_utils import DEFAULT
 
-from .._utils import DEFAULT
-from ._app_search import AppSearch as _AppSearch
-from ._enterprise_search import EnterpriseSearch as _EnterpriseSearch
-from ._workplace_search import WorkplaceSearch as _WorkplaceSearch
-
-__all__ = ["AppSearch", "EnterpriseSearch", "WorkplaceSearch"]
+from ._base import _quote_query
+from .app_search import AppSearch as _AsyncAppSearch
+from .enterprise_search import EnterpriseSearch as _AsyncEnterpriseSearch
+from .workplace_search import WorkplaceSearch as _AsyncWorkplaceSearch
 
 
-class AppSearch(_AppSearch):
-    """Client for Elastic App Search service
+class AppSearch(_AsyncAppSearch):
+    """Client for App Search
 
     `<https://www.elastic.co/guide/en/app-search/current/api-reference.html>`_
     """
 
     @staticmethod
     def create_signed_search_key(
-        api_key,
-        api_key_name,
-        search_fields=DEFAULT,
-        result_fields=DEFAULT,
-        filters=DEFAULT,
-        facets=DEFAULT,
+        *,
+        api_key: str,
+        api_key_name: str,
+        search_fields: t.Optional[t.Dict[str, t.Any]] = None,
+        result_fields: t.Optional[t.Dict[str, t.Any]] = None,
+        filters: t.Optional[t.Dict[str, t.Any]] = None,
+        facets: t.Optional[t.Dict[str, t.Any]] = None,
     ):
         """Creates a Signed Search Key to keep your Private API Key secret
         and restrict what a user can search over.
@@ -65,18 +64,20 @@ class AppSearch(_AppSearch):
                 ("filters", filters),
                 ("facets", facets),
             )
-            if v is not DEFAULT
+            if v is not DEFAULT and v is not None
         }
-        return ensure_str(jwt.encode(payload=options, key=api_key, algorithm="HS256"))
+        return jwt.encode(payload=options, key=api_key, algorithm="HS256")
 
 
-class WorkplaceSearch(_WorkplaceSearch):
+class WorkplaceSearch(_AsyncWorkplaceSearch):
     """Client for Workplace Search
 
     `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-api-overview.html>`_
     """
 
-    def oauth_authorize_url(self, response_type, client_id, redirect_uri):
+    def oauth_authorize_url(
+        self, *, response_type: str, client_id: str, redirect_uri: str
+    ) -> str:
         """Constructs an OAuth authorize URL to start either the Confidential flow
         (response_type='code') or Implicit flow (response_type='token')
 
@@ -97,18 +98,18 @@ class WorkplaceSearch(_WorkplaceSearch):
         ):
             raise TypeError("All parameters must be of type 'str'")
 
-        base_url = self.transport.get_connection().base_url.rstrip("/")
-        query = urlencode(
-            [
-                ("response_type", response_type),
-                ("client_id", client_id),
-                ("redirect_uri", redirect_uri),
-            ]
-        )
-        return f"{base_url}/ws/oauth/authorize?{query}"
+        # Get a random node from the pool to use as a base URL.
+        base_url = self.transport.node_pool.get().base_url
+        return f"{base_url}/ws/oauth/authorize?{_quote_query({'response_type': response_type, 'client_id': client_id, 'redirect_uri': redirect_uri})}"
 
     def oauth_exchange_for_access_token(
-        self, client_id, client_secret, redirect_uri, code=None, refresh_token=None
+        self,
+        *,
+        client_id: str,
+        client_secret: str,
+        redirect_uri: str,
+        code: t.Optional[str] = None,
+        refresh_token: t.Optional[str] = None,
     ):
         """Exchanges either an authorization code or refresh token for
         an access token via the confidential OAuth flow.
@@ -144,48 +145,27 @@ class WorkplaceSearch(_WorkplaceSearch):
         if not all(isinstance(value, str) for value in values):
             raise TypeError("All parameters must be of type 'str'")
 
-        params = QueryParams()
-        params.add("grant_type", grant_type)
-        params.add("client_id", client_id)
-        params.add("client_secret", client_secret)
-        params.add("redirect_uri", redirect_uri)
+        params = {
+            "grant_type": grant_type,
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "redirect_uri": redirect_uri,
+        }
         if code is not None:
-            params.add("code", code)
+            params["code"] = code
         else:
-            params.add("refresh_token", refresh_token)
+            params["refresh_token"] = refresh_token
 
-        return self.perform_request(
+        return self.options(basic_auth=None, bearer_auth=None).perform_request(
             method="POST",
             path="/ws/oauth/token",
             params=params,
-            # Note that we don't want any authentication on this
-            # request, the 'code'/'refresh_token' is enough!
-            http_auth=None,
         )
 
 
-class EnterpriseSearch(_EnterpriseSearch):
-    """Client for Enterprise Search
-
-    `<https://www.elastic.co/guide/en/enterprise-search/current/management-apis.html>`_
-    """
-
-    def __init__(self, hosts=None, transport_class=None, **kwargs):
-        """
-        :arg hosts: List of nodes, or a single node, we should connect to.
-            Node should be a dictionary ({"host": "localhost", "port": 3002}),
-            the entire dictionary will be passed to the :class:`~elastic_transport.Connection`
-            class as kwargs, or a string in the format of ``host[:port]`` which will be
-            translated to a dictionary automatically.  If no value is given the
-            :class:`~elastic_transport.Connection` class defaults will be used.
-
-        :arg transport_class: :class:`~elastic_transport.Transport` sub-class to use.
-
-        :arg kwargs: Any additional arguments will be passed on to the
-            :class:`~elastic_transport.Transport` class and, subsequently, to the
-            :class:`~elastic_transport.Connection` instances.
-        """
-        super().__init__(hosts=hosts, transport_class=transport_class, **kwargs)
+class EnterpriseSearch(_AsyncEnterpriseSearch):
+    def __init__(self, *args, **kwargs):
+        super().__init__()
 
         self.app_search = AppSearch(_transport=self.transport)
         self.workplace_search = WorkplaceSearch(_transport=self.transport)

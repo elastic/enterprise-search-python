@@ -64,7 +64,7 @@ def openapi_type_to_typing(openapi_type, required=True) -> str:
     elif openapi_type == "boolean":
         t = "bool"
     if t and not required:
-        t = "typing.Optional[%s]" % t
+        t = f"typing.Optional[{t}]"
     return t
 
 
