@@ -30,7 +30,7 @@ SOURCE_FILES = (
 
 @nox.session()
 def format(session):
-    session.install("black", "isort")
+    session.run("python", "-m", "pip", "install", "--pre", "black<22", "isort")
     session.run(
         "black", "--target-version=py27", "--target-version=py37", *SOURCE_FILES
     )
@@ -42,7 +42,9 @@ def format(session):
 
 @nox.session
 def lint(session):
-    session.install("flake8", "black", "isort")
+    session.run(
+        "python", "-m", "pip", "install", "--pre", "black<22", "isort", "flake8"
+    )
     session.run(
         "black",
         "--check",

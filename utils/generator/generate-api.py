@@ -26,7 +26,7 @@ import jinja2
 import urllib3
 
 http = urllib3.PoolManager()
-current_branch = "7.16"
+current_branch = "7.17"
 base_dir = pathlib.Path(__file__).absolute().parent.parent.parent
 schemas_dir = base_dir.parent / "ent-search/swagger/v1"
 templates_dir = str(pathlib.Path(__file__).absolute().parent / "templates")
