@@ -1,0 +1,12 @@
+[[release-notes-7-17-0]]
+=== 7.17.0 Release Notes
+
+[discrete]
+==== General
+
+- Updated APIs to the 7.17 specification
+
+[discrete]
+==== App Search
+
+- Added the `current_page` and `page_size` parameters to the `list_crawler_crawl_requests` and `list_crawler_process_crawls` APIs
