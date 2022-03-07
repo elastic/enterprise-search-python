@@ -19,15 +19,15 @@ import re
 
 import pytest
 
-from tests.conftest import DummyConnection
+from tests.conftest import DummyNode
 
 
 def test_client_meta_header_http_meta(client_class):
     # Test with HTTP connection meta
-    class DummyConnectionWithMeta(DummyConnection):
-        HTTP_CLIENT_META = ("dm", "1.2.3")
+    class DummyNodeWithMeta(DummyNode):
+        _CLIENT_META_HTTP_CLIENT = ("dm", "1.2.3")
 
-    client = client_class(connection_class=DummyConnectionWithMeta)
+    client = client_class(node_class=DummyNodeWithMeta)
     assert client.http_auth is None
     client.perform_request("GET", "/")
 
@@ -42,7 +42,7 @@ def test_client_meta_header_http_meta(client_class):
 
 def test_client_meta_header_no_http_meta(client_class):
     # Test without an HTTP connection meta
-    client = client_class(connection_class=DummyConnection)
+    client = client_class(node_class=DummyNode)
     assert client.http_auth is None
     client.perform_request("GET", "/")
 
@@ -55,10 +55,10 @@ def test_client_meta_header_no_http_meta(client_class):
 
 
 def test_client_meta_header_extra_meta(client_class):
-    class DummyConnectionWithMeta(DummyConnection):
-        HTTP_CLIENT_META = ("dm", "1.2.3")
+    class DummyNodeWithMeta(DummyNode):
+        _CLIENT_META_HTTP_CLIENT = ("dm", "1.2.3")
 
-    client = client_class(connection_class=DummyConnectionWithMeta)
+    client = client_class(node_class=DummyNodeWithMeta)
     assert client.http_auth is None
     client.perform_request("GET", "/", params={"__elastic_client_meta": (("h", "pg"),)})
 

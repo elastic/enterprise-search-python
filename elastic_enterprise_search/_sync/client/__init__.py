@@ -16,17 +16,17 @@
 #  under the License.
 
 import typing as t
+from urllib.parse import urlencode
 
 import jwt
 from elastic_transport.client_utils import DEFAULT
 
-from ._base import _quote_query
-from .app_search import AppSearch as _AsyncAppSearch
-from .enterprise_search import EnterpriseSearch as _AsyncEnterpriseSearch
-from .workplace_search import WorkplaceSearch as _AsyncWorkplaceSearch
+from .app_search import AppSearch as _AppSearch
+from .enterprise_search import EnterpriseSearch as _EnterpriseSearch
+from .workplace_search import WorkplaceSearch as _WorkplaceSearch
 
 
-class AppSearch(_AsyncAppSearch):
+class AppSearch(_AppSearch):
     """Client for App Search
 
     `<https://www.elastic.co/guide/en/app-search/current/api-reference.html>`_
@@ -37,10 +37,10 @@ class AppSearch(_AsyncAppSearch):
         *,
         api_key: str,
         api_key_name: str,
-        search_fields: t.Optional[t.Dict[str, t.Any]] = None,
-        result_fields: t.Optional[t.Dict[str, t.Any]] = None,
-        filters: t.Optional[t.Dict[str, t.Any]] = None,
-        facets: t.Optional[t.Dict[str, t.Any]] = None,
+        search_fields: t.Optional[t.Dict[str, t.Any]] = DEFAULT,
+        result_fields: t.Optional[t.Dict[str, t.Any]] = DEFAULT,
+        filters: t.Optional[t.Dict[str, t.Any]] = DEFAULT,
+        facets: t.Optional[t.Dict[str, t.Any]] = DEFAULT,
     ):
         """Creates a Signed Search Key to keep your Private API Key secret
         and restrict what a user can search over.
@@ -64,12 +64,12 @@ class AppSearch(_AsyncAppSearch):
                 ("filters", filters),
                 ("facets", facets),
             )
-            if v is not DEFAULT and v is not None
+            if v is not DEFAULT
         }
         return jwt.encode(payload=options, key=api_key, algorithm="HS256")
 
 
-class WorkplaceSearch(_AsyncWorkplaceSearch):
+class WorkplaceSearch(_WorkplaceSearch):
     """Client for Workplace Search
 
     `<https://www.elastic.co/guide/en/workplace-search/current/workplace-search-api-overview.html>`_
@@ -99,8 +99,15 @@ class WorkplaceSearch(_AsyncWorkplaceSearch):
             raise TypeError("All parameters must be of type 'str'")
 
         # Get a random node from the pool to use as a base URL.
-        base_url = self.transport.node_pool.get().base_url
-        return f"{base_url}/ws/oauth/authorize?{_quote_query({'response_type': response_type, 'client_id': client_id, 'redirect_uri': redirect_uri})}"
+        base_url = self.transport.node_pool.get().base_url.rstrip("/")
+        query = urlencode(
+            [
+                ("response_type", response_type),
+                ("client_id", client_id),
+                ("redirect_uri", redirect_uri),
+            ]
+        )
+        return f"{base_url}/ws/oauth/authorize?{query}"
 
     def oauth_exchange_for_access_token(
         self,
@@ -163,9 +170,9 @@ class WorkplaceSearch(_AsyncWorkplaceSearch):
         )
 
 
-class EnterpriseSearch(_AsyncEnterpriseSearch):
-    def __init__(self, *args, **kwargs):
-        super().__init__()
+class EnterpriseSearch(_EnterpriseSearch):
+    def __init__(self, hosts):
+        super().__init__(hosts)
 
         self.app_search = AppSearch(_transport=self.transport)
         self.workplace_search = WorkplaceSearch(_transport=self.transport)

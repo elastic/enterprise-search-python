@@ -42,7 +42,7 @@ packages = [
 # Allow pre-releases of elastic-transport if the
 # package itself is a pre-release, otherwise only
 # allow stable releases to avoid disrupting stable versions.
-elastic_transport_required = "elastic-transport>=7,<8"
+elastic_transport_required = "elastic-transport>=8,<9"
 if not re.match(r"^[0-9.]+$", version):
     # Adds '.dev' to the end of every version number.
     elastic_transport_required = re.sub(

@@ -19,11 +19,11 @@ import pytest
 
 from elastic_enterprise_search import WorkplaceSearch
 from elastic_enterprise_search._utils import DEFAULT
-from tests.conftest import DummyConnection
+from tests.conftest import DummyNode
 
 
 def test_http_auth_none(client_class):
-    client = client_class(connection_class=DummyConnection, meta_header=False)
+    client = client_class(node_class=DummyNode, meta_header=False)
     assert client.http_auth is None
     client.perform_request("GET", "/")
 
@@ -39,9 +39,7 @@ def test_http_auth_none(client_class):
         )
     ]
 
-    client = client_class(
-        http_auth=None, connection_class=DummyConnection, meta_header=False
-    )
+    client = client_class(http_auth=None, node_class=DummyNode, meta_header=False)
     assert client.http_auth is None
     client.perform_request("GET", "/")
 
@@ -62,7 +60,7 @@ def test_http_auth_none(client_class):
     "http_auth", ["this-is-a-token", ("user", "password"), ("üser", "pӓssword")]
 )
 def test_http_auth_set_and_get(client_class, http_auth):
-    client = client_class(http_auth=http_auth, connection_class=DummyConnection)
+    client = client_class(http_auth=http_auth, node_class=DummyNode)
     assert client.http_auth == http_auth
     client.perform_request("GET", "/")
 
@@ -72,7 +70,7 @@ def test_http_auth_set_and_get(client_class, http_auth):
 
 
 def test_http_auth_per_request_override(client_class):
-    client = client_class(http_auth="bad-token", connection_class=DummyConnection)
+    client = client_class(http_auth="bad-token", node_class=DummyNode)
     assert client.http_auth == "bad-token"
     client.perform_request("GET", "/", http_auth=("user", "pass"))
 
@@ -102,7 +100,7 @@ def test_http_auth_object(client_class):
 
 
 def test_http_auth_disable_with_none(client_class):
-    client = client_class(http_auth="api-token", connection_class=DummyConnection)
+    client = client_class(http_auth="api-token", node_class=DummyNode)
     assert client.http_auth == "api-token"
     client.perform_request("GET", "/")
 
@@ -128,7 +126,7 @@ def test_http_auth_disable_with_none(client_class):
 @pytest.mark.parametrize("http_auth", ["token", ("user", "pass")])
 def test_auth_not_sent_with_oauth_exchange(http_auth):
     client = WorkplaceSearch(
-        connection_class=DummyConnection, meta_header=False, http_auth=http_auth
+        node_class=DummyNode, meta_header=False, http_auth=http_auth
     )
     client.oauth_exchange_for_access_token(
         client_id="client-id",

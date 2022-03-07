@@ -19,11 +19,11 @@ import pytest
 from elastic_transport import Transport
 
 from elastic_enterprise_search import EnterpriseSearch
-from tests.conftest import DummyConnection
+from tests.conftest import DummyNode
 
 
 @pytest.mark.parametrize(
-    "option", ["hosts", "http_auth", "transport_class", "connection_class"]
+    "option", ["hosts", "http_auth", "transport_class", "node_class"]
 )
 def test_transport_constructor(client_class, option):
     with pytest.raises(ValueError) as e:
@@ -36,7 +36,7 @@ def test_transport_constructor(client_class, option):
 
 @pytest.mark.parametrize("request_timeout", [3, 5.0])
 def test_request_timeout(request_timeout):
-    client = EnterpriseSearch(connection_class=DummyConnection, meta_header=False)
+    client = EnterpriseSearch(node_class=DummyNode, meta_header=False)
     client.get_version(request_timeout=request_timeout)
 
     calls = client.transport.get_connection().calls

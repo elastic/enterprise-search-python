@@ -15,70 +15,163 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import datetime
 import typing as t
 
-from elastic_transport import ApiResponse, Transport
-from elastic_transport.client_utils import percent_encode
+from elastic_transport import ApiResponse, BaseNode, Transport
+from elastic_transport.client_utils import DEFAULT, DefaultType
 
-from ..._utils import format_datetime
+from ..._utils import _quote_query, client_node_configs, resolve_auth_headers
 
-SKIP_IN_PATH = {None, "", b""}
-
-
-def _escape(value: t.Any) -> str:
-    if isinstance(value, datetime.date):
-        return value.isoformat()
-    elif isinstance(value, datetime.datetime):
-        return format_datetime(value)
-    elif isinstance(value, bytes):
-        return value.decode("utf-8", "surrogatepass")
-    if not isinstance(value, str):
-        return str(value)
-    return value
-
-
-def _quote(value: t.Any) -> str:
-    return percent_encode(_escape(value), ",*[]:-")
-
-
-def _quote_query(query: t.Mapping[str, t.Any]) -> str:
-    kvs: t.List[t.Tuple[str, str]] = []
-    for k, v in query.items():
-        if isinstance(v, (list, tuple, dict)):
-            if k.endswith("[]"):
-                k = k[:-2]
-            kvs.extend(_quote_query_deep_object(k, v))
-        else:
-            kvs.append((k, _quote(v)))
-
-    return "&".join([f"{k}={v}" for k, v in kvs])
-
-
-def _quote_query_deep_object(prefix, value) -> t.Iterable[t.Tuple[str, str]]:
-    if not isinstance(value, (list, tuple, dict)):
-        yield (prefix, _quote(value))
-    elif isinstance(value, (list, tuple)):
-        for item in value:
-            yield from _quote_query_deep_object(f"{prefix}[]", item)
-    else:
-        for key, val in value.items():
-            yield from _quote_query_deep_object(f"{prefix}[{key}]", val)
+_TYPE_SELF = t.TypeVar("_TYPE_SELF", bound="BaseClient")
+_TYPE_HOSTS = t.Union[str, t.Dict[str, t.Any], t.List[str], t.List[t.Dic[str, t.Any]]]
 
 
 class BaseClient:
-    def __init__(self):
-        self._transport = Transport()
-        self._headers = None
-        self._request_timeout = None
-        self._max_retries = None
-        self._retry_on_status = None
-        self._retry_on_timeout = None
+    def __init__(
+        self,
+        hosts: t.Optional[_TYPE_HOSTS] = None,
+        *,
+        # API
+        basic_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
+        bearer_auth: t.Optional[str] = None,
+        opaque_id: t.Optional[str] = None,
+        # Node
+        headers: t.Union[DefaultType, t.Mapping[str, str]] = DEFAULT,
+        connections_per_node: t.Union[DefaultType, int] = DEFAULT,
+        http_compress: t.Union[DefaultType, bool] = DEFAULT,
+        verify_certs: t.Union[DefaultType, bool] = DEFAULT,
+        ca_certs: t.Union[DefaultType, str] = DEFAULT,
+        client_cert: t.Union[DefaultType, str] = DEFAULT,
+        client_key: t.Union[DefaultType, str] = DEFAULT,
+        ssl_assert_hostname: t.Union[DefaultType, str] = DEFAULT,
+        ssl_assert_fingerprint: t.Union[DefaultType, str] = DEFAULT,
+        ssl_version: t.Union[DefaultType, int] = DEFAULT,
+        ssl_context: t.Union[DefaultType, t.Any] = DEFAULT,
+        ssl_show_warn: t.Union[DefaultType, bool] = DEFAULT,
+        # Transport
+        transport_class: t.Type[Transport] = Transport,
+        request_timeout: t.Union[DefaultType, None, float] = DEFAULT,
+        node_class: t.Union[DefaultType, t.Type[BaseNode]] = DEFAULT,
+        dead_node_backoff_factor: t.Union[DefaultType, float] = DEFAULT,
+        max_dead_node_backoff: t.Union[DefaultType, float] = DEFAULT,
+        max_retries: t.Union[DefaultType, int] = DEFAULT,
+        retry_on_status: t.Union[DefaultType, int, t.Collection[int]] = DEFAULT,
+        retry_on_timeout: t.Union[DefaultType, bool] = DEFAULT,
+        meta_header: t.Union[DefaultType, bool] = DEFAULT,
+        # Deprecated
+        http_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
+        # Internal
+        _transport: t.Optional[Transport] = None,
+    ):
+        if _transport is None:
+            transport_kwargs = {}
+            if connections_per_node is not DEFAULT:
+                transport_kwargs["connections_per_node"] = connections_per_node
+            if http_compress is not DEFAULT:
+                transport_kwargs["http_compress"] = http_compress
+            if verify_certs is not DEFAULT:
+                transport_kwargs["verify_certs"] = verify_certs
+            if node_class is not DEFAULT:
+                transport_kwargs["node_class"] = node_class
+            if dead_node_backoff_factor is not DEFAULT:
+                transport_kwargs["dead_node_backoff_factor"] = dead_node_backoff_factor
+            if max_dead_node_backoff is not DEFAULT:
+                transport_kwargs["max_dead_node_backoff"] = max_dead_node_backoff
+            if meta_header is not DEFAULT:
+                transport_kwargs["meta_header"] = meta_header
+
+            node_configs = client_node_configs(
+                hosts,
+                connections_per_node=connections_per_node,
+                http_compress=http_compress,
+                verify_certs=verify_certs,
+                ca_certs=ca_certs,
+                client_cert=client_cert,
+                client_key=client_key,
+                ssl_assert_hostname=ssl_assert_hostname,
+                ssl_assert_fingerprint=ssl_assert_fingerprint,
+                ssl_version=ssl_version,
+                ssl_context=ssl_context,
+                ssl_show_warn=ssl_show_warn,
+            )
+            self._transport = transport_class(node_configs, **transport_kwargs)
+        else:
+            self._transport = _transport
+
+        self._headers = resolve_auth_headers(
+            headers=headers,
+            http_auth=http_auth,
+            basic_auth=basic_auth,
+            bearer_auth=bearer_auth,
+        )
+        self._request_timeout = request_timeout
+        self._max_retries = max_retries
+        self._retry_on_status = retry_on_status
+        self._retry_on_timeout = retry_on_timeout
         self._client_meta = None
+        self._ignore_status = None
 
     @property
     def transport(self) -> Transport:
         return self._transport
+
+    def options(
+        self: _TYPE_SELF,
+        *,
+        opaque_id: t.Union[DefaultType, str] = DEFAULT,
+        basic_auth: t.Union[DefaultType, str, t.Tuple[str, str]] = DEFAULT,
+        bearer_auth: t.Union[DefaultType, str] = DEFAULT,
+        headers: t.Union[DefaultType, t.Mapping[str, str]] = DEFAULT,
+        request_timeout: t.Union[DefaultType, t.Optional[float]] = DEFAULT,
+        ignore_status: t.Union[DefaultType, int, t.Collection[int]] = DEFAULT,
+        max_retries: t.Union[DefaultType, int] = DEFAULT,
+        retry_on_status: t.Union[DefaultType, int, t.Collection[int]] = DEFAULT,
+        retry_on_timeout: t.Union[DefaultType, bool] = DEFAULT,
+    ) -> _TYPE_SELF:
+        client = type(self)(_transport=self.transport)
+
+        resolved_headers = headers if headers is not DEFAULT else None
+        resolved_headers = resolve_auth_headers(
+            headers=resolved_headers,
+            basic_auth=basic_auth,
+            bearer_auth=bearer_auth,
+        )
+        if opaque_id is None:
+            resolved_headers.pop("x-opaque-id", None)
+        elif opaque_id is not DEFAULT:
+            resolved_headers["x-opaque-id"] = opaque_id
+
+        if resolved_headers:
+            new_headers = self._headers.copy()
+            new_headers.update(resolved_headers)
+            client._headers = new_headers
+        else:
+            client._headers = self._headers.copy()
+
+        if request_timeout is not DEFAULT:
+            client._request_timeout = request_timeout
+
+        if ignore_status is not DEFAULT:
+            if isinstance(ignore_status, int):
+                ignore_status = (ignore_status,)
+            client._ignore_status = ignore_status
+
+        if max_retries is not DEFAULT:
+            if not isinstance(max_retries, int):
+                raise TypeError("'max_retries' must be of type 'int'")
+            client._max_retries = max_retries
+
+        if retry_on_status is not DEFAULT:
+            if isinstance(retry_on_status, int):
+                retry_on_status = (retry_on_status,)
+            client._retry_on_status = retry_on_status
+
+        if retry_on_timeout is not DEFAULT:
+            if not isinstance(retry_on_timeout, bool):
+                raise TypeError("'retry_on_timeout' must be of type 'bool'")
+            client._retry_on_timeout = retry_on_timeout
+
+        return client
 
     def perform_request(
         self, method: str, path: str, params=None, headers=None, body=None

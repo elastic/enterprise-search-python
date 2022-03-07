@@ -17,7 +17,8 @@
 
 import typing as t
 
-from ._base import SKIP_IN_PATH, BaseClient, _quote
+from ..._utils import SKIP_IN_PATH, _quote
+from ._base import BaseClient
 
 
 class AsyncWorkplaceSearch(BaseClient):

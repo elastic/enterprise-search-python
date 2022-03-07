@@ -29,6 +29,9 @@ def main():
         "AsyncAppSearch": "AppSearch",
         "AsyncEnterpriseSearch": "EnterpriseSearch",
         "AsyncWorkplaceSearch": "WorkplaceSearch",
+        "_AsyncAppSearch": "_AppSearch",
+        "_AsyncEnterpriseSearch": "_EnterpriseSearch",
+        "_AsyncWorkplaceSearch": "_WorkplaceSearch",
     }
     rules = [
         unasync.Rule(

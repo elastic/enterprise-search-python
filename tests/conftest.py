@@ -17,7 +17,7 @@
 
 import pytest
 import urllib3
-from elastic_transport import Connection
+from elastic_transport import BaseNode
 
 from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSearch
 
@@ -48,7 +48,7 @@ def ent_search_url():
     return f"http://{host}:3002"
 
 
-class DummyConnection(Connection):
+class DummyNode(BaseNode):
     def __init__(self, **kwargs):
         self.exception = kwargs.pop("exception", None)
         self.status, self.data = kwargs.pop("status", 200), kwargs.pop("data", "{}")

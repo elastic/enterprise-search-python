@@ -16,11 +16,11 @@
 #  under the License.
 
 import typing as t
+from urllib.parse import urlencode
 
 import jwt
 from elastic_transport.client_utils import DEFAULT
 
-from ._base import _quote_query
 from .app_search import AsyncAppSearch as _AsyncAppSearch
 from .enterprise_search import AsyncEnterpriseSearch as _AsyncEnterpriseSearch
 from .workplace_search import AsyncWorkplaceSearch as _AsyncWorkplaceSearch
@@ -37,10 +37,10 @@ class AsyncAppSearch(_AsyncAppSearch):
         *,
         api_key: str,
         api_key_name: str,
-        search_fields: t.Optional[t.Dict[str, t.Any]] = None,
-        result_fields: t.Optional[t.Dict[str, t.Any]] = None,
-        filters: t.Optional[t.Dict[str, t.Any]] = None,
-        facets: t.Optional[t.Dict[str, t.Any]] = None,
+        search_fields: t.Optional[t.Dict[str, t.Any]] = DEFAULT,
+        result_fields: t.Optional[t.Dict[str, t.Any]] = DEFAULT,
+        filters: t.Optional[t.Dict[str, t.Any]] = DEFAULT,
+        facets: t.Optional[t.Dict[str, t.Any]] = DEFAULT,
     ):
         """Creates a Signed Search Key to keep your Private API Key secret
         and restrict what a user can search over.
@@ -64,7 +64,7 @@ class AsyncAppSearch(_AsyncAppSearch):
                 ("filters", filters),
                 ("facets", facets),
             )
-            if v is not DEFAULT and v is not None
+            if v is not DEFAULT
         }
         return jwt.encode(payload=options, key=api_key, algorithm="HS256")
 
@@ -99,8 +99,15 @@ class AsyncWorkplaceSearch(_AsyncWorkplaceSearch):
             raise TypeError("All parameters must be of type 'str'")
 
         # Get a random node from the pool to use as a base URL.
-        base_url = self.transport.node_pool.get().base_url
-        return f"{base_url}/ws/oauth/authorize?{_quote_query({'response_type': response_type, 'client_id': client_id, 'redirect_uri': redirect_uri})}"
+        base_url = self.transport.node_pool.get().base_url.rstrip("/")
+        query = urlencode(
+            [
+                ("response_type", response_type),
+                ("client_id", client_id),
+                ("redirect_uri", redirect_uri),
+            ]
+        )
+        return f"{base_url}/ws/oauth/authorize?{query}"
 
     def oauth_exchange_for_access_token(
         self,
@@ -164,8 +171,8 @@ class AsyncWorkplaceSearch(_AsyncWorkplaceSearch):
 
 
 class AsyncEnterpriseSearch(_AsyncEnterpriseSearch):
-    def __init__(self, *args, **kwargs):
-        super().__init__()
+    def __init__(self, hosts):
+        super().__init__(hosts)
 
         self.app_search = AsyncAppSearch(_transport=self.transport)
         self.workplace_search = AsyncWorkplaceSearch(_transport=self.transport)
