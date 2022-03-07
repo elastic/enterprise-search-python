@@ -1,0 +1,12 @@
+---
+- job:
+    name: elastic+enterprise-search-python+7.17
+    display-name: 'elastic / enterprise-search-python # 7.17'
+    description: Testing the enterprise-search-python 7.17 branch.
+    junit_results: "junit/*-junit.xml"
+    parameters:
+    - string:
+        name: branch_specifier
+        default: refs/heads/7.17
+        description: the Git branch specifier to build (&lt;branchName&gt;, &lt;tagName&gt;,
+          &lt;commitId&gt;, etc.)
