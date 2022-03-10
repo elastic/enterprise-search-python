@@ -16,8 +16,20 @@
 #  under the License.
 
 import typing as t
+import warnings
 
-from elastic_transport import ApiError
+from elastic_transport import ApiError as _ApiError
+
+
+class ApiError(_ApiError):
+    @property
+    def status(self) -> int:
+        warnings.warn(
+            "ApiError.status is deprecated in favor of ApiError.meta.status",
+            category=DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.meta.status
 
 
 class BadGatewayError(ApiError):

@@ -28,10 +28,9 @@ def test_client_meta_header_http_meta(client_class):
         _CLIENT_META_HTTP_CLIENT = ("dm", "1.2.3")
 
     client = client_class(node_class=DummyNodeWithMeta)
-    assert client.http_auth is None
     client.perform_request("GET", "/")
 
-    calls = client.transport.get_connection().calls
+    calls = client.transport.node_pool.get().calls
     assert len(calls) == 1
     headers = calls[0][1]["headers"]
     assert re.match(
@@ -43,10 +42,9 @@ def test_client_meta_header_http_meta(client_class):
 def test_client_meta_header_no_http_meta(client_class):
     # Test without an HTTP connection meta
     client = client_class(node_class=DummyNode)
-    assert client.http_auth is None
     client.perform_request("GET", "/")
 
-    calls = client.transport.get_connection().calls
+    calls = client.transport.node_pool.get().calls
     assert len(calls) == 1
     headers = calls[0][1]["headers"]
     assert re.match(
@@ -59,10 +57,9 @@ def test_client_meta_header_extra_meta(client_class):
         _CLIENT_META_HTTP_CLIENT = ("dm", "1.2.3")
 
     client = client_class(node_class=DummyNodeWithMeta)
-    assert client.http_auth is None
     client.perform_request("GET", "/", params={"__elastic_client_meta": (("h", "pg"),)})
 
-    calls = client.transport.get_connection().calls
+    calls = client.transport.node_pool.get().calls
     assert len(calls) == 1
     headers = calls[0][1]["headers"]
     assert re.match(

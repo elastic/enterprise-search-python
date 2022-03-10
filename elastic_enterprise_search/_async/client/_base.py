@@ -17,13 +17,28 @@
 
 import typing as t
 
-from elastic_transport import ApiResponse, AsyncTransport, BaseNode
+from elastic_transport import (
+    ApiResponse,
+    AsyncTransport,
+    BaseNode,
+    BinaryApiResponse,
+    HeadApiResponse,
+    ListApiResponse,
+    ObjectApiResponse,
+    TextApiResponse,
+)
 from elastic_transport.client_utils import DEFAULT, DefaultType
 
-from ..._utils import _quote_query, client_node_configs, resolve_auth_headers
+from ..._utils import (
+    CLIENT_META_SERVICE,
+    _quote_query,
+    client_node_configs,
+    resolve_auth_headers,
+)
+from ...exceptions import _HTTP_EXCEPTIONS, ApiError
 
 _TYPE_SELF = t.TypeVar("_TYPE_SELF", bound="BaseClient")
-_TYPE_HOSTS = t.Union[str, t.Dict[str, t.Any], t.List[str], t.List[t.Dic[str, t.Any]]]
+_TYPE_HOSTS = t.Union[str, t.Dict[str, t.Any], t.List[str], t.List[t.Dict[str, t.Any]]]
 
 
 class BaseClient:
@@ -34,7 +49,6 @@ class BaseClient:
         # API
         basic_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
         bearer_auth: t.Optional[str] = None,
-        opaque_id: t.Optional[str] = None,
         # Node
         headers: t.Union[DefaultType, t.Mapping[str, str]] = DEFAULT,
         connections_per_node: t.Union[DefaultType, int] = DEFAULT,
@@ -78,6 +92,8 @@ class BaseClient:
             if max_dead_node_backoff is not DEFAULT:
                 transport_kwargs["max_dead_node_backoff"] = max_dead_node_backoff
             if meta_header is not DEFAULT:
+                if not isinstance(meta_header, bool):
+                    raise TypeError("meta_header must be of type bool")
                 transport_kwargs["meta_header"] = meta_header
 
             node_configs = client_node_configs(
@@ -94,7 +110,11 @@ class BaseClient:
                 ssl_context=ssl_context,
                 ssl_show_warn=ssl_show_warn,
             )
-            self._transport = transport_class(node_configs, **transport_kwargs)
+            self._transport = transport_class(
+                node_configs,
+                client_meta_service=CLIENT_META_SERVICE,
+                **transport_kwargs,
+            )
         else:
             self._transport = _transport
 
@@ -108,7 +128,7 @@ class BaseClient:
         self._max_retries = max_retries
         self._retry_on_status = retry_on_status
         self._retry_on_timeout = retry_on_timeout
-        self._client_meta = None
+        self._client_meta = DEFAULT
         self._ignore_status = None
 
     @property
@@ -143,7 +163,11 @@ class BaseClient:
 
         if resolved_headers:
             new_headers = self._headers.copy()
-            new_headers.update(resolved_headers)
+            for header, value in resolved_headers.items():
+                if value is None:
+                    new_headers.pop(header, None)
+                else:
+                    new_headers[header] = value
             client._headers = new_headers
         else:
             client._headers = self._headers.copy()
@@ -198,4 +222,34 @@ class BaseClient:
             retry_on_timeout=self._retry_on_timeout,
             client_meta=self._client_meta,
         )
-        return resp
+
+        # HEAD with a 404 is returned as a normal response
+        # since this is used as an 'exists' functionality.
+        if not 200 <= resp.meta.status < 299 and (
+            self._ignore_status is DEFAULT
+            or self._ignore_status is None
+            or resp.meta.status not in self._ignore_status
+        ):
+            message = str(resp.body)
+
+            raise _HTTP_EXCEPTIONS.get(resp.meta.status, ApiError)(
+                message=message, meta=resp.meta, body=resp.body
+            )
+
+        if method == "HEAD":
+            response = HeadApiResponse(meta=resp.meta)
+        elif isinstance(resp.body, dict):
+            response = ObjectApiResponse(body=resp.body, meta=resp.meta)  # type: ignore[assignment]
+        elif isinstance(resp.body, list):
+            response = ListApiResponse(body=resp.body, meta=resp.meta)  # type: ignore[assignment]
+        elif isinstance(resp.body, str):
+            response = TextApiResponse(  # type: ignore[assignment]
+                body=resp.body,
+                meta=resp.meta,
+            )
+        elif isinstance(resp.body, bytes):
+            response = BinaryApiResponse(body=resp.body, meta=resp.meta)  # type: ignore[assignment]
+        else:
+            response = ApiResponse(body=resp.body, meta=resp.meta)  # type: ignore[assignment]
+
+        return response

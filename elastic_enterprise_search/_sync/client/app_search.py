@@ -17,13 +17,14 @@
 
 import typing as t
 
-from ..._utils import SKIP_IN_PATH, _quote
+from ..._utils import SKIP_IN_PATH, _quote, _rewrite_parameters
 from ._base import BaseClient
 
 
 class AppSearch(BaseClient):
     # AUTO-GENERATED-API-DEFINITIONS #
 
+    @_rewrite_parameters()
     def get_adaptive_relevance_settings(
         self,
         *,
@@ -45,6 +46,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_adaptive_relevance_settings(
         self,
         *,
@@ -74,6 +78,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def list_adaptive_relevance_suggestions(
         self,
         *,
@@ -113,6 +120,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_name="body",
+    )
     def put_adaptive_relevance_suggestions(
         self,
         *,
@@ -142,6 +152,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def get_adaptive_relevance_suggestions(
         self,
         *,
@@ -187,6 +200,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def refresh_adaptive_relevance_update_process(
         self,
         *,
@@ -214,6 +228,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def get_top_clicks_analytics(
         self,
         *,
@@ -252,6 +269,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def get_count_analytics(
         self,
         *,
@@ -285,6 +305,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def get_top_queries_analytics(
         self,
         *,
@@ -319,6 +342,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def log_clickthrough(
         self,
         *,
@@ -362,6 +388,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_name="body",
+    )
     def get_crawler_url_extraction_result(
         self,
         *,
@@ -390,6 +419,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def create_crawler_crawl_request(
         self,
         *,
@@ -435,6 +467,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def list_crawler_crawl_requests(
         self,
         *,
@@ -466,6 +499,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_crawler_crawl_request(
         self,
         *,
@@ -491,6 +525,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_crawler_active_crawl_request(
         self,
         *,
@@ -512,6 +547,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def delete_crawler_active_crawl_request(
         self,
         *,
@@ -533,6 +569,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def create_crawler_crawl_rule(
         self,
         *,
@@ -588,6 +627,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_crawler_crawl_rule(
         self,
         *,
@@ -647,6 +689,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def delete_crawler_crawl_rule(
         self,
         *,
@@ -676,6 +719,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_crawler_crawl_schedule(
         self,
         *,
@@ -697,6 +741,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_crawler_crawl_schedule(
         self,
         *,
@@ -732,6 +779,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def delete_crawler_crawl_schedule(
         self,
         *,
@@ -753,6 +801,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_crawler_process_crawl_denied_urls(
         self,
         *,
@@ -779,6 +828,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def list_crawler_domains(
         self,
         *,
@@ -810,6 +860,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def create_crawler_domain(
         self,
         *,
@@ -857,6 +910,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_crawler_domain(
         self,
         *,
@@ -882,6 +936,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_crawler_domain(
         self,
         *,
@@ -933,6 +990,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def delete_crawler_domain(
         self,
         *,
@@ -958,6 +1016,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def create_crawler_entry_point(
         self,
         *,
@@ -995,6 +1056,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_crawler_entry_point(
         self,
         *,
@@ -1036,6 +1100,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def delete_crawler_entry_point(
         self,
         *,
@@ -1065,6 +1130,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_crawler_metrics(
         self,
     ) -> t.Any:
@@ -1079,6 +1145,7 @@ class AppSearch(BaseClient):
             "GET", "/api/as/v1/crawler/metrics", headers=__headers
         )
 
+    @_rewrite_parameters()
     def get_crawler_overview(
         self,
         *,
@@ -1101,6 +1168,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def create_crawler_process_crawl(
         self,
         *,
@@ -1134,6 +1204,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def list_crawler_process_crawls(
         self,
         *,
@@ -1165,6 +1236,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_crawler_process_crawl(
         self,
         *,
@@ -1190,6 +1262,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def create_crawler_sitemap(
         self,
         *,
@@ -1227,6 +1302,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_crawler_sitemap(
         self,
         *,
@@ -1268,6 +1346,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def delete_crawler_sitemap(
         self,
         *,
@@ -1297,11 +1376,14 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def get_crawler_url_tracing_result(
         self,
         *,
         engine_name: str,
-        body: str,
+        url: str,
     ) -> t.Any:
         """
         Returns information about the history of a given URL with the App Search Crawler.
@@ -1309,13 +1391,15 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/web-crawler-api-reference.html#web-crawler-apis-post-crawler-trace-url>`_
 
         :param engine_name: Name of the engine
-        :param body:
+        :param url:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
-        if body is None:
-            raise ValueError("Empty value passed for parameter 'body'")
-        __body = body
+        if url is None:
+            raise ValueError("Empty value passed for parameter 'url'")
+        __body: t.Dict[str, t.Any] = {}
+        if url is not None:
+            __body["url"] = url
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "POST",
@@ -1324,6 +1408,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def get_crawler_url_validation_result(
         self,
         *,
@@ -1374,6 +1461,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_name="body",
+    )
     def get_crawler_domain_validation_result(
         self,
         *,
@@ -1395,6 +1485,7 @@ class AppSearch(BaseClient):
             "POST", "/api/as/v1/crawler/validate_url", body=__body, headers=__headers
         )
 
+    @_rewrite_parameters()
     def get_crawler_user_agent(
         self,
     ) -> t.Any:
@@ -1409,6 +1500,7 @@ class AppSearch(BaseClient):
             "GET", "/api/as/v1/crawler/user_agent", headers=__headers
         )
 
+    @_rewrite_parameters()
     def list_api_keys(
         self,
         *,
@@ -1433,6 +1525,9 @@ class AppSearch(BaseClient):
             "GET", "/api/as/v1/credentials", params=__query, headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def create_api_key(
         self,
         *,
@@ -1477,6 +1572,7 @@ class AppSearch(BaseClient):
             "POST", "/api/as/v1/credentials", body=__body, headers=__headers
         )
 
+    @_rewrite_parameters()
     def get_api_key(
         self,
         *,
@@ -1496,6 +1592,9 @@ class AppSearch(BaseClient):
             "GET", f"/api/as/v1/credentials/{_quote(api_key_name)}", headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_api_key(
         self,
         *,
@@ -1547,6 +1646,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def delete_api_key(
         self,
         *,
@@ -1568,6 +1668,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def list_curations(
         self,
         *,
@@ -1599,6 +1700,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def create_curation(
         self,
         *,
@@ -1640,6 +1744,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_curation(
         self,
         *,
@@ -1665,6 +1770,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_curation(
         self,
         *,
@@ -1710,6 +1818,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def delete_curation(
         self,
         *,
@@ -1735,6 +1844,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_documents(
         self,
         *,
@@ -1762,6 +1872,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_name="documents",
+    )
     def index_documents(
         self,
         *,
@@ -1794,6 +1907,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_name="document_ids",
+    )
     def delete_documents(
         self,
         *,
@@ -1824,6 +1940,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_name="documents",
+    )
     def put_documents(
         self,
         *,
@@ -1856,6 +1975,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def list_documents(
         self,
         *,
@@ -1887,6 +2007,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def list_engines(
         self,
         *,
@@ -1911,6 +2032,9 @@ class AppSearch(BaseClient):
             "GET", "/api/as/v1/engines", params=__query, headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def create_engine(
         self,
         *,
@@ -1946,6 +2070,7 @@ class AppSearch(BaseClient):
             "POST", "/api/as/v1/engines", body=__body, headers=__headers
         )
 
+    @_rewrite_parameters()
     def get_engine(
         self,
         *,
@@ -1965,6 +2090,7 @@ class AppSearch(BaseClient):
             "GET", f"/api/as/v1/engines/{_quote(engine_name)}", headers=__headers
         )
 
+    @_rewrite_parameters()
     def delete_engine(
         self,
         *,
@@ -1984,6 +2110,9 @@ class AppSearch(BaseClient):
             "DELETE", f"/api/as/v1/engines/{_quote(engine_name)}", headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_name="source_engines",
+    )
     def delete_meta_engine_source(
         self,
         *,
@@ -2014,6 +2143,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_name="source_engines",
+    )
     def add_meta_engine_source(
         self,
         *,
@@ -2044,6 +2176,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def get_api_logs(
         self,
         *,
@@ -2085,6 +2220,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def query_suggestion(
         self,
         *,
@@ -2122,6 +2260,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_schema(
         self,
         *,
@@ -2141,6 +2280,9 @@ class AppSearch(BaseClient):
             "GET", f"/api/as/v1/engines/{_quote(engine_name)}/schema", headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_name="schema",
+    )
     def put_schema(
         self,
         *,
@@ -2171,6 +2313,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def search(
         self,
         *,
@@ -2244,6 +2389,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_search_settings(
         self,
         *,
@@ -2265,6 +2411,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_search_settings(
         self,
         *,
@@ -2306,6 +2455,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def reset_search_settings(
         self,
         *,
@@ -2327,6 +2477,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def list_synonym_sets(
         self,
         *,
@@ -2358,6 +2509,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def create_synonym_set(
         self,
         *,
@@ -2387,6 +2541,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def get_synonym_set(
         self,
         *,
@@ -2412,6 +2567,9 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_synonym_set(
         self,
         *,
@@ -2445,6 +2603,7 @@ class AppSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     def delete_synonym_set(
         self,
         *,

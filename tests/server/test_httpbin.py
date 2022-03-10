@@ -15,13 +15,17 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import pytest
+import re
 
-from elastic_enterprise_search import AppSearch
+from elastic_enterprise_search import EnterpriseSearch
 
 
-@pytest.fixture()
-def app_search():
-    yield AppSearch(
-        "http://localhost:3002", bearer_auth="private-k3ra4bqu12vgnhe3wibdw69f"
+def test_httpbin():
+    client = EnterpriseSearch("https://httpbin.org:443")
+    resp = client.perform_request("GET", "/anything")
+    assert resp.meta.status == 200
+    assert re.match(
+        r"^ent=8[.0-9]+p?,py=[.0-9]+p?,t=[.0-9]+p?,ur=[.0-9]+p?$",
+        resp.body["headers"]["X-Elastic-Client-Meta"],
     )
+    assert resp.body["headers"]["User-Agent"].startswith("enterprise-search-python/")

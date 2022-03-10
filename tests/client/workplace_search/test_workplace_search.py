@@ -36,13 +36,13 @@ OAUTH_REFRESH_TOKEN = "8be8a32c22f98a28d59cdd9d2c2028c97fa6367b77a1a41cc27f22640
 
 @pytest.fixture()
 def vcr_workplace_search():
-    yield WorkplaceSearch("http://localhost:3002", http_auth=access_token)
+    yield WorkplaceSearch("http://localhost:3002", bearer_auth=access_token)
 
 
 @pytest.fixture()
 def workplace_search(ent_search_url):
     with WorkplaceSearch(
-        ent_search_url, http_auth=("enterprise_search", "changeme")
+        ent_search_url, basic_auth=("enterprise_search", "changeme")
     ) as client:
         yield client
 
@@ -62,7 +62,7 @@ def content_source(workplace_search):
 
 def test_content_sources(workplace_search, content_source):
     resp = workplace_search.get_content_source(content_source)
-    assert resp.status == 200
+    assert resp.meta.status == 200
 
     content_source_json = resp.body.copy()
     for field in ("name", "created_at", "last_updated_at", "groups"):
@@ -89,7 +89,7 @@ def test_content_sources(workplace_search, content_source):
     }
 
     resp = workplace_search.list_content_sources()
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
         "meta": {
             "page": {"current": 1, "total_pages": 1, "total_results": 1, "size": 25}
@@ -119,7 +119,7 @@ def test_documents(workplace_search, content_source):
             },
         ],
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
         "results": [{"id": "1234", "errors": []}, {"id": "1235", "errors": []}]
     }
@@ -127,7 +127,7 @@ def test_documents(workplace_search, content_source):
     resp = workplace_search.get_document(
         content_source_id=content_source, document_id="1234"
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     resp.body.pop("last_updated")
     assert resp == {
         "title": "The Meaning of Time",
@@ -140,7 +140,7 @@ def test_documents(workplace_search, content_source):
     }
 
     resp = workplace_search.delete_all_documents(content_source_id=content_source)
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {"deleted": 0, "failures": [], "total": 0}
 
 
@@ -153,13 +153,13 @@ def test_external_identities(workplace_search, content_source):
     resp = workplace_search.create_external_identity(
         content_source_id=content_source, body=external_identity
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == external_identity
 
     resp = workplace_search.get_external_identity(
         content_source_id=content_source, user="elastic_user"
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == external_identity
 
     resp = workplace_search.list_external_identities(content_source_id=content_source)
@@ -173,7 +173,7 @@ def test_external_identities(workplace_search, content_source):
     resp = workplace_search.delete_external_identity(
         content_source_id=content_source, user="elastic_user"
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == "ok"
 
 
@@ -181,7 +181,7 @@ def test_permissions(workplace_search, content_source):
     resp = workplace_search.put_user_permissions(
         content_source_id=content_source, user="elastic_user", body={"permissions": []}
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {"user": "elastic_user", "permissions": []}
 
     resp = workplace_search.add_user_permissions(
@@ -189,7 +189,7 @@ def test_permissions(workplace_search, content_source):
         user="elastic_user",
         body={"permissions": ["permission1", "permission2"]},
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
         "user": "elastic_user",
         "permissions": ["permission1", "permission2"],
@@ -198,7 +198,7 @@ def test_permissions(workplace_search, content_source):
     resp = workplace_search.get_user_permissions(
         content_source_id=content_source, user="elastic_user"
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
         "user": "elastic_user",
         "permissions": ["permission1", "permission2"],
@@ -209,7 +209,7 @@ def test_permissions(workplace_search, content_source):
         user="elastic_user",
         body={"permissions": ["permission2"]},
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {"user": "elastic_user", "permissions": ["permission1"]}
 
 
@@ -238,7 +238,7 @@ def test_oauth_exchange_for_access_token_code(vcr_workplace_search):
         code="c6424958616f102ce4e8b9e776ac8547aa06c1a603a27970547648080c43abb9",
     )
 
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
         "access_token": "00a456134c1964a0a9e82dff3ff93d8a20e9071a51f75b2bce18dde12908eb5d",
         "expires_in": 7200,
@@ -257,7 +257,7 @@ def test_oauth_exchange_for_access_token_refresh_token(vcr_workplace_search):
         refresh_token="57297c5f3a7fdf9dd63d03910c49c231d869e55e2e5934835c1ffa89c3c3b704",
     )
 
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
         "access_token": "494c72a1acaab2ac1dcf06882d874f5e54ce50c82d6b7183374597c2aceaddd6",
         "expires_in": 7200,
@@ -278,8 +278,8 @@ def test_oauth_exchange_for_access_token_invalid_grant(vcr_workplace_search):
             code="7186fec34911a182606d2ab7fc36ea0ed4b8c32fef9929235cd80294422204ca",
         )
 
-    assert e.value.status == 401
-    assert e.value.message == {
+    assert e.value.meta.status == 401
+    assert e.value.body == {
         "error": "invalid_grant",
         "error_description": "The provided authorization grant is invalid, expired, "
         "revoked, does not match the redirection URI used in the "

@@ -19,8 +19,10 @@ import typing as t
 from urllib.parse import urlencode
 
 import jwt
-from elastic_transport.client_utils import DEFAULT
+from elastic_transport import AsyncTransport, BaseNode
+from elastic_transport.client_utils import DEFAULT, DefaultType
 
+from ._base import _TYPE_HOSTS
 from .app_search import AsyncAppSearch as _AsyncAppSearch
 from .enterprise_search import AsyncEnterpriseSearch as _AsyncEnterpriseSearch
 from .workplace_search import AsyncWorkplaceSearch as _AsyncWorkplaceSearch
@@ -163,7 +165,7 @@ class AsyncWorkplaceSearch(_AsyncWorkplaceSearch):
         else:
             params["refresh_token"] = refresh_token
 
-        return self.options(basic_auth=None, bearer_auth=None).perform_request(
+        return self.options(headers={"Authorization": None}).perform_request(
             method="POST",
             path="/ws/oauth/token",
             params=params,
@@ -171,8 +173,69 @@ class AsyncWorkplaceSearch(_AsyncWorkplaceSearch):
 
 
 class AsyncEnterpriseSearch(_AsyncEnterpriseSearch):
-    def __init__(self, hosts):
-        super().__init__(hosts)
+    def __init__(
+        self,
+        hosts: t.Optional[_TYPE_HOSTS] = None,
+        *,
+        # API
+        basic_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
+        bearer_auth: t.Optional[str] = None,
+        # Node
+        headers: t.Union[DefaultType, t.Mapping[str, str]] = DEFAULT,
+        connections_per_node: t.Union[DefaultType, int] = DEFAULT,
+        http_compress: t.Union[DefaultType, bool] = DEFAULT,
+        verify_certs: t.Union[DefaultType, bool] = DEFAULT,
+        ca_certs: t.Union[DefaultType, str] = DEFAULT,
+        client_cert: t.Union[DefaultType, str] = DEFAULT,
+        client_key: t.Union[DefaultType, str] = DEFAULT,
+        ssl_assert_hostname: t.Union[DefaultType, str] = DEFAULT,
+        ssl_assert_fingerprint: t.Union[DefaultType, str] = DEFAULT,
+        ssl_version: t.Union[DefaultType, int] = DEFAULT,
+        ssl_context: t.Union[DefaultType, t.Any] = DEFAULT,
+        ssl_show_warn: t.Union[DefaultType, bool] = DEFAULT,
+        # Transport
+        transport_class: t.Type[AsyncTransport] = AsyncTransport,
+        request_timeout: t.Union[DefaultType, None, float] = DEFAULT,
+        node_class: t.Union[DefaultType, t.Type[BaseNode]] = DEFAULT,
+        dead_node_backoff_factor: t.Union[DefaultType, float] = DEFAULT,
+        max_dead_node_backoff: t.Union[DefaultType, float] = DEFAULT,
+        max_retries: t.Union[DefaultType, int] = DEFAULT,
+        retry_on_status: t.Union[DefaultType, int, t.Collection[int]] = DEFAULT,
+        retry_on_timeout: t.Union[DefaultType, bool] = DEFAULT,
+        meta_header: t.Union[DefaultType, bool] = DEFAULT,
+        # Deprecated
+        http_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
+        # Internal
+        _transport: t.Optional[AsyncTransport] = None,
+    ):
+        super().__init__(
+            hosts,
+            basic_auth=basic_auth,
+            bearer_auth=bearer_auth,
+            headers=headers,
+            connections_per_node=connections_per_node,
+            http_compress=http_compress,
+            verify_certs=verify_certs,
+            ca_certs=ca_certs,
+            client_cert=client_cert,
+            client_key=client_key,
+            ssl_assert_fingerprint=ssl_assert_fingerprint,
+            ssl_assert_hostname=ssl_assert_hostname,
+            ssl_version=ssl_version,
+            ssl_context=ssl_context,
+            ssl_show_warn=ssl_show_warn,
+            transport_class=transport_class,
+            request_timeout=request_timeout,
+            retry_on_status=retry_on_status,
+            retry_on_timeout=retry_on_timeout,
+            max_retries=max_retries,
+            node_class=node_class,
+            dead_node_backoff_factor=dead_node_backoff_factor,
+            max_dead_node_backoff=max_dead_node_backoff,
+            meta_header=meta_header,
+            http_auth=http_auth,
+            _transport=_transport,
+        )
 
         self.app_search = AsyncAppSearch(_transport=self.transport)
         self.workplace_search = AsyncWorkplaceSearch(_transport=self.transport)

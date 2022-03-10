@@ -17,13 +17,16 @@
 
 import typing as t
 
-from ..._utils import SKIP_IN_PATH, _quote
+from ..._utils import SKIP_IN_PATH, _quote, _rewrite_parameters
 from ._base import BaseClient
 
 
 class AsyncWorkplaceSearch(BaseClient):
     # AUTO-GENERATED-API-DEFINITIONS #
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def create_content_source(
         self,
         *,
@@ -70,6 +73,7 @@ class AsyncWorkplaceSearch(BaseClient):
             "POST", "/api/ws/v1/sources", body=__body, headers=__headers
         )
 
+    @_rewrite_parameters()
     async def list_content_sources(
         self,
         *,
@@ -94,6 +98,7 @@ class AsyncWorkplaceSearch(BaseClient):
             "GET", "/api/ws/v1/sources", params=__query, headers=__headers
         )
 
+    @_rewrite_parameters()
     async def get_content_source(
         self,
         *,
@@ -114,6 +119,9 @@ class AsyncWorkplaceSearch(BaseClient):
             "GET", f"/api/ws/v1/sources/{_quote(content_source_id)}", headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def put_content_source(
         self,
         *,
@@ -170,6 +178,7 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     async def delete_content_source(
         self,
         *,
@@ -192,6 +201,9 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def put_content_source_icons(
         self,
         *,
@@ -226,6 +238,9 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def delete_documents_by_query(
         self,
         *,
@@ -256,6 +271,9 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def list_documents(
         self,
         *,
@@ -311,6 +329,9 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_name="documents",
+    )
     async def index_documents(
         self,
         *,
@@ -342,6 +363,9 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_name="document_ids",
+    )
     async def delete_documents(
         self,
         *,
@@ -370,6 +394,7 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     async def get_document(
         self,
         *,
@@ -397,6 +422,7 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     async def list_external_identities(
         self,
         *,
@@ -429,6 +455,9 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def create_external_identity(
         self,
         *,
@@ -475,6 +504,7 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     async def get_external_identity(
         self,
         *,
@@ -502,6 +532,9 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def put_external_identity(
         self,
         *,
@@ -543,6 +576,7 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     async def delete_external_identity(
         self,
         *,
@@ -570,6 +604,9 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters(
+        body_name="body",
+    )
     async def command_sync_jobs(
         self,
         *,
@@ -618,6 +655,7 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     async def get_synonym_set(
         self,
         *,
@@ -637,6 +675,9 @@ class AsyncWorkplaceSearch(BaseClient):
             "GET", f"/api/ws/v1/synonyms/{_quote(synonym_set_id)}", headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def put_synonym_set(
         self,
         *,
@@ -666,6 +707,7 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     async def delete_synonym_set(
         self,
         *,
@@ -685,6 +727,9 @@ class AsyncWorkplaceSearch(BaseClient):
             "DELETE", f"/api/ws/v1/synonyms/{_quote(synonym_set_id)}", headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def list_synonym_sets(
         self,
         *,
@@ -721,6 +766,9 @@ class AsyncWorkplaceSearch(BaseClient):
             "GET", "/api/ws/v1/synonyms", body=__body, headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def create_batch_synonym_sets(
         self,
         *,
@@ -749,6 +797,7 @@ class AsyncWorkplaceSearch(BaseClient):
             "POST", "/api/ws/v1/synonyms", body=__body, headers=__headers
         )
 
+    @_rewrite_parameters()
     async def get_triggers_blocklist(
         self,
     ) -> t.Any:
@@ -762,6 +811,7 @@ class AsyncWorkplaceSearch(BaseClient):
             "GET", "/api/ws/v1/automatic_query_refinement", headers=__headers
         )
 
+    @_rewrite_parameters()
     async def put_triggers_blocklist(
         self,
     ) -> t.Any:
@@ -775,6 +825,7 @@ class AsyncWorkplaceSearch(BaseClient):
             "PUT", "/api/ws/v1/automatic_query_refinement", headers=__headers
         )
 
+    @_rewrite_parameters()
     async def get_auto_query_refinement_details(
         self,
         *,
@@ -797,6 +848,7 @@ class AsyncWorkplaceSearch(BaseClient):
             headers=__headers,
         )
 
+    @_rewrite_parameters()
     async def get_current_user(
         self,
     ) -> t.Any:
@@ -810,6 +862,9 @@ class AsyncWorkplaceSearch(BaseClient):
             "GET", "/api/ws/v1/whoami", headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_name="body",
+    )
     async def create_analytics_event(
         self,
         *,
@@ -830,6 +885,9 @@ class AsyncWorkplaceSearch(BaseClient):
             "POST", "/api/ws/v1/analytics/event", body=__body, headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     async def search(
         self,
         *,

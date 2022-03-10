@@ -22,24 +22,24 @@ from elastic_enterprise_search import EnterpriseSearch
 
 @pytest.fixture()
 def enterprise_search():
-    yield EnterpriseSearch("http://localhost:3002", http_auth=("elastic", "changeme"))
+    yield EnterpriseSearch("http://localhost:3002", basic_auth=("elastic", "changeme"))
 
 
 @pytest.mark.vcr()
 def test_get_stats(enterprise_search):
     resp = enterprise_search.get_stats()
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert sorted(resp.keys()) == ["app", "connectors", "queues"]
 
     resp = enterprise_search.get_stats(include=["connectors", "queues"])
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert sorted(resp.keys()) == ["connectors", "queues"]
 
 
 @pytest.mark.vcr()
 def test_get_health(enterprise_search):
     resp = enterprise_search.get_health()
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert sorted(resp.keys()) == [
         "esqueues_me",
         "filebeat",
@@ -58,7 +58,7 @@ def test_get_health(enterprise_search):
 @pytest.mark.vcr()
 def test_get_version(enterprise_search):
     resp = enterprise_search.get_health()
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert sorted(resp.keys()) == [
         "esqueues_me",
         "filebeat",
@@ -78,13 +78,13 @@ def test_get_version(enterprise_search):
 def test_get_and_put_read_only(enterprise_search):
     http_auth = ("elastic", "changeme")
     resp = enterprise_search.put_read_only(body={"enabled": True}, http_auth=http_auth)
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {"enabled": True}
 
     resp = enterprise_search.get_read_only(http_auth=http_auth)
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {"enabled": True}
 
     resp = enterprise_search.put_read_only(body={"enabled": False}, http_auth=http_auth)
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {"enabled": False}

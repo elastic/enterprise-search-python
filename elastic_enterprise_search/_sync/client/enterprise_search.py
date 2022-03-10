@@ -17,12 +17,14 @@
 
 import typing as t
 
+from ..._utils import _rewrite_parameters
 from ._base import BaseClient
 
 
 class EnterpriseSearch(BaseClient):
     # AUTO-GENERATED-API-DEFINITIONS #
 
+    @_rewrite_parameters()
     def get_health(
         self,
     ) -> t.Any:
@@ -37,6 +39,7 @@ class EnterpriseSearch(BaseClient):
             "GET", "/api/ent/v1/internal/health", headers=__headers
         )
 
+    @_rewrite_parameters()
     def get_read_only(
         self,
     ) -> t.Any:
@@ -50,6 +53,9 @@ class EnterpriseSearch(BaseClient):
             "GET", "/api/ent/v1/internal/read_only_mode", headers=__headers
         )
 
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def put_read_only(
         self,
         *,
@@ -72,6 +78,7 @@ class EnterpriseSearch(BaseClient):
             "PUT", "/api/ent/v1/internal/read_only_mode", body=__body, headers=__headers
         )
 
+    @_rewrite_parameters()
     def get_stats(
         self,
         *,
@@ -93,6 +100,7 @@ class EnterpriseSearch(BaseClient):
             "GET", "/api/ent/v1/internal/stats", params=__query, headers=__headers
         )
 
+    @_rewrite_parameters()
     def get_version(
         self,
     ) -> t.Any:

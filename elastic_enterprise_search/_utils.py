@@ -22,6 +22,7 @@ import sys
 import typing as t
 import warnings
 from datetime import date, datetime
+from functools import wraps
 from pathlib import Path
 
 from dateutil import parser, tz
@@ -32,6 +33,7 @@ from elastic_transport.client_utils import (
     client_meta_version,
     create_user_agent,
     percent_encode,
+    url_to_node_config,
 )
 
 from ._version import __version__
@@ -44,9 +46,18 @@ __all__ = [
     "resolve_auth_headers",
 ]
 
+F = t.TypeVar("F")
 SKIP_IN_PATH = {None, "", b""}
-CLIENT_META_SERVICE = ("es", client_meta_version(__version__))
+CLIENT_META_SERVICE = ("ent", client_meta_version(__version__))
 USER_AGENT = create_user_agent("enterprise-search-python", __version__)
+
+_TRANSPORT_OPTIONS = {
+    "http_auth",
+    "request_timeout",
+    "opaque_id",
+    "headers",
+    "ignore_status",
+}
 
 
 def format_datetime(value):
@@ -92,7 +103,7 @@ def resolve_auth_headers(
     bearer_auth: t.Union[DefaultType, None, str] = DEFAULT,
 ) -> HttpHeaders:
 
-    if headers is None:
+    if headers is None or headers is DEFAULT:
         headers = HttpHeaders()
     elif not isinstance(headers, HttpHeaders):
         headers = HttpHeaders(headers)
@@ -162,7 +173,40 @@ def resolve_auth_headers(
 
 
 def client_node_configs(hosts, **kwargs) -> t.List[NodeConfig]:
-    return []
+    if hosts is None or hosts is DEFAULT:
+        hosts = ["http://localhost:3002"]
+    if not isinstance(hosts, (list, tuple)):
+        hosts = [hosts]
+    node_configs = []
+    for host in hosts:
+        if isinstance(host, str):
+            node_configs.append(url_to_node_config(host))
+        else:
+            raise ValueError("NOT SUPPORTED")
+
+    # Remove all values which are 'DEFAULT' to avoid overwriting actual defaults.
+    node_options = {k: v for k, v in kwargs.items() if v is not DEFAULT}
+
+    # Set the 'User-Agent' default header.
+    headers = HttpHeaders(node_options.pop("headers", ()))
+    headers.setdefault("user-agent", USER_AGENT)
+    node_options["headers"] = headers
+
+    def apply_node_options(node_config: NodeConfig) -> NodeConfig:
+        """Needs special handling of headers since .replace() wipes out existing headers"""
+        nonlocal node_options
+        headers = node_config.headers.copy()  # type: ignore[attr-defined]
+
+        headers_to_add = node_options.pop("headers", ())
+        if headers_to_add:
+            headers.update(headers_to_add)
+
+        headers.setdefault("user-agent", USER_AGENT)
+        headers.freeze()
+        node_options["headers"] = headers
+        return node_config.replace(**node_options)
+
+    return [apply_node_options(node_config) for node_config in node_configs]
 
 
 def warn_stacklevel() -> int:
@@ -248,3 +292,147 @@ def _quote_query_deep_object(
     else:
         for key, val in value.items():
             yield from _quote_query_deep_object(f"{prefix}[{key}]", val)
+
+
+def _merge_kwargs_no_duplicates(
+    kwargs: t.Dict[str, t.Any], values: t.Dict[str, t.Any]
+) -> None:
+    for key, val in values.items():
+        if key in kwargs:
+            raise ValueError(
+                f"Received multiple values for '{key}', specify parameters "
+                "directly instead of using 'body' or 'params'"
+            )
+        kwargs[key] = val
+
+
+def _rewrite_parameters(
+    body_name: t.Optional[str] = None,
+    body_fields: bool = False,
+    parameter_aliases: t.Optional[t.Dict[str, str]] = None,
+    ignore_deprecated_options: t.Optional[t.Set[str]] = None,
+) -> t.Callable[[F], F]:
+    def wrapper(api: F) -> F:
+        @wraps(api)
+        def wrapped(*args: t.Any, **kwargs: t.Any) -> t.Any:
+            nonlocal api, body_name, body_fields
+
+            # Let's give a nicer error message when users pass positional arguments.
+            if len(args) >= 2:
+                raise TypeError(
+                    "Positional arguments can't be used with Elasticsearch API methods. "
+                    "Instead only use keyword arguments."
+                )
+
+            # We merge 'params' first as transport options can be specified using params.
+            if "params" in kwargs and (
+                not ignore_deprecated_options
+                or "params" not in ignore_deprecated_options
+            ):
+                params = kwargs.pop("params")
+                if params:
+                    if not hasattr(params, "items"):
+                        raise ValueError(
+                            "Couldn't merge 'params' with other parameters as it wasn't a mapping. "
+                            "Instead of using 'params' use individual API parameters"
+                        )
+                    warnings.warn(
+                        "The 'params' parameter is deprecated and will be removed "
+                        "in a future version. Instead use individual parameters.",
+                        category=DeprecationWarning,
+                        stacklevel=warn_stacklevel(),
+                    )
+                    _merge_kwargs_no_duplicates(kwargs, params)
+
+            maybe_transport_options = _TRANSPORT_OPTIONS.intersection(kwargs)
+            if maybe_transport_options:
+                transport_options = {}
+                for option in maybe_transport_options:
+                    if (
+                        ignore_deprecated_options
+                        and option in ignore_deprecated_options
+                    ):
+                        continue
+
+                    #
+                    transport_option = option
+                    if option == "http_auth":
+                        if isinstance(kwargs["http_auth"], str):
+                            transport_option = "bearer_auth"
+                        elif isinstance(kwargs["http_auth"], (list, tuple)):
+                            transport_option = "basic_auth"
+
+                    try:
+                        transport_options[transport_option] = kwargs.pop(option)
+                    except KeyError:
+                        pass
+                if transport_options:
+                    warnings.warn(
+                        "Passing transport options in the API method is deprecated. Use 'Elasticsearch.options()' instead.",
+                        category=DeprecationWarning,
+                        stacklevel=warn_stacklevel(),
+                    )
+                    client = args[0].options(**transport_options)
+                    args = (client,) + args[1:]
+
+            if "body" in kwargs and (
+                not ignore_deprecated_options or "body" not in ignore_deprecated_options
+            ):
+                body = kwargs.pop("body")
+                if body is not None:
+                    if body_name:
+                        if body_name in kwargs:
+                            raise TypeError(
+                                f"Can't use '{body_name}' and 'body' parameters together because '{body_name}' "
+                                "is an alias for 'body'. Instead you should only use the "
+                                f"'{body_name}' parameter. See https://github.com/elastic/elasticsearch-py/"
+                                "issues/1698 for more information"
+                            )
+
+                        warnings.warn(
+                            "The 'body' parameter is deprecated and will be removed "
+                            f"in a future version. Instead use the '{body_name}' parameter. "
+                            "See https://github.com/elastic/elasticsearch-py/issues/1698 "
+                            "for more information",
+                            category=DeprecationWarning,
+                            stacklevel=warn_stacklevel(),
+                        )
+                        kwargs[body_name] = body
+
+                    elif body_fields:
+                        if not hasattr(body, "items"):
+                            raise ValueError(
+                                "Couldn't merge 'body' with other parameters as it wasn't a mapping. "
+                                "Instead of using 'body' use individual API parameters"
+                            )
+                        warnings.warn(
+                            "The 'body' parameter is deprecated and will be removed "
+                            "in a future version. Instead use individual parameters.",
+                            category=DeprecationWarning,
+                            stacklevel=warn_stacklevel(),
+                        )
+
+                        # Special handling of page:{current:1,size:20} -> current_page=1, page_size=20
+                        if "page" in body and set(body["page"]).issubset(
+                            {"current", "size"}
+                        ):
+                            page = body.pop("page")
+                            if "current" in page:
+                                kwargs["current_page"] = page["current"]
+                            if "size" in page:
+                                kwargs["page_size"] = page["size"]
+
+                        _merge_kwargs_no_duplicates(kwargs, body)
+
+            if parameter_aliases:
+                for alias, rename_to in parameter_aliases.items():
+                    try:
+                        kwargs[rename_to] = kwargs.pop(alias)
+                    except KeyError:
+                        pass
+
+            return api(*args, **kwargs)
+
+        return wrapped  # type: ignore[return-value]
+
+    return wrapper
