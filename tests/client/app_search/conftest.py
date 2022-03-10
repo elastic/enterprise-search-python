@@ -23,5 +23,6 @@ from elastic_enterprise_search import AppSearch
 @pytest.fixture()
 def app_search():
     yield AppSearch(
-        "http://localhost:3002", bearer_auth="private-k3ra4bqu12vgnhe3wibdw69f"
+        "https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io:443",
+        bearer_auth="private-ybzoyx7cok65hpxyxkwaarnn",
     )

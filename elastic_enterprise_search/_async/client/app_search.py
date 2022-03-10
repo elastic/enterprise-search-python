@@ -2046,6 +2046,8 @@ class AsyncAppSearch(BaseClient):
                 str,
             ]
         ] = None,
+        source_engines: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
+        type: t.Optional[t.Union["t.Literal['default', 'meta']", str]] = None,
     ) -> t.Any:
         """
         Creates an App Search Engine
@@ -2055,6 +2057,8 @@ class AsyncAppSearch(BaseClient):
         :param engine_name:
         :param index_create_settings_override:
         :param language:
+        :param source_engines:
+        :param type:
         """
         if engine_name is None:
             raise ValueError("Empty value passed for parameter 'engine_name'")
@@ -2065,6 +2069,10 @@ class AsyncAppSearch(BaseClient):
             __body["index_create_settings_override"] = index_create_settings_override
         if language is not None:
             __body["language"] = language
+        if source_engines is not None:
+            __body["source_engines"] = source_engines
+        if type is not None:
+            __body["type"] = type
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return await self.perform_request(  # type: ignore[return-value]
             "POST", "/api/as/v1/engines", body=__body, headers=__headers

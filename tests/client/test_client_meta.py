@@ -57,7 +57,8 @@ def test_client_meta_header_extra_meta(client_class):
         _CLIENT_META_HTTP_CLIENT = ("dm", "1.2.3")
 
     client = client_class(node_class=DummyNodeWithMeta)
-    client.perform_request("GET", "/", params={"__elastic_client_meta": (("h", "pg"),)})
+    client._client_meta = (("h", "pg"),)
+    client.perform_request("GET", "/")
 
     calls = client.transport.node_pool.get().calls
     assert len(calls) == 1

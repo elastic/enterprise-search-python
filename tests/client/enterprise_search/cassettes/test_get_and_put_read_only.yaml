@@ -2,120 +2,130 @@ interactions:
 - request:
     body: '{"enabled":true}'
     headers:
+      accept:
+      - application/json
       authorization:
-      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      - Basic ZWxhc3RpYzp5cWNHcFJxVTlNazRGUW1zdkpLeEw5VW8=
       connection:
       - keep-alive
       content-type:
       - application/json
     method: PUT
-    uri: http://localhost:3002/api/ent/v1/internal/read_only_mode
+    uri: https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io/api/ent/v1/internal/read_only_mode
   response:
     body:
       string: '{"enabled":true}'
     headers:
       Cache-Control:
       - max-age=0, private, must-revalidate
+      Content-Length:
+      - '16'
       Content-Type:
       - application/json;charset=utf-8
-      ETag:
-      - W/"ebd28baaaa212dca587bc607653bbaf0"
+      Date:
+      - Thu, 10 Mar 2022 23:28:28 GMT
+      Etag:
+      - W/"26b3426b2593763c96d0890b4a77a0bb"
       Server:
-      - Jetty(9.4.33.v20201020)
-      Transfer-Encoding:
-      - chunked
+      - Jetty(9.4.43.v20210629)
       Vary:
       - Accept-Encoding, User-Agent
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - SAMEORIGIN
+      X-Cloud-Request-Id:
+      - BVLodpndTgqLYCw7l5kdIg
+      X-Found-Handling-Cluster:
+      - efbb93a5d1bb4b3f90f192c495ee00d1
+      X-Found-Handling-Instance:
+      - instance-0000000000
       X-Request-Id:
-      - 788bdbb8-5b4e-4033-8a53-9f50ab9a309f
+      - BVLodpndTgqLYCw7l5kdIg
       X-Runtime:
-      - '0.023845'
-      X-XSS-Protection:
-      - 1; mode=block
+      - '0.347579'
     status:
       code: 200
       message: OK
 - request:
     body: null
     headers:
+      accept:
+      - application/json
       authorization:
-      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      - Basic ZWxhc3RpYzp5cWNHcFJxVTlNazRGUW1zdkpLeEw5VW8=
       connection:
       - keep-alive
-      content-type:
-      - application/json
     method: GET
-    uri: http://localhost:3002/api/ent/v1/internal/read_only_mode
+    uri: https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io/api/ent/v1/internal/read_only_mode
   response:
     body:
       string: '{"enabled":true}'
     headers:
       Cache-Control:
       - max-age=0, private, must-revalidate
+      Content-Length:
+      - '16'
       Content-Type:
       - application/json;charset=utf-8
-      ETag:
-      - W/"ebd28baaaa212dca587bc607653bbaf0"
+      Date:
+      - Thu, 10 Mar 2022 23:28:29 GMT
+      Etag:
+      - W/"26b3426b2593763c96d0890b4a77a0bb"
       Server:
-      - Jetty(9.4.33.v20201020)
-      Transfer-Encoding:
-      - chunked
+      - Jetty(9.4.43.v20210629)
       Vary:
       - Accept-Encoding, User-Agent
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - SAMEORIGIN
+      X-Cloud-Request-Id:
+      - TpAJAR7GTFO7Neb3GpmN8Q
+      X-Found-Handling-Cluster:
+      - efbb93a5d1bb4b3f90f192c495ee00d1
+      X-Found-Handling-Instance:
+      - instance-0000000000
       X-Request-Id:
-      - 4be35df3-e551-48f7-8dfa-bd291a4f75bd
+      - TpAJAR7GTFO7Neb3GpmN8Q
       X-Runtime:
-      - '0.023486'
-      X-XSS-Protection:
-      - 1; mode=block
+      - '0.027522'
     status:
       code: 200
       message: OK
 - request:
     body: '{"enabled":false}'
     headers:
+      accept:
+      - application/json
       authorization:
-      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      - Basic ZWxhc3RpYzp5cWNHcFJxVTlNazRGUW1zdkpLeEw5VW8=
       connection:
       - keep-alive
       content-type:
       - application/json
     method: PUT
-    uri: http://localhost:3002/api/ent/v1/internal/read_only_mode
+    uri: https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io/api/ent/v1/internal/read_only_mode
   response:
     body:
       string: '{"enabled":false}'
     headers:
       Cache-Control:
       - max-age=0, private, must-revalidate
+      Content-Length:
+      - '17'
       Content-Type:
       - application/json;charset=utf-8
-      ETag:
-      - W/"d987f50e402ceb8f1a41643a6c665ef0"
+      Date:
+      - Thu, 10 Mar 2022 23:28:29 GMT
+      Etag:
+      - W/"5acf3ff77b4420677b5923071f303fac"
       Server:
-      - Jetty(9.4.33.v20201020)
-      Transfer-Encoding:
-      - chunked
+      - Jetty(9.4.43.v20210629)
       Vary:
       - Accept-Encoding, User-Agent
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - SAMEORIGIN
+      X-Cloud-Request-Id:
+      - 5g4W_zvrTpO4KsBAu-3-Bg
+      X-Found-Handling-Cluster:
+      - efbb93a5d1bb4b3f90f192c495ee00d1
+      X-Found-Handling-Instance:
+      - instance-0000000000
       X-Request-Id:
-      - f226e990-69cf-46fa-a8ab-f7f8791b1c9e
+      - 5g4W_zvrTpO4KsBAu-3-Bg
       X-Runtime:
-      - '0.213871'
-      X-XSS-Protection:
-      - 1; mode=block
+      - '0.269852'
     status:
       code: 200
       message: OK
