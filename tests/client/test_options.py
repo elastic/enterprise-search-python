@@ -15,28 +15,18 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import inspect
+
 import pytest
-from elastic_transport import Transport
 
-from elastic_enterprise_search import EnterpriseSearch
-from tests.conftest import DummyConnection
-
-
-@pytest.mark.parametrize(
-    "option", ["hosts", "http_auth", "transport_class", "connection_class"]
-)
-def test_transport_constructor(client_class, option):
-    with pytest.raises(ValueError) as e:
-        client_class(_transport=Transport(), **{option: True})
-    assert str(e.value) == (
-        "Can't pass both a Transport via '_transport' "
-        "and other parameters a client constructor"
-    )
+from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSearch
+from tests.conftest import DummyNode
 
 
+@pytest.mark.xfail
 @pytest.mark.parametrize("request_timeout", [3, 5.0])
 def test_request_timeout(request_timeout):
-    client = EnterpriseSearch(connection_class=DummyConnection, meta_header=False)
+    client = EnterpriseSearch(node_class=DummyNode, meta_header=False)
     client.get_version(request_timeout=request_timeout)
 
     calls = client.transport.get_connection().calls
@@ -50,3 +40,37 @@ def test_request_timeout(request_timeout):
             },
         )
     ]
+
+
+@pytest.mark.parametrize("client_cls", [EnterpriseSearch, AppSearch, WorkplaceSearch])
+def test_client_class_init_parameters(client_cls):
+    # Ensures that all client signatures are identical.
+    sig = inspect.signature(client_cls)
+    assert set(sig.parameters) == {
+        "_transport",
+        "basic_auth",
+        "bearer_auth",
+        "ca_certs",
+        "client_cert",
+        "client_key",
+        "connections_per_node",
+        "dead_node_backoff_factor",
+        "headers",
+        "hosts",
+        "http_auth",
+        "http_compress",
+        "max_dead_node_backoff",
+        "max_retries",
+        "meta_header",
+        "node_class",
+        "request_timeout",
+        "retry_on_status",
+        "retry_on_timeout",
+        "ssl_assert_fingerprint",
+        "ssl_assert_hostname",
+        "ssl_context",
+        "ssl_show_warn",
+        "ssl_version",
+        "transport_class",
+        "verify_certs",
+    }

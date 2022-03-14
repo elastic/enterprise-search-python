@@ -19,11 +19,11 @@ import datetime
 
 from dateutil import tz
 
-from elastic_enterprise_search import JSONSerializer
+from elastic_enterprise_search import JsonSerializer
 
 
 def test_serializer_formatting():
-    serializer = JSONSerializer()
+    serializer = JsonSerializer()
     assert (
         serializer.dumps(
             {
@@ -38,9 +38,9 @@ def test_serializer_formatting():
                 ),
             }
         )
-        == '{"d":"2020-12-11T10:09:08Z"}'
+        == b'{"d":"2020-12-11T10:09:08Z"}'
     )
     assert (
         serializer.dumps({"t": datetime.date(year=2020, month=1, day=29)})
-        == '{"t":"2020-01-29"}'
+        == b'{"t":"2020-01-29"}'
     )
