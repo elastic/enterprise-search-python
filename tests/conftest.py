@@ -17,7 +17,7 @@
 
 import pytest
 import urllib3
-from elastic_transport import Connection
+from elastic_transport import ApiResponseMeta, BaseNode, HttpHeaders
 
 from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSearch
 
@@ -48,16 +48,25 @@ def ent_search_url():
     return f"http://{host}:3002"
 
 
-class DummyConnection(Connection):
-    def __init__(self, **kwargs):
+class DummyNode(BaseNode):
+    def __init__(self, node_config, **kwargs):
         self.exception = kwargs.pop("exception", None)
-        self.status, self.data = kwargs.pop("status", 200), kwargs.pop("data", "{}")
-        self.headers = kwargs.pop("headers", {})
+        self.resp_status, self.resp_data = kwargs.pop("status", 200), kwargs.pop(
+            "data", "{}"
+        )
+        self.resp_headers = kwargs.pop("headers", {})
         self.calls = []
-        super().__init__(**kwargs)
+        super().__init__(node_config)
 
     def perform_request(self, *args, **kwargs):
         self.calls.append((args, kwargs))
         if self.exception:
             raise self.exception
-        return self.status, self.headers, self.data
+        meta = ApiResponseMeta(
+            status=self.resp_status,
+            http_version="1.1",
+            headers=HttpHeaders(self.resp_headers),
+            duration=0.0,
+            node=self.config,
+        )
+        return meta, self.resp_data

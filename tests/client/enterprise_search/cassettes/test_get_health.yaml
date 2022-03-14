@@ -2,44 +2,46 @@ interactions:
 - request:
     body: null
     headers:
+      accept:
+      - application/json
       authorization:
-      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      - Basic ZWxhc3RpYzp5cWNHcFJxVTlNazRGUW1zdkpLeEw5VW8=
       connection:
       - keep-alive
-      content-type:
-      - application/json
     method: GET
-    uri: http://localhost:3002/api/ent/v1/internal/health
+    uri: https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io/api/ent/v1/internal/health
   response:
     body:
-      string: '{"name":"f1b653d1bbd8","version":{"number":"7.12.0","build_hash":"3a6edf8029dd285b60f1a6d63c741f46df7f195f","build_date":"2021-01-06T15:24:44Z"},"jvm":{"gc":{"collection_count":43,"collection_time":2360,"garbage_collectors":{"PS
-        Scavenge":{"collection_count":38,"collection_time":1095},"PS MarkSweep":{"collection_count":5,"collection_time":1265}}},"pid":6,"uptime":5017178,"memory_usage":{"heap_init":1073741824,"heap_used":494383704,"heap_committed":1803026432,"heap_max":1908932608,"object_pending_finalization_count":0,"non_heap_init":2555904,"non_heap_committed":365125632},"memory_pools":["Code
-        Cache","Metaspace","Compressed Class Space","PS Eden Space","PS Survivor Space","PS
-        Old Gen"],"threads":{"thread_count":38,"peak_thread_count":45,"total_started_thread_count":154,"daemon_thread_count":12},"vm_version":"25.252-b09","vm_vendor":"AdoptOpenJDK","vm_name":"OpenJDK
-        64-Bit Server VM"},"filebeat":{"pid":134,"alive":true,"restart_count":0,"seconds_since_last_restart":-1},"esqueues_me":{},"system":{"java_version":"1.8.0_252","jruby_version":"9.2.13.0","os_name":"Linux","os_version":"5.4.0-54-generic"}}'
+      string: '{"name":"8a5386c434c2","version":{"number":"8.1.0","build_hash":"233d9108d258845ddd4a36915d45e22c19024981","build_date":"2022-03-03T14:31:36+00:00"},"jvm":{"gc":{"collection_count":35,"collection_time":5263,"garbage_collectors":{"Copy":{"collection_count":30,"collection_time":2813},"MarkSweepCompact":{"collection_count":5,"collection_time":2450}}},"pid":8,"uptime":6514644,"memory_usage":{"heap_init":1289748480,"heap_used":594640040,"heap_committed":1246756864,"heap_max":1246756864,"object_pending_finalization_count":0,"non_heap_init":7667712,"non_heap_committed":308342784},"memory_pools":["CodeHeap
+        \u0027non-nmethods\u0027","Metaspace","Tenured Gen","CodeHeap \u0027profiled
+        nmethods\u0027","Eden Space","Survivor Space","Compressed Class Space","CodeHeap
+        \u0027non-profiled nmethods\u0027"],"threads":{"thread_count":23,"peak_thread_count":32,"total_started_thread_count":72,"daemon_thread_count":13},"vm_version":"11.0.13+8-Ubuntu-0ubuntu1.20.04","vm_vendor":"Ubuntu","vm_name":"OpenJDK
+        64-Bit Server VM"},"filebeat":{"pid":72,"alive":true,"restart_count":0,"seconds_since_last_restart":-1},"metricbeat":{"alive":false},"esqueues_me":{"instance":{"created_at":1646951624033,"scheduled_at":1646951624033,"processing_started_at":1646951624090,"processing_latency":57,"total_processed":17,"time_since_last_scheduled":1778919,"time_since_last_processed":1778862},"Work::Engine::EngineDestroyer":{"created_at":1646951624033,"scheduled_at":1646951624033,"processing_started_at":1646951624090,"processing_latency":57,"total_processed":17,"time_since_last_scheduled":1778919,"time_since_last_processed":1778862}},"crawler":{"running":true,"workers":{"pool_size":2,"active":0,"available":2}},"system":{"java_version":"11.0.13","jruby_version":"9.2.16.0","os_name":"Linux","os_version":"5.4.0-1032-gcp"},"cluster_uuid":"B1R0DzFmRKCoGl4ib42t7w"}'
     headers:
       Cache-Control:
       - max-age=0, private, must-revalidate
+      Content-Length:
+      - '1844'
       Content-Type:
       - application/json;charset=utf-8
-      ETag:
-      - W/"6115c2e4940f91264c10b0639bd40710"
+      Date:
+      - Thu, 10 Mar 2022 23:03:22 GMT
+      Etag:
+      - W/"623d427d834003e23852837621bb41a6"
       Server:
-      - Jetty(9.4.33.v20201020)
-      Transfer-Encoding:
-      - chunked
+      - Jetty(9.4.43.v20210629)
       Vary:
       - Accept-Encoding, User-Agent
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - SAMEORIGIN
+      X-Cloud-Request-Id:
+      - k1G5hXjDSRKkCnfeaWVjUw
+      X-Found-Handling-Cluster:
+      - efbb93a5d1bb4b3f90f192c495ee00d1
+      X-Found-Handling-Instance:
+      - instance-0000000000
       X-Request-Id:
-      - ec81436b-2c78-4374-a4c0-1fa9c89866d1
+      - k1G5hXjDSRKkCnfeaWVjUw
       X-Runtime:
-      - '0.033051'
-      X-XSS-Protection:
-      - 1; mode=block
+      - '0.123531'
     status:
       code: 200
       message: OK

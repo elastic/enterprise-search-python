@@ -17,31 +17,40 @@
 
 """Python Elastic Enterprise Search Client"""
 
-from elastic_transport import APIError as APIError
-from elastic_transport import BadGatewayError as BadGatewayError
-from elastic_transport import BadRequestError as BadRequestError
-from elastic_transport import ConflictError as ConflictError
+
 from elastic_transport import ConnectionError as ConnectionError
 from elastic_transport import ConnectionTimeout as ConnectionTimeout
-from elastic_transport import ForbiddenError as ForbiddenError
-from elastic_transport import GatewayTimeoutError as GatewayTimeoutError
-from elastic_transport import InternalServerError as InternalServerError
-from elastic_transport import MethodNotImplementedError as MethodNotImplementedError
-from elastic_transport import NotFoundError as NotFoundError
-from elastic_transport import PayloadTooLargeError as PayloadTooLargeError
-from elastic_transport import PaymentRequiredError as PaymentRequiredError
 from elastic_transport import SerializationError as SerializationError
-from elastic_transport import ServiceUnavailableError as ServiceUnavailableError
 from elastic_transport import TransportError as TransportError
-from elastic_transport import UnauthorizedError as UnauthorizedError
 
-from ._serializer import JSONSerializer
+from ._async.client import AsyncAppSearch as AsyncAppSearch
+from ._async.client import AsyncEnterpriseSearch as AsyncEnterpriseSearch
+from ._async.client import AsyncWorkplaceSearch as AsyncWorkplaceSearch
+from ._serializer import JsonSerializer
+from ._sync.client import AppSearch as AppSearch
+from ._sync.client import EnterpriseSearch as EnterpriseSearch
+from ._sync.client import WorkplaceSearch as WorkplaceSearch
 from ._version import __version__  # noqa: F401
-from .client import AppSearch, EnterpriseSearch, WorkplaceSearch
+from .exceptions import (
+    ApiError,
+    BadGatewayError,
+    BadRequestError,
+    ConflictError,
+    ForbiddenError,
+    GatewayTimeoutError,
+    InternalServerError,
+    NotFoundError,
+    PayloadTooLargeError,
+    ServiceUnavailableError,
+    UnauthorizedError,
+)
 
 __all__ = [
-    "APIError",
+    "ApiError",
     "AppSearch",
+    "AsyncAppSearch",
+    "AsyncEnterpriseSearch",
+    "AsyncWorkplaceSearch",
     "BadGatewayError",
     "BadRequestError",
     "ConflictError",
@@ -51,7 +60,7 @@ __all__ = [
     "ForbiddenError",
     "GatewayTimeoutError",
     "InternalServerError",
-    "JSONSerializer",
+    "JsonSerializer",
     "MethodNotImplementedError",
     "NotFoundError",
     "PayloadTooLargeError",
@@ -62,3 +71,7 @@ __all__ = [
     "UnauthorizedError",
     "WorkplaceSearch",
 ]
+
+# Aliases for compatibility with 7.x
+APIError = ApiError
+JSONSerializer = JsonSerializer

@@ -15,6 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import pytest
+
 from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSearch
 
 
@@ -26,6 +28,11 @@ def test_sub_clients():
     # Requests Session is shared for pooling
     assert client.transport is client.app_search.transport
     assert client.transport is client.workplace_search.transport
+
+
+@pytest.mark.xfail
+def test_sub_client_auth():
+    client = EnterpriseSearch()
 
     # Authenticating doesn't modify other clients
     client.http_auth = ("user", "pass")

@@ -2,80 +2,84 @@ interactions:
 - request:
     body: null
     headers:
+      accept:
+      - application/json
       authorization:
-      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      - Basic ZWxhc3RpYzp5cWNHcFJxVTlNazRGUW1zdkpLeEw5VW8=
       connection:
       - keep-alive
-      content-type:
-      - application/json
     method: GET
-    uri: http://localhost:3002/api/ent/v1/internal/stats
+    uri: https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io/api/ent/v1/internal/stats
   response:
     body:
-      string: '{"app":{"pid":6,"start":"2021-01-27T20:34:48+00:00","end":"2021-01-27T20:35:48+00:00","metrics":{"timers.actastic.relation.search":{"sum":214.88393805339,"max":7.693164021475241,"mean":3.6421006449727122},"timers.cron.local.cron-keep_filebeat_alive.total_job_time":{"sum":23.110500012990087,"max":23.110500012990087,"mean":23.110500012990087},"timers.cron.local.cron-cleanup_heartbeat_index.total_job_time":{"sum":27.537045010831207,"max":27.537045010831207,"mean":27.537045010831207},"timers.cron.local.cron-refresh_elasticsearch_license.total_job_time":{"sum":31.15287100081332,"max":31.15287100081332,"mean":31.15287100081332},"timers.actastic.relation.document_count":{"sum":9.87388999783434,"max":2.1980470046401024,"mean":1.974777999566868},"timers.http.request.all":{"sum":281.4068794250488,"max":232.64312744140625,"mean":70.3517198562622},"timers.http.request.302":{"sum":32.675743103027344,"max":17.500877380371094,"mean":16.337871551513672},"timers.http.request.401":{"sum":16.088008880615234,"max":16.088008880615234,"mean":16.088008880615234},"timers.http.request.200":{"sum":232.64312744140625,"max":232.64312744140625,"mean":232.64312744140625},"counters.http.request.all":4,"counters.http.request.302":2,"counters.http.request.401":1,"counters.http.request.200":1}},"queues":{"connectors":{"pending":0},"document_destroyer":{"pending":0},"engine_destroyer":{"pending":0},"index_adder":{"pending":0},"indexed_doc_remover":{"pending":0},"mailer":{"pending":0},"refresh_document_counts":{"pending":0},"reindexer":{"pending":0},"schema_updater":{"pending":0},"seed_sample_engine":{"pending":0},"workplace_search":{"pending":0},"failed":[]},"connectors":{"alive":true,"pool":{"extract_worker_pool":{"running":true,"queue_depth":0,"size":8,"busy":1,"idle":7,"total_scheduled":1911,"total_completed":1910},"subextract_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"publish_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"status_update_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0}},"job_store":{"waiting":0,"working":0,"job_types":{"full":0,"incremental":0,"delete":0,"permissions":0}}}}'
+      string: '{"cluster_uuid":"B1R0DzFmRKCoGl4ib42t7w","http":{"connections":{"current":6,"max":38,"total":1388},"request_duration_ms":{"max":72381,"mean":31457.7004341534,"std_dev":4976.998594428453},"network_bytes":{"received_total":1585843,"received_rate":0,"sent_total":5463819,"sent_rate":0},"responses":{"1xx":0,"2xx":2399,"3xx":0,"4xx":12,"5xx":0}},"app":{"pid":8,"start":"2022-03-10T23:11:06+00:00","end":"2022-03-10T23:12:06+00:00","metrics":{"timers.http.request.all":{"sum":258.47601890563965,"max":78.5210132598877,"mean":18.46257277897426},"timers.http.request.200":{"sum":258.47601890563965,"max":78.5210132598877,"mean":18.46257277897426},"timers.actastic.relation.search":{"sum":74.78302344679832,"max":8.070411160588264,"mean":4.985534896453221},"timers.actastic.relation.document_count":{"sum":33.80800597369671,"max":3.9616338908672333,"mean":3.380800597369671},"timers.cron.local.cron-refresh_elasticsearch_license.total_job_time":{"sum":7.745834067463875,"max":7.745834067463875,"mean":7.745834067463875},"timers.cron.local.cron-update_search_relevance_suggestions.total_job_time":{"sum":54.193636402487755,"max":54.193636402487755,"mean":54.193636402487755},"counters.http.request.all":14,"counters.http.request.200":14}},"queues":{"engine_destroyer":{"pending":0},"process_crawl":{"pending":0},"mailer":{"pending":0},"failed":[]},"connectors":{"alive":true,"pool":{"extract_worker_pool":{"running":true,"queue_depth":0,"size":1,"busy":1,"idle":0,"total_scheduled":1,"total_completed":0},"subextract_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"publish_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0}},"job_store":{"waiting":0,"working":0,"job_types":{"full":0,"incremental":0,"delete":0,"permissions":0}}},"crawler":{"global":{"crawl_requests":{"pending":0,"active":0,"successful":0,"failed":0}},"node":{"pages_visited":0,"urls_allowed":0,"urls_denied":{},"status_codes":{},"queue_size":{"primary":0,"purge":0},"active_threads":0,"workers":{"pool_size":2,"active":0,"available":2}}},"product_usage":{"app_search":{"total_engines":5},"workplace_search":{"total_org_sources":0,"total_private_sources":0,"total_queries_last_30_days":0}}}'
     headers:
       Cache-Control:
       - max-age=0, private, must-revalidate
+      Content-Length:
+      - '2277'
       Content-Type:
       - application/json;charset=utf-8
-      ETag:
-      - W/"797d682bdbd532571cb49ebd0ff1b313"
+      Date:
+      - Thu, 10 Mar 2022 23:13:00 GMT
+      Etag:
+      - W/"5fdee13797bbe623fee0bc75353be447"
       Server:
-      - Jetty(9.4.33.v20201020)
-      Transfer-Encoding:
-      - chunked
+      - Jetty(9.4.43.v20210629)
       Vary:
       - Accept-Encoding, User-Agent
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - SAMEORIGIN
+      X-Cloud-Request-Id:
+      - 9t6TxfkYS9-xnrI_s1X7uQ
+      X-Found-Handling-Cluster:
+      - efbb93a5d1bb4b3f90f192c495ee00d1
+      X-Found-Handling-Instance:
+      - instance-0000000000
       X-Request-Id:
-      - c8f14630-5b1b-49fd-b39e-5c0a8617af83
+      - 9t6TxfkYS9-xnrI_s1X7uQ
       X-Runtime:
-      - '0.058923'
-      X-XSS-Protection:
-      - 1; mode=block
+      - '0.148459'
     status:
       code: 200
       message: OK
 - request:
     body: null
     headers:
+      accept:
+      - application/json
       authorization:
-      - Basic ZWxhc3RpYzpjaGFuZ2VtZQ==
+      - Basic ZWxhc3RpYzp5cWNHcFJxVTlNazRGUW1zdkpLeEw5VW8=
       connection:
       - keep-alive
-      content-type:
-      - application/json
     method: GET
-    uri: http://localhost:3002/api/ent/v1/internal/stats?include=connectors,queues
+    uri: https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io/api/ent/v1/internal/stats?include%5B%5D=connectors&include%5B%5D=queues
   response:
     body:
-      string: '{"connectors":{"alive":true,"pool":{"extract_worker_pool":{"running":true,"queue_depth":0,"size":8,"busy":1,"idle":7,"total_scheduled":1911,"total_completed":1910},"subextract_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"publish_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"status_update_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0}},"job_store":{"waiting":0,"working":0,"job_types":{"full":0,"incremental":0,"delete":0,"permissions":0}}},"queues":{"connectors":{"pending":0},"document_destroyer":{"pending":0},"engine_destroyer":{"pending":0},"index_adder":{"pending":0},"indexed_doc_remover":{"pending":0},"mailer":{"pending":0},"refresh_document_counts":{"pending":0},"reindexer":{"pending":0},"schema_updater":{"pending":0},"seed_sample_engine":{"pending":0},"workplace_search":{"pending":0},"failed":[]}}'
+      string: '{"connectors":{"alive":true,"pool":{"extract_worker_pool":{"running":true,"queue_depth":0,"size":1,"busy":1,"idle":0,"total_scheduled":1,"total_completed":0},"subextract_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"publish_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0}},"job_store":{"waiting":0,"working":0,"job_types":{"full":0,"incremental":0,"delete":0,"permissions":0}}},"queues":{"engine_destroyer":{"pending":0},"process_crawl":{"pending":0},"mailer":{"pending":0},"failed":[]}}'
     headers:
       Cache-Control:
       - max-age=0, private, must-revalidate
+      Content-Length:
+      - '620'
       Content-Type:
       - application/json;charset=utf-8
-      ETag:
-      - W/"e262a6c051b70a3f99cb1cf9a643d3f8"
+      Date:
+      - Thu, 10 Mar 2022 23:13:01 GMT
+      Etag:
+      - W/"5ebfdeaf9e3c855c552df3b56cd305c5"
       Server:
-      - Jetty(9.4.33.v20201020)
-      Transfer-Encoding:
-      - chunked
+      - Jetty(9.4.43.v20210629)
       Vary:
       - Accept-Encoding, User-Agent
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - SAMEORIGIN
+      X-Cloud-Request-Id:
+      - gRT9G4f7Ryi9AsJupHocNA
+      X-Found-Handling-Cluster:
+      - efbb93a5d1bb4b3f90f192c495ee00d1
+      X-Found-Handling-Instance:
+      - instance-0000000000
       X-Request-Id:
-      - 5e674fad-3c40-4bbb-92ad-153345dd4c27
+      - gRT9G4f7Ryi9AsJupHocNA
       X-Runtime:
-      - '0.060609'
-      X-XSS-Protection:
-      - 1; mode=block
+      - '0.079419'
     status:
       code: 200
       message: OK

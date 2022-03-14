@@ -14,21 +14,3 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-
-from elastic_transport import QueryParams
-from ._base import BaseClient
-from .._utils import (  # noqa: F401
-    to_array,
-    to_deep_object,
-    to_path,
-    DEFAULT,
-    SKIP_IN_PATH,
-)
-
-
-class {{ spec.client_class_name }}(BaseClient):
-{% for api in spec.apis %}
-{% with api=api %}
-{% include "api" %}
-{% endwith %}
-{% endfor %}

@@ -1,49 +1,52 @@
 interactions:
 - request:
-    body: null
+    body: '{"query":"ca","types":{"documents":{"fields":["title"]}}}'
     headers:
+      accept:
+      - application/json
       authorization:
-      - Bearer private-k3ra4bqu12vgnhe3wibdw69f
+      - Bearer private-ybzoyx7cok65hpxyxkwaarnn
       connection:
       - keep-alive
       content-type:
       - application/json
     method: POST
-    uri: http://localhost:3002/api/as/v1/engines/national-parks-demo/query_suggestion?query=ca&types%5Bdocuments%5D%5Bfields%5D%5B%5D=title&types%5Bdocuments%5D%5Bfields%5D%5B%5D=states
+    uri: https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io/api/as/v1/engines/national-parks-demo/query_suggestion
   response:
     body:
-      string: '{"results":{"documents":[{"suggestion":"cave"},{"suggestion":"capitol"},{"suggestion":"capitol
-        reef"},{"suggestion":"canyon"},{"suggestion":"california"},{"suggestion":"canyonlands"},{"suggestion":"carlsbad
-        caverns"},{"suggestion":"cascades"},{"suggestion":"carolina"},{"suggestion":"canyon
-        of"}]},"meta":{"request_id":"15a4ce10-1d5b-49d0-a83f-f4cf35b0e45e"}}'
+      string: '{"results":{"documents":[{"suggestion":"cave"},{"suggestion":"canyon"},{"suggestion":"canyonlands"},{"suggestion":"capitol"},{"suggestion":"capitol
+        reef"},{"suggestion":"carlsbad caverns"},{"suggestion":"cascades"},{"suggestion":"canyon
+        of"},{"suggestion":"canyon of the"},{"suggestion":"canyon of the gunnison"}]},"meta":{"request_id":"H2-JTFaXT_qUjkzHdct-9g"}}'
     headers:
       Cache-Control:
       - max-age=0, private, must-revalidate
+      Content-Length:
+      - '362'
       Content-Type:
       - application/json;charset=utf-8
-      ETag:
-      - W/"185e9bb8fa9b574cbe4ec866e907e206"
+      Date:
+      - Thu, 10 Mar 2022 21:32:23 GMT
+      Etag:
+      - W/"c4f24414760523290f3f43e33a602b0a"
       Server:
-      - Jetty(9.4.33.v20201020)
-      Transfer-Encoding:
-      - chunked
+      - Jetty(9.4.43.v20210629)
       Vary:
       - Origin
       - Accept-Encoding, User-Agent
       X-App-Search-Version:
-      - 7.12.0
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - SAMEORIGIN
+      - 8.1.0
+      X-Cloud-Request-Id:
+      - H2-JTFaXT_qUjkzHdct-9g
+      X-Found-Handling-Cluster:
+      - efbb93a5d1bb4b3f90f192c495ee00d1
+      X-Found-Handling-Instance:
+      - instance-0000000000
       X-Request-Id:
-      - 15a4ce10-1d5b-49d0-a83f-f4cf35b0e45e
+      - H2-JTFaXT_qUjkzHdct-9g
       X-Runtime:
-      - '0.079127'
+      - '0.106425'
       X-St-Internal-Rails-Version:
-      - 4.2.11.3
-      X-XSS-Protection:
-      - 1; mode=block
+      - 5.2.6
     status:
       code: 200
       message: OK
