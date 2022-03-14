@@ -15,10 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-"""A command line tool for building and verifying releases
-Can be used for building both 'elasticsearch' and 'elasticsearchX' dists.
-Only requires 'name' in 'setup.py' and the directory to be changed.
-"""
+"""A command line tool for building and verifying releases."""
 
 import contextlib
 import os
@@ -139,7 +136,7 @@ def main():
         version_data = f.read()
     version_data = re.sub(
         r"__version__ = \"[^\"]+\"",
-        '__version__ = "%s"' % version,
+        f'__version__ = "{version}"',
         version_data,
     )
     with open(version_path, "w") as f:
@@ -147,7 +144,7 @@ def main():
         f.write(version_data)
 
     # Build the sdist/wheels
-    run("python", "setup.py", "sdist", "bdist_wheel")
+    run("python", "-m", "build")
 
     # Test everything that got created
     dists = os.listdir(os.path.join(base_dir, "dist"))

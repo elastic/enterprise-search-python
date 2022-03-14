@@ -22,12 +22,12 @@ from elastic_enterprise_search import EnterpriseSearch
 
 @pytest.fixture(scope="session")
 def ent_search(ent_search_url):
-    with EnterpriseSearch(ent_search_url, http_auth=("elastic", "changeme")) as client:
+    with EnterpriseSearch(ent_search_url, basic_auth=("elastic", "changeme")) as client:
         yield client
 
 
 @pytest.fixture(scope="session")
 def app_search(ent_search):
     client = ent_search.app_search
-    client.http_auth = ("elastic", "7XdP3UGdKcFq4D6JfZC4VPzB")
+    client.basic_auth = ("elastic", "7XdP3UGdKcFq4D6JfZC4VPzB")
     yield client
