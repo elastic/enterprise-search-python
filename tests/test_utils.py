@@ -19,7 +19,6 @@ import datetime
 
 import pytest
 from dateutil import tz
-from elastic_transport import QueryParams
 
 from elastic_enterprise_search import _utils
 
@@ -48,48 +47,13 @@ def test_format_datetime_tz_naive():
 
 
 def test_to_params():
-    params = QueryParams(
-        [
-            ("a", 1),
-            ("b", "z"),
-            ("c", ["d", 2]),
-            ("e", datetime.date(year=2020, month=1, day=1)),
-            (
-                "f",
-                datetime.datetime(
-                    year=2020,
-                    month=2,
-                    day=3,
-                    hour=4,
-                    minute=5,
-                    second=6,
-                    microsecond=7,
-                    tzinfo=tz.gettz("HST"),
-                ),
-            ),
-            ("g", (True, False)),
-            ("h", b"hello-world"),
-            ("i", None),
-            ("z", "[]1234567890-_~. `=!@#$%^&*()+;'{}:,<>?/\\\""),
-        ]
-    )
-    assert _utils.default_params_encoder(params) == (
-        "a=1&b=z&c=d,2&e=2020-01-01&f=2020-02-03T04:05:06-10:00&"
-        "g=true,false&h=hello-world&i&z=[]1234567890-_~."
-        "%20%60%3D%21%40%23%24%25%5E%26*%28%29%2B%3B%27%7B%7D:,%3C%3E%3F%2F%5C%22"
-    )
-
-
-def test_make_path():
-    assert (
-        _utils.to_path(
-            "a",
-            1,
-            "/&",
-            ",",
-            "*",
-            ["d", 2],
-            datetime.date(year=2020, month=1, day=1),
+    params = [
+        ("a", 1),
+        ("b", "z"),
+        ("c", ["d", 2]),
+        ("e", datetime.date(year=2020, month=1, day=1)),
+        (
+            "f",
             datetime.datetime(
                 year=2020,
                 month=2,
@@ -100,43 +64,26 @@ def test_make_path():
                 microsecond=7,
                 tzinfo=tz.gettz("HST"),
             ),
-            False,
-        )
-        == "/a/1/%2F%26/,/*/d,2/2020-01-01/2020-02-03T04:05:06-10:00/false"
-    )
-
-
-def test_to_deep_object():
-    assert _utils.to_deep_object("key", {"field": [1, False, {"val": 2}]}) == [
-        ("key[field][]", "1"),
-        ("key[field][]", "false"),
-        ("key[field][][val]", "2"),
+        ),
+        ("g", (True, False)),
+        ("h", b"hello-world"),
+        ("i", None),
+        ("z", "[]1234567890-_~. `=!@#$%^&*()+;'{}:,<>?/\\\""),
+        ("kv", {"key": [1, "2", {"k": "v"}]}),
     ]
-
-
-def test_datetime_with_timezone():
-    # Hawaii Standard Time is UTC-10 and doesn't observe
-    # daylight savings so this should continue to pass :)
-    params = QueryParams(
-        {
-            "dt": datetime.datetime(
-                year=2020,
-                month=1,
-                day=1,
-                hour=10,
-                minute=0,
-                second=0,
-                tzinfo=tz.gettz("HST"),
-            )
-        }
+    assert _utils._quote_query(params) == (
+        "a=1&"
+        "b=z&"
+        "c[]=d&"
+        "c[]=2&"
+        "e=2020-01-01&"
+        "f=2020-02-03T04:05:06.000007-10:00&"
+        "g[]=True&g[]=False&"
+        "h=hello-world&"
+        "i=None&"
+        "z=[]1234567890-_~.%20%60%3D%21%40%23%24%25%5E%26*%28%29%2B%3B%27%7B%7D:,%3C%3E%3F%2F%5C%22&"
+        "kv[key][]=1&kv[key][]=2&kv[key][][k]=v"
     )
-    assert _utils.default_params_encoder(params) == "dt=2020-01-01T10:00:00-10:00"
-
-    dt = datetime.datetime(
-        year=2020, month=1, day=1, hour=10, minute=0, second=0, tzinfo=tz.UTC
-    )
-    params["dt"] = dt
-    assert _utils.default_params_encoder(params) == "dt=2020-01-01T10:00:00Z"
 
 
 @pytest.mark.parametrize(

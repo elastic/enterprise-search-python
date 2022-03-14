@@ -25,13 +25,33 @@ from elastic_enterprise_search import AppSearch, UnauthorizedError
 def test_list_engines(app_search):
     resp = app_search.list_engines()
 
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
         "meta": {
-            "page": {"current": 1, "total_pages": 1, "total_results": 1, "size": 25}
+            "page": {"current": 1, "total_pages": 1, "total_results": 3, "size": 25}
         },
         "results": [
-            {"name": "national-parks-demo", "type": "default", "language": None}
+            {
+                "name": "source-engine-2",
+                "type": "default",
+                "language": None,
+                "index_create_settings_override": {},
+                "document_count": 0,
+            },
+            {
+                "name": "source-engine-1",
+                "type": "default",
+                "language": "en",
+                "index_create_settings_override": {},
+                "document_count": 0,
+            },
+            {
+                "name": "national-parks-demo",
+                "type": "default",
+                "language": None,
+                "index_create_settings_override": {},
+                "document_count": 59,
+            },
         ],
     }
 
@@ -41,7 +61,7 @@ def test_list_documents(app_search):
     resp = app_search.list_documents(
         engine_name="national-parks-demo", page_size=2, current_page=3
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
         "meta": {
             "page": {"current": 3, "total_pages": 30, "total_results": 59, "size": 2}
@@ -86,7 +106,7 @@ def test_delete_documents(app_search):
             "park_zion",
         ],
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == [
         {"id": "park_yellowstone", "deleted": True},
         {"id": "park_zion", "deleted": True},
@@ -126,7 +146,7 @@ def test_index_documents(app_search):
             },
         ],
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == [
         {"id": "park_zion", "errors": []},
         {"id": "park_yellowstone", "errors": []},
@@ -138,55 +158,56 @@ def test_search(app_search):
     resp = app_search.search(
         engine_name="national-parks-demo", body={"query": "tree", "page": {"size": 2}}
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
         "meta": {
             "alerts": [],
             "warnings": [],
-            "page": {"current": 1, "total_pages": 12, "total_results": 23, "size": 2},
+            "precision": 2,
+            "page": {"current": 1, "total_pages": 10, "total_results": 20, "size": 2},
             "engine": {"name": "national-parks-demo", "type": "default"},
-            "request_id": "4999a4ef-b750-4bef-aea2-87f54d9c87b3",
+            "request_id": "HduTq2QERG2-xjFjx0JWhA",
         },
         "results": [
             {
-                "nps_link": {"raw": "https://www.nps.gov/grsm/index.htm"},
-                "title": {"raw": "Great Smoky Mountains"},
-                "date_established": {"raw": "1934-06-15T05:00:00+00:00"},
+                "visitors": {"raw": 11312786.0},
+                "square_km": {"raw": 2114.2},
                 "world_heritage_site": {"raw": "true"},
-                "states": {"raw": ["Tennessee", "North Carolina"]},
+                "date_established": {"raw": "1934-06-15T05:00:00+00:00"},
                 "description": {
                     "raw": "The Great Smoky Mountains, part of the Appalachian Mountains, span a wide range of elevations, making them home to over 400 vertebrate species, 100 tree species, and 5000 plant species. Hiking is the park's main attraction, with over 800 miles (1,300 km) of trails, including 70 miles (110 km) of the Appalachian Trail. Other activities include fishing, horseback riding, and touring nearly 80 historic structures."
                 },
-                "visitors": {"raw": 11312786.0},
+                "location": {"raw": "35.68,-83.53"},
+                "acres": {"raw": 522426.88},
                 "_meta": {
                     "id": "park_great-smoky-mountains",
                     "engine": "national-parks-demo",
-                    "score": 16969184.0,
+                    "score": 16969186.0,
                 },
                 "id": {"raw": "park_great-smoky-mountains"},
-                "location": {"raw": "35.68,-83.53"},
-                "square_km": {"raw": 2114.2},
-                "acres": {"raw": 522426.88},
+                "title": {"raw": "Great Smoky Mountains"},
+                "nps_link": {"raw": "https://www.nps.gov/grsm/index.htm"},
+                "states": {"raw": ["Tennessee", "North Carolina"]},
             },
             {
-                "nps_link": {"raw": "https://www.nps.gov/yose/index.htm"},
-                "title": {"raw": "Yosemite"},
-                "date_established": {"raw": "1890-10-01T05:00:00+00:00"},
+                "visitors": {"raw": 5969811.0},
+                "square_km": {"raw": 4862.9},
                 "world_heritage_site": {"raw": "true"},
-                "states": {"raw": ["California"]},
+                "date_established": {"raw": "1919-02-26T06:00:00+00:00"},
                 "description": {
-                    "raw": "Yosemite features sheer granite cliffs, exceptionally tall waterfalls, and old-growth forests at a unique intersection of geology and hydrology. Half Dome and El Capitan rise from the park's centerpiece, the glacier-carved Yosemite Valley, and from its vertical walls drop Yosemite Falls, one of North America's tallest waterfalls at 2,425 feet (739 m) high. Three giant sequoia groves, along with a pristine wilderness in the heart of the Sierra Nevada, are home to a wide variety of rare plant and animal species."
+                    "raw": "The Grand Canyon, carved by the mighty Colorado River, is 277 miles (446 km) long, up to 1 mile (1.6 km) deep, and up to 15 miles (24 km) wide. Millions of years of erosion have exposed the multicolored layers of the Colorado Plateau in mesas and canyon walls, visible from both the north and south rims, or from a number of trails that descend into the canyon itself."
                 },
-                "visitors": {"raw": 5028868.0},
+                "location": {"raw": "36.06,-112.14"},
+                "acres": {"raw": 1201647.03},
                 "_meta": {
-                    "id": "park_yosemite",
+                    "id": "park_grand-canyon",
                     "engine": "national-parks-demo",
-                    "score": 7543302.0,
+                    "score": 8954717.0,
                 },
-                "id": {"raw": "park_yosemite"},
-                "location": {"raw": "37.83,-119.5"},
-                "square_km": {"raw": 3082.7},
-                "acres": {"raw": 761747.5},
+                "id": {"raw": "park_grand-canyon"},
+                "title": {"raw": "Grand Canyon"},
+                "nps_link": {"raw": "https://www.nps.gov/grca/index.htm"},
+                "states": {"raw": ["Arizona"]},
             },
         ],
     }
@@ -194,15 +215,16 @@ def test_search(app_search):
 
 @pytest.mark.vcr()
 def test_not_authorized(app_search):
-    app_search.http_auth = None
     with pytest.raises(UnauthorizedError) as e:
-        app_search.list_engines()
-    assert e.value.status == 401
-    assert e.value.message == {"error": "You need to sign in before continuing."}
+        app_search.options(headers={"Authorization": ""}).list_engines()
+    assert e.value.meta.status == 401
+    assert e.value.body == {"error": "You need to sign in before continuing."}
     assert e.value.errors == ()
 
-    resp = app_search.list_engines(ignore_status=401)
-    assert resp.status == 401
+    resp = app_search.options(headers={"Authorization": ""}).list_engines(
+        ignore_status=401
+    )
+    assert resp.meta.status == 401
     assert resp == {"error": "You need to sign in before continuing."}
 
 
@@ -211,11 +233,11 @@ def test_meta_engine(app_search):
     # Create some source engines
     resp = app_search.create_engine(
         engine_name="source-engine-1",
-        type="default",
         language="en",
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
+        "index_create_settings_override": {},
         "document_count": 0,
         "language": "en",
         "name": "source-engine-1",
@@ -225,8 +247,9 @@ def test_meta_engine(app_search):
     resp = app_search.create_engine(
         engine_name="source-engine-2",
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
+        "index_create_settings_override": {},
         "document_count": 0,
         "language": None,
         "name": "source-engine-2",
@@ -236,34 +259,27 @@ def test_meta_engine(app_search):
     # Create a meta engine
     resp = app_search.create_engine(
         engine_name="meta-engine",
-        type="meta",
         source_engines=["source-engine-1", "source-engine-2"],
+        type="meta",
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
-        "document_count": 0,
         "name": "meta-engine",
-        "source_engines": ["source-engine-1", "source-engine-2"],
         "type": "meta",
+        "source_engines": ["source-engine-1", "source-engine-2"],
+        "document_count": 0,
     }
 
     # Delete some source engines
-    resp = app_search.delete_engine(engine_name="source-engine-2")
-    assert resp.status == 200
-    assert resp == {"deleted": True}
-
-    resp = app_search.delete_engine(engine_name="source-engine-1")
-    assert resp.status == 200
-    assert resp == {"deleted": True}
-
-    # See the meta engine has no source engines
-    resp = app_search.get_engine(engine_name="meta-engine")
-    assert resp.status == 200
+    resp = app_search.delete_meta_engine_source(
+        engine_name="meta-engine", source_engines=["source-engine-1", "source-engine-2"]
+    )
+    assert resp.meta.status == 200
     assert resp == {
-        "document_count": 0,
         "name": "meta-engine",
-        "source_engines": [],
         "type": "meta",
+        "source_engines": [],
+        "document_count": 0,
     }
 
     # Use the add_meta_engine_source() API
@@ -271,7 +287,7 @@ def test_meta_engine(app_search):
     resp = app_search.add_meta_engine_source(
         engine_name="meta-engine", source_engines=["source-engine-added"]
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
         "document_count": 0,
         "name": "meta-engine",
@@ -285,28 +301,29 @@ def test_query_suggestions(app_search):
     resp = app_search.query_suggestion(
         engine_name="national-parks-demo",
         query="ca",
-        fields=["title", "states"],
+        types={"documents": {"fields": ["title"]}},
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == {
-        "meta": {"request_id": "15a4ce10-1d5b-49d0-a83f-f4cf35b0e45e"},
         "results": {
             "documents": [
                 {"suggestion": "cave"},
+                {"suggestion": "canyon"},
+                {"suggestion": "canyonlands"},
                 {"suggestion": "capitol"},
                 {"suggestion": "capitol reef"},
-                {"suggestion": "canyon"},
-                {"suggestion": "california"},
-                {"suggestion": "canyonlands"},
                 {"suggestion": "carlsbad caverns"},
                 {"suggestion": "cascades"},
-                {"suggestion": "carolina"},
                 {"suggestion": "canyon of"},
+                {"suggestion": "canyon of the"},
+                {"suggestion": "canyon of the gunnison"},
             ]
         },
+        "meta": {"request_id": "H2-JTFaXT_qUjkzHdct-9g"},
     }
 
 
+@pytest.mark.xfail
 @pytest.mark.vcr()
 def test_multi_search(app_search):
     resp = app_search.multi_search(
@@ -318,7 +335,7 @@ def test_multi_search(app_search):
             ]
         },
     )
-    assert resp.status == 200
+    assert resp.meta.status == 200
     assert resp == [
         {
             "meta": {
@@ -409,11 +426,3 @@ def test_create_signed_search_key():
         "filters": {"status": "available"},
         "search_fields": {"first_name": {}},
     }
-
-
-def test_array_type_check(app_search):
-    with pytest.raises(TypeError) as e:
-        app_search.create_engine(
-            engine_name="test-engine", type="meta", source_engines="source-engine"
-        )
-    assert str(e.value) == "Parameter 'source_engines' must be a tuple or list"

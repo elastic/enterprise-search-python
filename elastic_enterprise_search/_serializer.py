@@ -17,13 +17,13 @@
 
 import datetime
 
-from elastic_transport import JSONSerializer as _JSONSerializer
+from elastic_transport import JsonSerializer as _JsonSerializer
 
 from ._utils import format_datetime
 
 
-class JSONSerializer(_JSONSerializer):
-    """Same as elastic_transport.JSONSerializer except also formats
+class JsonSerializer(_JsonSerializer):
+    """Same as elastic_transport.JsonSerializer except also formats
     datetime objects to RFC 3339. If a datetime is received without
     explicit timezone information then the timezone will be assumed
     to be the local timezone.
@@ -33,3 +33,6 @@ class JSONSerializer(_JSONSerializer):
         if isinstance(data, datetime.datetime):
             return format_datetime(data)
         return super().default(data)
+
+
+JSONSerializer = JsonSerializer
