@@ -15,9 +15,8 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import pytest
-
 from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSearch
+from tests.conftest import DummyNode
 
 
 def test_sub_clients():
@@ -30,21 +29,39 @@ def test_sub_clients():
     assert client.transport is client.workplace_search.transport
 
 
-@pytest.mark.xfail
 def test_sub_client_auth():
-    client = EnterpriseSearch()
+    client = EnterpriseSearch(node_class=DummyNode, meta_header=False)
+
+    # Using options on individual clients
+    client.options(bearer_auth="enterprise-search").perform_request(
+        "GET", "/enterprise-search"
+    )
+    client.app_search.options(bearer_auth="app-search").perform_request(
+        "GET", "/app-search"
+    )
+    client.workplace_search.options(bearer_auth="workplace-search").perform_request(
+        "GET", "/workplace-search"
+    )
 
     # Authenticating doesn't modify other clients
-    client.http_auth = ("user", "pass")
-    client.app_search.http_auth = "token-app-search"
-    client.workplace_search.http_auth = "token-workplace-search"
-
-    assert client.http_auth == ("user", "pass")
-    assert client.app_search.http_auth == "token-app-search"
-    assert client.workplace_search.http_auth == "token-workplace-search"
-
-    assert client._authorization_header == "Basic dXNlcjpwYXNz"
-    assert client.app_search._authorization_header == "Bearer token-app-search"
-    assert (
-        client.workplace_search._authorization_header == "Bearer token-workplace-search"
+    client.options(bearer_auth="not-app-search").app_search.perform_request(
+        "GET", "/not-app-search"
     )
+    client.options(bearer_auth="not-workplace-search").workplace_search.perform_request(
+        "GET", "/not-workplace-search"
+    )
+
+    # The Authorziation header gets hidden
+    calls = client.transport.node_pool.get().calls
+    headers = [
+        (target, kwargs["headers"].get("Authorization", None))
+        for ((_, target), kwargs) in calls
+    ]
+
+    assert headers == [
+        ("/enterprise-search", "Bearer enterprise-search"),
+        ("/app-search", "Bearer app-search"),
+        ("/workplace-search", "Bearer workplace-search"),
+        ("/not-app-search", None),
+        ("/not-workplace-search", None),
+    ]

@@ -102,72 +102,78 @@ def resolve_auth_headers(
     basic_auth: t.Union[DefaultType, None, t.Tuple[str, str], str] = DEFAULT,
     bearer_auth: t.Union[DefaultType, None, str] = DEFAULT,
 ) -> HttpHeaders:
+    # Return an HttpHeaders instance. Can return values with 'None'
+    # which are meant to be popped from an existing HttpHeaders instance
+    # if two instances are being combined together.
 
     if headers is None or headers is DEFAULT:
         headers = HttpHeaders()
     elif not isinstance(headers, HttpHeaders):
         headers = HttpHeaders(headers)
 
-    resolved_http_auth = http_auth if http_auth is not DEFAULT else None
-    resolved_basic_auth = basic_auth if basic_auth is not DEFAULT else None
-    resolved_bearer_auth = bearer_auth if bearer_auth is not DEFAULT else None
-
-    if resolved_http_auth is not None:
-        if resolved_basic_auth is not None or resolved_bearer_auth is not None:
-            raise ValueError(
-                "Can't specify both 'http_auth' and 'basic_auth'/'bearer_auth', "
-                "instead only specify 'basic_auth'"
-            )
-        if isinstance(resolved_http_auth, (list, tuple)) and all(
-            isinstance(x, str) for x in resolved_http_auth
-        ):
-            resolved_basic_auth = resolved_http_auth
-        elif isinstance(resolved_http_auth, str):
-            resolved_bearer_auth = resolved_http_auth
-        else:
-            raise TypeError(
-                "The deprecated 'http_auth' parameter must be either 'Tuple[str, str]' or 'str'. "
-                "Use the 'basic_auth' or 'bearer_auth' parameters instead"
-            )
-
-        warnings.warn(
-            "The 'http_auth' parameter is deprecated. "
-            "Use 'basic_auth' or 'bearer_auth' parameters instead",
-            category=DeprecationWarning,
-            stacklevel=warn_stacklevel(),
+    # Handle special authentication options
+    auth_params_given = sum(
+        x is not DEFAULT for x in (http_auth, basic_auth, bearer_auth)
+    )
+    if auth_params_given > 1:
+        # More than one authentication parameter would have conflicts.
+        # Don't allow users to specify both.
+        raise ValueError(
+            "Can't specify more than one authentication parameter (basic_auth/bearer_auth)"
         )
 
-    if resolved_basic_auth or resolved_bearer_auth:
-        if (
-            sum(
-                x is not None
-                for x in (
-                    resolved_basic_auth,
-                    resolved_bearer_auth,
+    # If there's exactly one parameter specified we can apply it to headers.
+    if auth_params_given == 1:
+        # http_auth -> bearer_auth / basic_auth
+        if http_auth is not DEFAULT:
+            if http_auth is None:
+                basic_auth = None
+            elif isinstance(http_auth, (list, tuple)) and all(
+                isinstance(x, str) for x in http_auth
+            ):
+                basic_auth = http_auth
+            elif isinstance(http_auth, str):
+                bearer_auth = http_auth
+            else:
+                raise TypeError(
+                    "The deprecated 'http_auth' parameter must be either 'Tuple[str, str]' or 'str'. "
+                    "Use the 'basic_auth' or 'bearer_auth' parameters instead"
                 )
+
+            warnings.warn(
+                "The 'http_auth' parameter is deprecated. "
+                "Use 'basic_auth' or 'bearer_auth' parameters instead",
+                category=DeprecationWarning,
+                stacklevel=warn_stacklevel(),
             )
-            > 1
-        ):
-            raise ValueError(
-                "Can only set one of 'api_key', 'basic_auth', and 'bearer_auth'"
-            )
+
+        # Setting the 'Authorization' header would be a conflict.
         if headers and headers.get("authorization", None) is not None:
             raise ValueError(
                 "Can't set 'Authorization' HTTP header with other authentication options"
             )
-        if resolved_basic_auth:
-            if isinstance(resolved_basic_auth, str):
-                headers["authorization"] = f"Basic {resolved_basic_auth}"
-            elif isinstance(resolved_basic_auth, (list, tuple)):
-                headers[
-                    "authorization"
-                ] = f"Basic {base64.b64encode(':'.join(resolved_basic_auth).encode('utf-8')).decode('ascii')}"
-            else:
-                raise TypeError(
-                    "'basic_auth' must be a string or 2 item list/tuple of strings"
-                )
-        if resolved_bearer_auth:
-            headers["authorization"] = f"Bearer {resolved_bearer_auth}"
+
+        # Basic auth
+        if isinstance(basic_auth, str):
+            headers["authorization"] = f"Basic {basic_auth}"
+        elif isinstance(basic_auth, (list, tuple)):
+            headers[
+                "authorization"
+            ] = f"Basic {base64.b64encode(':'.join(basic_auth).encode('utf-8')).decode('ascii')}"
+        elif basic_auth is None:
+            headers["authorization"] = None
+        elif basic_auth is not DEFAULT:
+            raise TypeError(
+                "'basic_auth' must be a string or 2 item list/tuple of strings"
+            )
+
+        # Bearer auth
+        if isinstance(bearer_auth, str):
+            headers["authorization"] = f"Bearer {bearer_auth}"
+        elif bearer_auth is None:
+            headers["authorization"] = None
+        elif bearer_auth is not DEFAULT:
+            raise TypeError("'bearer_auth' must be a string")
 
     return headers
 
