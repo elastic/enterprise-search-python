@@ -16,6 +16,7 @@
 #  under the License.
 
 import datetime
+import warnings
 
 import pytest
 from dateutil import tz
@@ -145,4 +146,93 @@ def test_parse_datetime_bad_format():
     assert (
         str(e.value)
         == "Datetime must match format '(YYYY)-(MM)-(DD)T(HH):(MM):(SS)(TZ)' was '2020-03-10T10:10:10'"
+    )
+
+
+class Client:
+    def __init__(self):
+        self.options_kwargs = []
+
+    def options(self, **kwargs):
+        self.options_kwargs.append(kwargs)
+        return self
+
+    @_utils._rewrite_parameters(body_name="documents")
+    def func_body_name(self, *args, **kwargs):
+        return (args, kwargs)
+
+    @_utils._rewrite_parameters(body_fields=True)
+    def func_body_fields(self, *args, **kwargs):
+        return (args, kwargs)
+
+
+def test_rewrite_parameters_body_name():
+    client = Client()
+    with warnings.catch_warnings(record=True) as w:
+        _, kwargs = client.func_body_name(body=[1, 2, 3])
+    assert kwargs == {"documents": [1, 2, 3]}
+    assert (
+        len(w) == 1
+        and str(w[0].message)
+        == "The 'body' parameter is deprecated and will be removed in a future version. Instead use the 'documents' parameter."
+    )
+
+    with warnings.catch_warnings(record=True) as w:
+        _, kwargs = client.func_body_fields(documents=[1, 2, 3])
+    assert kwargs == {"documents": [1, 2, 3]}
+    assert w == []
+
+
+def test_rewrite_parameters_body_field():
+    client = Client()
+    with warnings.catch_warnings(record=True) as w:
+        _, kwargs = client.func_body_fields(params={"param": 1}, body={"field": 2})
+    assert kwargs == {"param": 1, "field": 2}
+    assert len(w) == 2 and {str(wn.message) for wn in w} == {
+        "The 'params' parameter is deprecated and will be removed in a future version. Instead use individual parameters.",
+        "The 'body' parameter is deprecated and will be removed in a future version. Instead use individual parameters.",
+    }
+
+
+@pytest.mark.parametrize(
+    ["http_auth", "auth_kwargs"],
+    [
+        ("api-key", {"bearer_auth": "api-key"}),
+        (("username", "password"), {"basic_auth": ("username", "password")}),
+        (["username", "password"], {"basic_auth": ["username", "password"]}),
+    ],
+)
+def test_rewrite_parameters_http_auth(http_auth, auth_kwargs):
+    client = Client()
+    with warnings.catch_warnings(record=True) as w:
+        args, kwargs = client.func_body_fields(http_auth=http_auth)
+    assert args == ()
+    assert kwargs == {}
+    assert client.options_kwargs == [auth_kwargs]
+    assert len(w) == 1 and {str(wn.message) for wn in w} == {
+        "Passing transport options in the API method is deprecated. Use 'Client.options()' instead."
+    }
+
+
+@pytest.mark.parametrize(
+    ["body", "page_kwargs"],
+    [
+        ({"page": {"current": 1}}, {"current_page": 1}),
+        ({"page": {"size": 1}}, {"page_size": 1}),
+        ({"page": {"current": 1, "size": 2}}, {"current_page": 1, "page_size": 2}),
+    ],
+)
+def test_rewrite_parameters_pagination(body, page_kwargs):
+    client = Client()
+    _, kwargs = client.func_body_fields(body=body)
+    assert kwargs == page_kwargs
+
+
+def test_rewrite_parameters_bad_body():
+    client = Client()
+    with pytest.raises(ValueError) as e:
+        client.func_body_fields(body=[1, 2, 3])
+    assert str(e.value) == (
+        "Couldn't merge 'body' with other parameters as it wasn't a mapping. "
+        "Instead of using 'body' use individual API parameters"
     )

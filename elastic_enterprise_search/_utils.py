@@ -354,25 +354,34 @@ def _rewrite_parameters(
                     ):
                         continue
 
-                    #
+                    # 'http_auth' needs to be aliased to 'basic_auth' or 'bearer_auth'.
                     transport_option = option
                     if option == "http_auth":
                         if isinstance(kwargs["http_auth"], str):
                             transport_option = "bearer_auth"
-                        elif isinstance(kwargs["http_auth"], (list, tuple)):
+                        elif (
+                            isinstance(kwargs["http_auth"], (list, tuple))
+                            and len(kwargs["http_auth"]) == 2
+                        ):
                             transport_option = "basic_auth"
+                        else:
+                            raise TypeError(
+                                "'http_auth' must be either a str or a 2-tuple of strings"
+                            )
 
                     try:
                         transport_options[transport_option] = kwargs.pop(option)
                     except KeyError:
                         pass
+
                 if transport_options:
+                    client = args[0].options(**transport_options)
                     warnings.warn(
-                        "Passing transport options in the API method is deprecated. Use 'Elasticsearch.options()' instead.",
+                        "Passing transport options in the API method is deprecated. "
+                        f"Use '{type(client).__name__}.options()' instead.",
                         category=DeprecationWarning,
                         stacklevel=warn_stacklevel(),
                     )
-                    client = args[0].options(**transport_options)
                     args = (client,) + args[1:]
 
             if "body" in kwargs and (
@@ -385,15 +394,12 @@ def _rewrite_parameters(
                             raise TypeError(
                                 f"Can't use '{body_name}' and 'body' parameters together because '{body_name}' "
                                 "is an alias for 'body'. Instead you should only use the "
-                                f"'{body_name}' parameter. See https://github.com/elastic/elasticsearch-py/"
-                                "issues/1698 for more information"
+                                f"'{body_name}' parameter."
                             )
 
                         warnings.warn(
                             "The 'body' parameter is deprecated and will be removed "
-                            f"in a future version. Instead use the '{body_name}' parameter. "
-                            "See https://github.com/elastic/elasticsearch-py/issues/1698 "
-                            "for more information",
+                            f"in a future version. Instead use the '{body_name}' parameter.",
                             category=DeprecationWarning,
                             stacklevel=warn_stacklevel(),
                         )

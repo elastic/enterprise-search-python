@@ -111,7 +111,7 @@ class AsyncWorkplaceSearch(_AsyncWorkplaceSearch):
         )
         return f"{base_url}/ws/oauth/authorize?{query}"
 
-    def oauth_exchange_for_access_token(
+    async def oauth_exchange_for_access_token(
         self,
         *,
         client_id: str,
@@ -165,7 +165,7 @@ class AsyncWorkplaceSearch(_AsyncWorkplaceSearch):
         else:
             params["refresh_token"] = refresh_token
 
-        return self.options(headers={"Authorization": None}).perform_request(
+        return await self.options(headers={"Authorization": None}).perform_request(
             method="POST",
             path="/ws/oauth/token",
             params=params,
