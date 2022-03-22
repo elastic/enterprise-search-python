@@ -111,7 +111,7 @@ class AsyncWorkplaceSearch(_AsyncWorkplaceSearch):
         )
         return f"{base_url}/ws/oauth/authorize?{query}"
 
-    def oauth_exchange_for_access_token(
+    async def oauth_exchange_for_access_token(
         self,
         *,
         client_id: str,
@@ -165,7 +165,7 @@ class AsyncWorkplaceSearch(_AsyncWorkplaceSearch):
         else:
             params["refresh_token"] = refresh_token
 
-        return self.options(headers={"Authorization": None}).perform_request(
+        return await self.options(headers={"Authorization": None}).perform_request(
             method="POST",
             path="/ws/oauth/token",
             params=params,
@@ -178,8 +178,8 @@ class AsyncEnterpriseSearch(_AsyncEnterpriseSearch):
         hosts: t.Optional[_TYPE_HOSTS] = None,
         *,
         # API
-        basic_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
-        bearer_auth: t.Optional[str] = None,
+        basic_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = DEFAULT,
+        bearer_auth: t.Optional[str] = DEFAULT,
         # Node
         headers: t.Union[DefaultType, t.Mapping[str, str]] = DEFAULT,
         connections_per_node: t.Union[DefaultType, int] = DEFAULT,
@@ -204,7 +204,7 @@ class AsyncEnterpriseSearch(_AsyncEnterpriseSearch):
         retry_on_timeout: t.Union[DefaultType, bool] = DEFAULT,
         meta_header: t.Union[DefaultType, bool] = DEFAULT,
         # Deprecated
-        http_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
+        http_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = DEFAULT,
         # Internal
         _transport: t.Optional[AsyncTransport] = None,
     ):
