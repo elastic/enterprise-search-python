@@ -14,19 +14,3 @@
 #  KIND, either express or implied.  See the License for the
 #  specific language governing permissions and limitations
 #  under the License.
-
-import pytest
-
-from elastic_enterprise_search import AppSearch, EnterpriseSearch
-
-
-@pytest.fixture(scope="session")
-def ent_search(ent_search_url, ent_search_basic_auth):
-    with EnterpriseSearch(ent_search_url, basic_auth=ent_search_basic_auth) as client:
-        yield client
-
-
-@pytest.fixture(scope="session")
-def app_search(ent_search_url, app_search_bearer_auth):
-    with AppSearch(ent_search_url, bearer_auth=app_search_bearer_auth) as client:
-        yield client

@@ -40,20 +40,15 @@ def vcr_workplace_search():
 
 
 @pytest.fixture()
-def workplace_search(ent_search_url):
-    with WorkplaceSearch(
-        ent_search_url, basic_auth=("enterprise_search", "changeme")
-    ) as client:
+def workplace_search(ent_search_url, ent_search_basic_auth):
+    with WorkplaceSearch(ent_search_url, basic_auth=ent_search_basic_auth) as client:
         yield client
 
 
 @pytest.fixture(scope="function")
 def content_source(workplace_search):
     resp = workplace_search.create_content_source(
-        body={
-            "name": "Custom Content Source %s"
-            % ("".join(random.choice(string.ascii_letters) for _ in range(16)))
-        }
+        name=f"Custom Content Source {''.join(random.choice(string.ascii_letters) for _ in range(16))}"
     )
     content_source_id = resp["id"]
     yield content_source_id
@@ -61,7 +56,7 @@ def content_source(workplace_search):
 
 
 def test_content_sources(workplace_search, content_source):
-    resp = workplace_search.get_content_source(content_source)
+    resp = workplace_search.get_content_source(content_source_id=content_source)
     assert resp.meta.status == 200
 
     content_source_json = resp.body.copy()
@@ -75,12 +70,18 @@ def test_content_sources(workplace_search, content_source):
         "details": [],
         "context": "organization",
         "is_searchable": True,
+        "facets": {"overrides": []},
+        "automatic_query_refinement": {"overrides": []},
         "schema": {},
         "display": {
-            "title_field": "external_id",
-            "subtitle_field": "url",
-            "description_field": "body",
-            "url_field": "url",
+            "title_field": "",
+            "subtitle_field": "",
+            "description_field": "",
+            "url_field": "",
+            "type_field": "",
+            "media_type_field": "",
+            "created_by_field": "",
+            "updated_by_field": "",
             "detail_fields": [],
             "color": "#000000",
         },
@@ -128,89 +129,21 @@ def test_documents(workplace_search, content_source):
         content_source_id=content_source, document_id="1234"
     )
     assert resp.meta.status == 200
-    resp.body.pop("last_updated")
+
+    for field in ("created_at", "updated_at", "last_updated"):
+        resp.body.pop(field)
     assert resp == {
         "title": "The Meaning of Time",
         "body": "Not much. It is a made up thing.",
         "url": "https://example.com/meaning/of/time",
-        "created_at": "2019-06-01T12:00:00Z",
         "source": "custom",
         "content_source_id": content_source,
         "id": "1234",
     }
 
-    resp = workplace_search.delete_all_documents(content_source_id=content_source)
+    resp = workplace_search.delete_documents_by_query(content_source_id=content_source)
     assert resp.meta.status == 200
     assert resp == {"deleted": 0, "failures": [], "total": 0}
-
-
-def test_external_identities(workplace_search, content_source):
-    external_identity = {
-        "user": "elastic_user",
-        "source_user_id": "example@example.com",
-    }
-
-    resp = workplace_search.create_external_identity(
-        content_source_id=content_source, body=external_identity
-    )
-    assert resp.meta.status == 200
-    assert resp == external_identity
-
-    resp = workplace_search.get_external_identity(
-        content_source_id=content_source, user="elastic_user"
-    )
-    assert resp.meta.status == 200
-    assert resp == external_identity
-
-    resp = workplace_search.list_external_identities(content_source_id=content_source)
-    assert resp == {
-        "meta": {
-            "page": {"current": 1, "total_pages": 1, "total_results": 1, "size": 25}
-        },
-        "results": [external_identity],
-    }
-
-    resp = workplace_search.delete_external_identity(
-        content_source_id=content_source, user="elastic_user"
-    )
-    assert resp.meta.status == 200
-    assert resp == "ok"
-
-
-def test_permissions(workplace_search, content_source):
-    resp = workplace_search.put_user_permissions(
-        content_source_id=content_source, user="elastic_user", body={"permissions": []}
-    )
-    assert resp.meta.status == 200
-    assert resp == {"user": "elastic_user", "permissions": []}
-
-    resp = workplace_search.add_user_permissions(
-        content_source_id=content_source,
-        user="elastic_user",
-        body={"permissions": ["permission1", "permission2"]},
-    )
-    assert resp.meta.status == 200
-    assert resp == {
-        "user": "elastic_user",
-        "permissions": ["permission1", "permission2"],
-    }
-
-    resp = workplace_search.get_user_permissions(
-        content_source_id=content_source, user="elastic_user"
-    )
-    assert resp.meta.status == 200
-    assert resp == {
-        "user": "elastic_user",
-        "permissions": ["permission1", "permission2"],
-    }
-
-    resp = workplace_search.remove_user_permissions(
-        content_source_id=content_source,
-        user="elastic_user",
-        body={"permissions": ["permission2"]},
-    )
-    assert resp.meta.status == 200
-    assert resp == {"user": "elastic_user", "permissions": ["permission1"]}
 
 
 @pytest.mark.vcr()
