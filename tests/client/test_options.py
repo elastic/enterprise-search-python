@@ -23,19 +23,18 @@ from elastic_enterprise_search import AppSearch, EnterpriseSearch, WorkplaceSear
 from tests.conftest import DummyNode
 
 
-@pytest.mark.xfail
 @pytest.mark.parametrize("request_timeout", [3, 5.0])
 def test_request_timeout(request_timeout):
     client = EnterpriseSearch(node_class=DummyNode, meta_header=False)
     client.get_version(request_timeout=request_timeout)
 
-    calls = client.transport.get_connection().calls
+    calls = client.transport.node_pool.get().calls
     assert calls == [
         (
-            ("GET", "/api/ent/v1/internal/version", None),
+            ("GET", "/api/ent/v1/internal/version"),
             {
-                "headers": {"user-agent": client._user_agent_header},
-                "ignore_status": (),
+                "body": None,
+                "headers": {"accept": "application/json"},
                 "request_timeout": request_timeout,
             },
         )
