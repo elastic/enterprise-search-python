@@ -15,6 +15,9 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import os
+from typing import Tuple
+
 import pytest
 import urllib3
 from elastic_transport import ApiResponseMeta, BaseNode, HttpHeaders
@@ -34,18 +37,41 @@ def client_class(request):
 
 @pytest.fixture(scope="session")
 def ent_search_url():
-    host = "localhost"
-    for try_host in ("enterprise-search", "localhost", "127.0.0.1"):
+    url = "http://localhost:3002"
+    urls_to_try = [
+        "http://enterprise-search:3002",
+        "http://localhost:3002",
+        "http://127.0.0.1:3002",
+    ]
+    if "ENTERPRISE_SEARCH_URL" in os.environ:
+        urls_to_try.insert(0, os.environ["ENTERPRISE_SEARCH_URL"])
+    for try_url in urls_to_try:
         try:
             http = urllib3.PoolManager()
-            http.request("GET", f"http://{try_host}:3002")
-            host = try_host
+            http.request("GET", try_url)
+            url = try_url
             break
         except Exception:
             continue
     else:
         pytest.skip("No Enterprise Search instance running on 'localhost:3002'")
-    return f"http://{host}:3002"
+    return url
+
+
+@pytest.fixture(scope="session")
+def ent_search_basic_auth() -> Tuple[str, str]:
+    try:
+        yield ("elastic", os.environ["ENTERPRISE_SEARCH_PASSWORD"])
+    except KeyError:
+        pytest.skip("Skipped test because 'ENTERPRISE_SEARCH_PASSWORD' isn't set")
+
+
+@pytest.fixture(scope="session")
+def app_search_bearer_auth() -> str:
+    try:
+        yield os.environ["APP_SEARCH_PRIVATE_KEY"]
+    except KeyError:
+        pytest.skip("Skipped test because 'APP_SEARCH_PRIVATE_KEY' isn't set")
 
 
 class DummyNode(BaseNode):

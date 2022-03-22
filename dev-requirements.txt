@@ -1,3 +1,4 @@
 nox-py2
 twine
 unasync
+aiohttp

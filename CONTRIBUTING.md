@@ -58,10 +58,6 @@ There are several environment variabels that control integration tests:
   the same as tags of `docker.elastic.co/elasticsearch/elasticsearch`
   such as `8.0.0-SNAPSHOT`, `7.11-SNAPSHOT`, etc. Defaults to the
   same `*-SNAPSHOT` version as the branch.
-
-## API Code Generation
-
-All the API methods within `elastic_enterprise_search/client/*.py`
-and generated from an API specification that is not available publicly
-currently. Because these files are generated, changes should instead
-be made to the code generator found in `utils/generator`.
+- `ENTERPRISE_SEARCH_URL`: URL for the Enterprise Search instance
+- `ENTERPRISE_SEARCH_PASSWORD`: Password for the `elastic` user on Enterprise Search. This is typically the same as the `elastic` password on Elasticsearch.
+- `APP_SEARCH_PRIVATE_KEY`: Private key for App Search

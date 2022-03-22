@@ -326,7 +326,7 @@ def _rewrite_parameters(
             # Let's give a nicer error message when users pass positional arguments.
             if len(args) >= 2:
                 raise TypeError(
-                    "Positional arguments can't be used with Elasticsearch API methods. "
+                    "Positional arguments can't be used with client API methods. "
                     "Instead only use keyword arguments."
                 )
 

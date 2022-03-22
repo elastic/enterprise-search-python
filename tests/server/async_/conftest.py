@@ -17,16 +17,14 @@
 
 import pytest
 
-from elastic_enterprise_search import AppSearch, EnterpriseSearch
+from elastic_enterprise_search import AsyncAppSearch
+
+pytestmark = pytest.mark.asyncio
 
 
-@pytest.fixture(scope="session")
-def ent_search(ent_search_url, ent_search_basic_auth):
-    with EnterpriseSearch(ent_search_url, basic_auth=ent_search_basic_auth) as client:
-        yield client
-
-
-@pytest.fixture(scope="session")
-def app_search(ent_search_url, app_search_bearer_auth):
-    with AppSearch(ent_search_url, bearer_auth=app_search_bearer_auth) as client:
+@pytest.fixture
+async def app_search(ent_search_url, app_search_bearer_auth) -> AsyncAppSearch:
+    async with AsyncAppSearch(
+        ent_search_url, bearer_auth=app_search_bearer_auth
+    ) as client:
         yield client
