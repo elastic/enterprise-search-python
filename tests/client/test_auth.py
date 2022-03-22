@@ -15,98 +15,77 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-import pytest
+import warnings
 
-from elastic_enterprise_search import WorkplaceSearch
-from elastic_enterprise_search._utils import DEFAULT
+import pytest
+from elastic_transport.client_utils import DEFAULT
+
+from elastic_enterprise_search import EnterpriseSearch, WorkplaceSearch
 from tests.conftest import DummyNode
 
 
-@pytest.mark.xfail
 def test_http_auth_none(client_class):
     client = client_class(node_class=DummyNode, meta_header=False)
-    assert client.http_auth is None
     client.perform_request("GET", "/")
 
-    calls = client.transport.get_connection().calls
-    assert calls == [
-        (
-            ("GET", "/", None),
-            {
-                "headers": {"user-agent": client._user_agent_header},
-                "ignore_status": (),
-                "request_timeout": DEFAULT,
-            },
-        )
-    ]
+    calls = client.transport.node_pool.get().calls
+    assert len(calls) == 1 and "Authorization" not in calls[-1][1]["headers"]
 
     client = client_class(http_auth=None, node_class=DummyNode, meta_header=False)
-    assert client.http_auth is None
     client.perform_request("GET", "/")
-
-    calls = client.transport.get_connection().calls
-    assert calls == [
-        (
-            ("GET", "/", None),
-            {
-                "headers": {"user-agent": client._user_agent_header},
-                "ignore_status": (),
-                "request_timeout": DEFAULT,
-            },
-        )
-    ]
+    assert len(calls) == 1 and "Authorization" not in calls[-1][1]["headers"]
 
 
-@pytest.mark.xfail
 @pytest.mark.parametrize(
-    "http_auth", ["this-is-a-token", ("user", "password"), ("üser", "pӓssword")]
+    ["auth_kwarg", "auth_value", "header_value"],
+    [
+        ("http_auth", ("user", "password"), "Basic dXNlcjpwYXNzd29yZA=="),
+        ("http_auth", ("üser", "pӓssword"), "Basic w7xzZXI6cNOTc3N3b3Jk"),
+        ("http_auth", "this-is-a-token", "Bearer this-is-a-token"),
+        ("basic_auth", ("user", "password"), "Basic dXNlcjpwYXNzd29yZA=="),
+        ("basic_auth", ("üser", "pӓssword"), "Basic w7xzZXI6cNOTc3N3b3Jk"),
+        ("bearer_auth", "this-is-a-token", "Bearer this-is-a-token"),
+    ],
 )
-def test_http_auth_set_and_get(client_class, http_auth):
-    client = client_class(http_auth=http_auth, node_class=DummyNode)
-    assert client.http_auth == http_auth
-    client.perform_request("GET", "/")
-
-    calls = client.transport.get_connection().calls
-    assert len(calls) == 1
-    assert calls[0][1]["headers"]["authorization"] == client._authorization_header
-
-
-@pytest.mark.xfail
-def test_http_auth_per_request_override(client_class):
-    client = client_class(http_auth="bad-token", node_class=DummyNode)
-    assert client.http_auth == "bad-token"
-    client.perform_request("GET", "/", http_auth=("user", "pass"))
-
-    calls = client.transport.get_connection().calls
-    assert len(calls) == 1
-    assert calls[0][1]["headers"]["authorization"] == "Basic dXNlcjpwYXNz"
-
-    # Client.http_auth doesn't get overwritten
-    assert client.http_auth == "bad-token"
-
-
-@pytest.mark.xfail
-def test_http_auth_disable_with_none(client_class):
-    client = client_class(http_auth="api-token", node_class=DummyNode)
+def test_http_auth_set_and_get(client_class, auth_kwarg, auth_value, header_value):
+    client = client_class(node_class=DummyNode, **{auth_kwarg: auth_value})
     client.perform_request("GET", "/")
 
     calls = client.transport.node_pool.get().calls
     assert len(calls) == 1
-    assert calls[-1][1]["headers"]["authorization"] == ""
+    assert calls[-1][1]["headers"]["Authorization"] == header_value
 
-    client.perform_request("GET", "/", http_auth=None)
+
+def test_http_auth_per_request_override():
+    client = EnterpriseSearch(http_auth="bad-token", node_class=DummyNode)
+    with warnings.catch_warnings(record=True) as w:
+        client.get_version(http_auth=("user", "password"))
+
+    assert len(w) == 1 and str(w[0].message) == (
+        "Passing transport options in the API method is deprecated. "
+        "Use 'EnterpriseSearch.options()' instead."
+    )
 
     calls = client.transport.node_pool.get().calls
+    assert len(calls) == 1
+    assert calls[-1][1]["headers"]["Authorization"] == "Basic dXNlcjpwYXNzd29yZA=="
+
+
+def test_http_auth_disable_with_none():
+    client = EnterpriseSearch(bearer_auth="api-token", node_class=DummyNode)
+    client.perform_request("GET", "/")
+
+    calls = client.transport.node_pool.get().calls
+    assert len(calls) == 1
+    assert calls[-1][1]["headers"]["Authorization"] == "Bearer api-token"
+
+    client.options(bearer_auth=None).get_version()
     assert len(calls) == 2
-    assert calls[-1][1]["headers"]["authorization"] == ""
+    assert "Authorization" not in calls[-1][1]["headers"]
 
-    client.http_auth = None
-    assert client.http_auth is None
-    client.perform_request("GET", "/")
-
-    calls = client.transport.get_connection().calls
+    client.options(basic_auth=None).get_version()
     assert len(calls) == 3
-    assert "authorization" not in calls[-1][1]["headers"]
+    assert "Authorization" not in calls[-1][1]["headers"]
 
 
 @pytest.mark.parametrize("http_auth", ["token", ("user", "pass")])
