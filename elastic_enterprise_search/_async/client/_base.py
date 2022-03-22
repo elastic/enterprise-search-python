@@ -23,6 +23,7 @@ from elastic_transport import (
     BaseNode,
     BinaryApiResponse,
     HeadApiResponse,
+    HttpHeaders,
     ListApiResponse,
     ObjectApiResponse,
     TextApiResponse,
@@ -47,8 +48,8 @@ class BaseClient:
         hosts: t.Optional[_TYPE_HOSTS] = None,
         *,
         # API
-        basic_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
-        bearer_auth: t.Optional[str] = None,
+        basic_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = DEFAULT,
+        bearer_auth: t.Optional[str] = DEFAULT,
         # Node
         headers: t.Union[DefaultType, t.Mapping[str, str]] = DEFAULT,
         connections_per_node: t.Union[DefaultType, int] = DEFAULT,
@@ -73,7 +74,7 @@ class BaseClient:
         retry_on_timeout: t.Union[DefaultType, bool] = DEFAULT,
         meta_header: t.Union[DefaultType, bool] = DEFAULT,
         # Deprecated
-        http_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
+        http_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = DEFAULT,
         # Internal
         _transport: t.Optional[AsyncTransport] = None,
     ):
@@ -118,12 +119,19 @@ class BaseClient:
         else:
             self._transport = _transport
 
-        self._headers = resolve_auth_headers(
-            headers=headers,
-            http_auth=http_auth,
-            basic_auth=basic_auth,
-            bearer_auth=bearer_auth,
-        )
+        # Need to filter out the 'None' values
+        headers = {
+            k: v
+            for k, v in resolve_auth_headers(
+                headers=headers,
+                http_auth=http_auth,
+                basic_auth=basic_auth,
+                bearer_auth=bearer_auth,
+            ).items()
+            if v is not None
+        }
+        self._headers = HttpHeaders(headers)
+
         self._request_timeout = request_timeout
         self._max_retries = max_retries
         self._retry_on_status = retry_on_status

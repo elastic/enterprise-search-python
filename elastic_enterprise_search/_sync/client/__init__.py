@@ -178,8 +178,8 @@ class EnterpriseSearch(_EnterpriseSearch):
         hosts: t.Optional[_TYPE_HOSTS] = None,
         *,
         # API
-        basic_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
-        bearer_auth: t.Optional[str] = None,
+        basic_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = DEFAULT,
+        bearer_auth: t.Optional[str] = DEFAULT,
         # Node
         headers: t.Union[DefaultType, t.Mapping[str, str]] = DEFAULT,
         connections_per_node: t.Union[DefaultType, int] = DEFAULT,
@@ -204,7 +204,7 @@ class EnterpriseSearch(_EnterpriseSearch):
         retry_on_timeout: t.Union[DefaultType, bool] = DEFAULT,
         meta_header: t.Union[DefaultType, bool] = DEFAULT,
         # Deprecated
-        http_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = None,
+        http_auth: t.Optional[t.Union[str, t.Tuple[str, str]]] = DEFAULT,
         # Internal
         _transport: t.Optional[Transport] = None,
     ):
