@@ -29,10 +29,10 @@ def engine_name(app_search):
     engine_name = "test-engine-" + "".join(
         random.choice(string.ascii_lowercase) for _ in range(16)
     )
-    app_search.delete_engine(engine_name=engine_name, ignore_status=404)
+    app_search.options(ignore_status=404).delete_engine(engine_name=engine_name)
     app_search.create_engine(engine_name=engine_name)
     yield engine_name
-    app_search.delete_engine(engine_name=engine_name, ignore_status=404)
+    app_search.options(ignore_status=404).delete_engine(engine_name=engine_name)
 
 
 def test_get_empty_engine(app_search, engine_name):
@@ -42,18 +42,14 @@ def test_get_empty_engine(app_search, engine_name):
         "type": "default",
         "language": None,
         "document_count": 0,
+        "index_create_settings_override": {},
     }
 
 
 def test_crawler(app_search, engine_name):
     # Get empty crawler overview
     resp = app_search.get_crawler_overview(engine_name=engine_name)
-    assert resp == {
-        "domains": [],
-        "events": [],
-        "most_recent_crawl_request": None,
-        "onboarding_completed": False,
-    }
+    assert resp == {"domains": [], "events": [], "most_recent_crawl_request": None}
 
     # Create crawler domain
     resp = app_search.create_crawler_domain(
@@ -89,6 +85,7 @@ def test_crawler(app_search, engine_name):
             "links",
             "headings",
         ],
+        "auth": None,
         "entry_points": [{"value": "/"}],
         "crawl_rules": [],
         "default_crawl_rule": {
@@ -113,6 +110,7 @@ def test_crawler(app_search, engine_name):
     assert resp == {
         "domains": [
             {
+                "auth": None,
                 "available_deduplication_fields": [
                     "title",
                     "body_content",
@@ -152,7 +150,6 @@ def test_crawler(app_search, engine_name):
         ],
         "events": [],
         "most_recent_crawl_request": None,
-        "onboarding_completed": True,
     }
 
     # Create crawler rules
@@ -249,6 +246,7 @@ def test_crawler(app_search, engine_name):
         "sitemaps": [
             {"id": crawler_sitemap_id, "url": "https://elastic.co/sitemap.xml"}
         ],
+        "auth": None,
     }
 
     # Start a crawl
@@ -256,7 +254,12 @@ def test_crawler(app_search, engine_name):
     resp = dict(resp)
     crawl_request_id = resp.pop("id")
     resp.pop("created_at")
-    assert resp == {"begun_at": None, "completed_at": None, "status": "pending"}
+    assert resp == {
+        "begun_at": None,
+        "completed_at": None,
+        "status": "pending",
+        "type": "full",
+    }
 
     # Cancel the crawl
     resp = app_search.delete_crawler_active_crawl_request(
@@ -269,4 +272,5 @@ def test_crawler(app_search, engine_name):
         "completed_at": None,
         "id": crawl_request_id,
         "status": "canceling",
+        "type": "full",
     }

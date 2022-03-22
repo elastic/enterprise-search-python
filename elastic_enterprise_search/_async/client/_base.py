@@ -139,6 +139,12 @@ class BaseClient:
         self._client_meta = DEFAULT
         self._ignore_status = None
 
+    async def __aenter__(self: _TYPE_SELF) -> _TYPE_SELF:
+        return self
+
+    async def __aexit__(self, *_: t.Any) -> None:
+        await self.transport.close()
+
     @property
     def transport(self) -> AsyncTransport:
         return self._transport

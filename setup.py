@@ -80,12 +80,14 @@ setup(
         "requests": ["requests>=2.4, <3"],
         "develop": [
             "pytest",
+            "pytest-asyncio",
             "pytest-cov",
             "pytest-mock",
             "pytest-vcr",
             "pytest-freezegun",
             "mock",
             "requests",
+            "aiohttp",
         ],
     },
     classifiers=[

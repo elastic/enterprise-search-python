@@ -139,6 +139,12 @@ class BaseClient:
         self._client_meta = DEFAULT
         self._ignore_status = None
 
+    def __enter__(self: _TYPE_SELF) -> _TYPE_SELF:
+        return self
+
+    def __exit__(self, *_: t.Any) -> None:
+        self.transport.close()
+
     @property
     def transport(self) -> Transport:
         return self._transport
