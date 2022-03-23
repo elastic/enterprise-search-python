@@ -17,6 +17,8 @@
 
 import typing as t
 
+from elastic_transport import ObjectApiResponse
+
 from ..._utils import SKIP_IN_PATH, _quote, _rewrite_parameters
 from ._base import BaseClient
 
@@ -29,7 +31,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieve adaptive relevance settings
 
@@ -54,7 +56,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         curation: t.Mapping[str, t.Any],
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Update adaptive relevance settings
 
@@ -88,7 +90,7 @@ class AsyncAppSearch(BaseClient):
         current_page: t.Optional[int] = None,
         filters: t.Optional[t.Mapping[str, t.Any]] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieve adaptive relevance
 
@@ -130,7 +132,7 @@ class AsyncAppSearch(BaseClient):
         body: t.Union[
             t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]
         ],
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Update adaptive relevance
 
@@ -163,7 +165,7 @@ class AsyncAppSearch(BaseClient):
         current_page: t.Optional[int] = None,
         filters: t.Optional[t.Mapping[str, t.Any]] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieve adaptive relevance for a single query
 
@@ -206,7 +208,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         adaptive_relevance_suggestion_type: t.Union["t.Literal['curation']", str],
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Update suggestions process refresh
 
@@ -238,7 +240,7 @@ class AsyncAppSearch(BaseClient):
         filters: t.Optional[t.Mapping[str, t.Any]] = None,
         page_size: t.Optional[int] = None,
         query: t.Optional[str] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns the number of clicks received by a document in descending order
 
@@ -278,7 +280,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         filters: t.Optional[t.Mapping[str, t.Any]] = None,
         interval: t.Optional[str] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns the number of clicks and total number of queries over a period
 
@@ -314,7 +316,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         filters: t.Optional[t.Mapping[str, t.Any]] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns queries analytics by usage count
 
@@ -353,7 +355,7 @@ class AsyncAppSearch(BaseClient):
         query: str,
         request_id: t.Optional[str] = None,
         tags: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Tracks results that were clicked after a query
 
@@ -396,7 +398,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         body: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Performs an HTTP request to a given URL and extracts content from the page using
         standard App Search Crawler extraction pipeline.
@@ -431,7 +433,7 @@ class AsyncAppSearch(BaseClient):
         seed_urls: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
         sitemap_discovery_disabled: t.Optional[bool] = None,
         sitemap_urls: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Creates a request to perform a crawl of a given engine with the Crawler.
 
@@ -474,7 +476,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         current_page: t.Optional[int] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns a list of latest crawl requests for a given engine.
 
@@ -505,7 +507,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         crawl_request_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns crawl request details.
 
@@ -530,7 +532,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns active crawl request details.
 
@@ -552,7 +554,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Cancels an active crawl request, stopping a running crawl if needed.
 
@@ -582,7 +584,7 @@ class AsyncAppSearch(BaseClient):
         policy: t.Union["t.Literal['allow', 'deny']", str],
         rule: t.Union["t.Literal['begins', 'contains', 'ends', 'regex']", str],
         created_at: t.Optional[str] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Creates a crawl rule for a given engine and domain
 
@@ -641,7 +643,7 @@ class AsyncAppSearch(BaseClient):
         policy: t.Union["t.Literal['allow', 'deny']", str],
         rule: t.Union["t.Literal['begins', 'contains', 'ends', 'regex']", str],
         created_at: t.Optional[str] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Updates crawl rule configuration
 
@@ -696,7 +698,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         domain_id: str,
         crawl_rule_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes a crawl rule from a given domain
 
@@ -724,7 +726,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns the current crawl schedule for a given engine
 
@@ -750,7 +752,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         frequency: int,
         unit: t.Union["t.Literal['day', 'hour', 'month', 'week']", str],
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Sets up a crawl schedule for a given engine
 
@@ -784,7 +786,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes a crawl schedule for a given engine
 
@@ -807,7 +809,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         process_crawl_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Provides a sample list of urls identified for deletion by the given process crawl
         id.
@@ -835,7 +837,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         current_page: t.Optional[int] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns a list of crawler domains
 
@@ -877,7 +879,7 @@ class AsyncAppSearch(BaseClient):
         sitemaps: t.Optional[
             t.Union[t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]]
         ] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Creates a crawler domain configuration for a given engine
 
@@ -916,7 +918,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         domain_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns crawler domain configuration details
 
@@ -954,7 +956,7 @@ class AsyncAppSearch(BaseClient):
         sitemaps: t.Optional[
             t.Union[t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]]
         ] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Updates crawler domain configuration for a given domain
 
@@ -996,7 +998,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         domain_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes crawler domain configuration for a given domain
 
@@ -1026,7 +1028,7 @@ class AsyncAppSearch(BaseClient):
         domain_id: str,
         value: str,
         created_at: t.Optional[str] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Creates a crawler domain entry point for a given engine and domain
 
@@ -1067,7 +1069,7 @@ class AsyncAppSearch(BaseClient):
         entry_point_id: str,
         value: str,
         created_at: t.Optional[str] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Updates a crawler entry point with a new value
 
@@ -1107,7 +1109,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         domain_id: str,
         entry_point_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes a crawler entry point
 
@@ -1133,7 +1135,7 @@ class AsyncAppSearch(BaseClient):
     @_rewrite_parameters()
     async def get_crawler_metrics(
         self,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves a momentary snapshot of key crawler metrics, including global and node-level
         crawler health
@@ -1150,7 +1152,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves crawler configuration overview of a given engine, including configured
         domains
@@ -1177,7 +1179,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         domains: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
         dry_run: t.Optional[bool] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Queues a task to reprocess crawled documents with current crawl configuration
 
@@ -1211,7 +1213,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         current_page: t.Optional[int] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns a list of latest process crawls for a given engine
 
@@ -1242,7 +1244,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         process_crawl_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns process crawl details.
 
@@ -1272,7 +1274,7 @@ class AsyncAppSearch(BaseClient):
         domain_id: str,
         url: str,
         created_at: t.Optional[str] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Creates a crawler sitemap configuration for a given engine and domain
 
@@ -1313,7 +1315,7 @@ class AsyncAppSearch(BaseClient):
         sitemap_id: str,
         url: str,
         created_at: t.Optional[str] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Updates sitemap configuration
 
@@ -1353,7 +1355,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         domain_id: str,
         sitemap_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes a sitemap from a given domain
 
@@ -1384,7 +1386,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         url: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Returns information about the history of a given URL with the App Search Crawler.
 
@@ -1433,7 +1435,7 @@ class AsyncAppSearch(BaseClient):
                 ],
             ]
         ] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Performs a number of checks on a given URL to make sure it is ready to be crawled
         and ingested into App Search.
@@ -1468,7 +1470,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         body: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Performs a number of checks on a given domain name to make sure it is ready to
         be crawled and ingested into App Search.
@@ -1488,7 +1490,7 @@ class AsyncAppSearch(BaseClient):
     @_rewrite_parameters()
     async def get_crawler_user_agent(
         self,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves the currently configured value for the User-Agent header used for all
         Crawler HTTP requests
@@ -1506,7 +1508,7 @@ class AsyncAppSearch(BaseClient):
         *,
         current_page: t.Optional[int] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         List the details of all API keys
 
@@ -1537,7 +1539,7 @@ class AsyncAppSearch(BaseClient):
         engines: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
         read: t.Optional[bool] = None,
         write: t.Optional[bool] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Creates an App Search API key
 
@@ -1577,7 +1579,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         api_key_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves details of an API key
 
@@ -1605,7 +1607,7 @@ class AsyncAppSearch(BaseClient):
         engines: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
         read: t.Optional[bool] = None,
         write: t.Optional[bool] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Updates an API key
 
@@ -1651,7 +1653,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         api_key_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes a given API key
 
@@ -1675,7 +1677,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         current_page: t.Optional[int] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieve available curations for the given engine
 
@@ -1711,7 +1713,7 @@ class AsyncAppSearch(BaseClient):
         hidden: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
         promoted: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
         suggestion: t.Optional[t.Mapping[str, t.Any]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Create a new curation for the engine
 
@@ -1750,7 +1752,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         curation_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves a curation by ID
 
@@ -1782,7 +1784,7 @@ class AsyncAppSearch(BaseClient):
         hidden: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
         promoted: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
         suggestion: t.Optional[t.Mapping[str, t.Any]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Updates an existing curation
 
@@ -1824,7 +1826,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         curation_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes a curation set by ID
 
@@ -1850,7 +1852,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         document_ids: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves one or more documents by id
 
@@ -1882,7 +1884,7 @@ class AsyncAppSearch(BaseClient):
         documents: t.Optional[
             t.Union[t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]]
         ] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Create or update documents
 
@@ -1915,7 +1917,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         document_ids: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes documents for given Document IDs
 
@@ -1950,7 +1952,7 @@ class AsyncAppSearch(BaseClient):
         documents: t.Optional[
             t.Union[t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]]
         ] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Update specific document fields by id and field
 
@@ -1982,7 +1984,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         current_page: t.Optional[int] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Lists up to 10,000 documents
 
@@ -2013,7 +2015,7 @@ class AsyncAppSearch(BaseClient):
         *,
         current_page: t.Optional[int] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves all engines with optional pagination support
 
@@ -2048,7 +2050,7 @@ class AsyncAppSearch(BaseClient):
         ] = None,
         source_engines: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
         type: t.Optional[t.Union["t.Literal['default', 'meta']", str]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Creates an App Search Engine
 
@@ -2083,7 +2085,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves details of a given engine by its name
 
@@ -2103,7 +2105,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Delete an engine by name
 
@@ -2126,7 +2128,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         source_engines: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes a source engine from a given meta engine
 
@@ -2159,7 +2161,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         source_engines: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Adds a source engine to a given meta engine
 
@@ -2195,7 +2197,7 @@ class AsyncAppSearch(BaseClient):
         page: t.Optional[t.Mapping[str, t.Any]] = None,
         query: t.Optional[str] = None,
         sort_direction: t.Optional[t.Union["t.Literal['asc', 'desc']", str]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         The API Log displays API request and response data at the Engine level
 
@@ -2238,7 +2240,7 @@ class AsyncAppSearch(BaseClient):
         query: t.Optional[str] = None,
         size: t.Optional[int] = None,
         types: t.Optional[t.Mapping[str, t.Any]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Provide relevant query suggestions for incomplete queries
 
@@ -2273,7 +2275,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieve current schema for the engine
 
@@ -2296,7 +2298,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         schema: t.Optional[t.Mapping[str, t.Any]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Update schema for the current engine
 
@@ -2341,7 +2343,7 @@ class AsyncAppSearch(BaseClient):
         sort: t.Optional[
             t.Union[t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]]
         ] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Submit a search and receive a set of results with meta data
 
@@ -2402,7 +2404,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieve current search settings for the engine
 
@@ -2430,7 +2432,7 @@ class AsyncAppSearch(BaseClient):
         precision: t.Optional[int] = None,
         result_fields: t.Optional[t.Mapping[str, t.Any]] = None,
         search_fields: t.Optional[t.Mapping[str, t.Any]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Updates search settings for the engine
 
@@ -2468,7 +2470,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Resets search settings for the engine
 
@@ -2492,7 +2494,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         current_page: t.Optional[int] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves all available synonym sets for the engine
 
@@ -2525,7 +2527,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         synonyms: t.Union[t.List[str], t.Tuple[str, ...]],
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Creates a new synonym set for the engine
 
@@ -2555,7 +2557,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         synonym_set_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves a synonym set by ID
 
@@ -2584,7 +2586,7 @@ class AsyncAppSearch(BaseClient):
         engine_name: str,
         synonym_set_id: str,
         synonyms: t.Union[t.List[str], t.Tuple[str, ...]],
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Updates a synonym set by ID
 
@@ -2617,7 +2619,7 @@ class AsyncAppSearch(BaseClient):
         *,
         engine_name: str,
         synonym_set_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes a synonym set by ID
 
