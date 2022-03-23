@@ -51,7 +51,7 @@ interactions:
       connection:
       - keep-alive
     method: GET
-    uri: https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io/api/ent/v1/internal/stats?include%5B%5D=connectors&include%5B%5D=queues
+    uri: https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io/api/ent/v1/internal/stats?include=connectors,queues
   response:
     body:
       string: '{"connectors":{"alive":true,"pool":{"extract_worker_pool":{"running":true,"queue_depth":0,"size":1,"busy":1,"idle":0,"total_scheduled":1,"total_completed":0},"subextract_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0},"publish_worker_pool":{"running":true,"queue_depth":0,"size":0,"busy":0,"idle":0,"total_scheduled":0,"total_completed":0}},"job_store":{"waiting":0,"working":0,"job_types":{"full":0,"incremental":0,"delete":0,"permissions":0}}},"queues":{"engine_destroyer":{"pending":0},"process_crawl":{"pending":0},"mailer":{"pending":0},"failed":[]}}'
