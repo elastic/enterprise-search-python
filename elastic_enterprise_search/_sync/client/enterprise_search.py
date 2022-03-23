@@ -17,7 +17,7 @@
 
 import typing as t
 
-from ..._utils import _rewrite_parameters
+from ..._utils import _quote_query_form, _rewrite_parameters
 from ._base import BaseClient
 
 
@@ -94,7 +94,7 @@ class EnterpriseSearch(BaseClient):
         """
         __query: t.Dict[str, t.Any] = {}
         if include is not None:
-            __query["include"] = include
+            __query["include"] = _quote_query_form("include", include)
         __headers = {"accept": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "GET", "/api/ent/v1/internal/stats", params=__query, headers=__headers
