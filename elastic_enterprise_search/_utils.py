@@ -300,6 +300,12 @@ def _quote_query_deep_object(
             yield from _quote_query_deep_object(f"{prefix}[{key}]", val)
 
 
+def _quote_query_form(key: str, value: t.Union[t.List[str], t.Tuple[str, ...]]) -> str:
+    if not isinstance(value, (tuple, list)):
+        raise ValueError(f"{key!r} must be of type list or tuple")
+    return ",".join(map(str, value))
+
+
 def _merge_kwargs_no_duplicates(
     kwargs: t.Dict[str, t.Any], values: t.Dict[str, t.Any]
 ) -> None:
