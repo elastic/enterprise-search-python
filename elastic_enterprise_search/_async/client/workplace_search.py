@@ -17,6 +17,8 @@
 
 import typing as t
 
+from elastic_transport import ObjectApiResponse
+
 from ..._utils import SKIP_IN_PATH, _quote, _rewrite_parameters
 from ._base import BaseClient
 
@@ -37,7 +39,7 @@ class AsyncWorkplaceSearch(BaseClient):
         indexing: t.Optional[t.Mapping[str, t.Any]] = None,
         is_searchable: t.Optional[bool] = None,
         schema: t.Optional[t.Mapping[str, t.Any]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Create a custom content source
 
@@ -79,7 +81,7 @@ class AsyncWorkplaceSearch(BaseClient):
         *,
         current_page: t.Optional[int] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves all content sources
 
@@ -103,7 +105,7 @@ class AsyncWorkplaceSearch(BaseClient):
         self,
         *,
         content_source_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves a content source by ID
 
@@ -133,7 +135,7 @@ class AsyncWorkplaceSearch(BaseClient):
         facets: t.Optional[t.Mapping[str, t.Any]] = None,
         indexing: t.Optional[t.Mapping[str, t.Any]] = None,
         schema: t.Optional[t.Mapping[str, t.Any]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Update a content source
 
@@ -183,7 +185,7 @@ class AsyncWorkplaceSearch(BaseClient):
         self,
         *,
         content_source_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes a content source by ID
 
@@ -210,7 +212,7 @@ class AsyncWorkplaceSearch(BaseClient):
         content_source_id: str,
         alt_icon: t.Optional[str] = None,
         main_icon: t.Optional[str] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Upload content source icons
 
@@ -246,7 +248,7 @@ class AsyncWorkplaceSearch(BaseClient):
         *,
         content_source_id: str,
         filters: t.Optional[t.Mapping[str, t.Any]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes documents by query in a custom content source
 
@@ -290,7 +292,7 @@ class AsyncWorkplaceSearch(BaseClient):
                 ],
             ]
         ] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Lists documents from a custom content source
 
@@ -339,7 +341,7 @@ class AsyncWorkplaceSearch(BaseClient):
         documents: t.Union[
             t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]
         ],
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Indexes one or more new documents into a custom content source, or updates one
         or more existing documents
@@ -371,7 +373,7 @@ class AsyncWorkplaceSearch(BaseClient):
         *,
         content_source_id: str,
         document_ids: t.Union[t.List[str], t.Tuple[str, ...]],
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Remove documents from a Custom API Source
 
@@ -400,7 +402,7 @@ class AsyncWorkplaceSearch(BaseClient):
         *,
         content_source_id: str,
         document_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves a document by ID from the specified content source
 
@@ -429,7 +431,7 @@ class AsyncWorkplaceSearch(BaseClient):
         content_source_id: str,
         current_page: t.Optional[int] = None,
         page_size: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves all external identities
 
@@ -467,7 +469,7 @@ class AsyncWorkplaceSearch(BaseClient):
             t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]
         ],
         permissions: t.Union[t.List[str], t.Tuple[str, ...]],
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Adds a new external identity
 
@@ -510,7 +512,7 @@ class AsyncWorkplaceSearch(BaseClient):
         *,
         content_source_id: str,
         external_user_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves an external identity
 
@@ -544,7 +546,7 @@ class AsyncWorkplaceSearch(BaseClient):
             t.Union[t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]]
         ] = None,
         permissions: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Updates an external identity
 
@@ -582,7 +584,7 @@ class AsyncWorkplaceSearch(BaseClient):
         *,
         content_source_id: str,
         external_user_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Deletes an external identity
 
@@ -627,7 +629,7 @@ class AsyncWorkplaceSearch(BaseClient):
                 ],
             ]
         ] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Control a content source's sync jobs
 
@@ -660,7 +662,7 @@ class AsyncWorkplaceSearch(BaseClient):
         self,
         *,
         synonym_set_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieve a synonym set by ID
 
@@ -683,7 +685,7 @@ class AsyncWorkplaceSearch(BaseClient):
         *,
         synonym_set_id: str,
         synonyms: t.Union[t.List[str], t.Tuple[str, ...]],
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Update a synonym set
 
@@ -712,7 +714,7 @@ class AsyncWorkplaceSearch(BaseClient):
         self,
         *,
         synonym_set_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Delete a synonym set
 
@@ -737,7 +739,7 @@ class AsyncWorkplaceSearch(BaseClient):
         filter: t.Optional[t.Mapping[str, t.Any]] = None,
         page_size: t.Optional[int] = None,
         sort: t.Optional[t.Mapping[str, t.Any]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieve a list of synonym sets
 
@@ -776,7 +778,7 @@ class AsyncWorkplaceSearch(BaseClient):
             t.Union[t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]]
         ] = None,
         synonyms: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Create batched synonym sets
 
@@ -800,7 +802,7 @@ class AsyncWorkplaceSearch(BaseClient):
     @_rewrite_parameters()
     async def get_triggers_blocklist(
         self,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Get current triggers blocklist
 
@@ -814,7 +816,7 @@ class AsyncWorkplaceSearch(BaseClient):
     @_rewrite_parameters()
     async def put_triggers_blocklist(
         self,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Update current triggers blocklist
 
@@ -830,7 +832,7 @@ class AsyncWorkplaceSearch(BaseClient):
         self,
         *,
         content_source_id: str,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Retrieves a content source's automatic query refinement details
 
@@ -851,7 +853,7 @@ class AsyncWorkplaceSearch(BaseClient):
     @_rewrite_parameters()
     async def get_current_user(
         self,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Get the authenticated user
 
@@ -869,7 +871,7 @@ class AsyncWorkplaceSearch(BaseClient):
         self,
         *,
         body: t.Any,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Capture Analytic events for click and feedback
 
@@ -913,7 +915,7 @@ class AsyncWorkplaceSearch(BaseClient):
             t.Union["t.Literal['all', 'remote', 'standard']", str]
         ] = None,
         timeout: t.Optional[int] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Issue a Search Query
 
