@@ -17,6 +17,8 @@
 
 import typing as t
 
+from elastic_transport import ObjectApiResponse
+
 from ..._utils import _quote_query_form, _rewrite_parameters
 from ._base import BaseClient
 
@@ -27,7 +29,7 @@ class AsyncEnterpriseSearch(BaseClient):
     @_rewrite_parameters()
     async def get_health(
         self,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Get information on the health of a deployment and basic statistics around resource
         usage
@@ -42,7 +44,7 @@ class AsyncEnterpriseSearch(BaseClient):
     @_rewrite_parameters()
     async def get_read_only(
         self,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Get the read-only flag's state
 
@@ -60,7 +62,7 @@ class AsyncEnterpriseSearch(BaseClient):
         self,
         *,
         enabled: bool,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Update the read-only flag's state
 
@@ -83,7 +85,7 @@ class AsyncEnterpriseSearch(BaseClient):
         self,
         *,
         include: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Get information about the resource usage of the application, the state of different
         internal queues, etc.
@@ -103,7 +105,7 @@ class AsyncEnterpriseSearch(BaseClient):
     @_rewrite_parameters()
     async def get_version(
         self,
-    ) -> t.Any:
+    ) -> ObjectApiResponse[t.Any]:
         """
         Get version information for this server
 
