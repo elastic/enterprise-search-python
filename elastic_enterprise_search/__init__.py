@@ -17,11 +17,13 @@
 
 """Python Elastic Enterprise Search Client"""
 
+import re
 
 from elastic_transport import ConnectionError as ConnectionError
 from elastic_transport import ConnectionTimeout as ConnectionTimeout
 from elastic_transport import SerializationError as SerializationError
 from elastic_transport import TransportError as TransportError
+from elastic_transport import __version__ as _elastic_transport_version
 
 from ._async.client import AsyncAppSearch as AsyncAppSearch
 from ._async.client import AsyncEnterpriseSearch as AsyncEnterpriseSearch
@@ -44,6 +46,15 @@ from .exceptions import (
     ServiceUnavailableError,
     UnauthorizedError,
 )
+
+# Ensure that a compatible version of elastic-transport is installed.
+_version_groups = tuple(int(x) for x in re.search(r"^(\d+)\.(\d+)\.(\d+)", _elastic_transport_version).groups())  # type: ignore
+if _version_groups < (8, 0, 0) or _version_groups > (9, 0, 0):
+    raise ImportError(
+        "An incompatible version of elastic-transport is installed. Must be between "
+        "v8.0.0 and v9.0.0. Install the correct version with the following command: "
+        "$ python -m pip install 'elastic-transport>=8, <9'"
+    )
 
 __all__ = [
     "ApiError",
