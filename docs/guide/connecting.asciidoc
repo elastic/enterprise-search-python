@@ -92,7 +92,7 @@ from elastic_enterprise_search import AppSearch
 # Create an AppSearch client authenticated with a search key.
 server_side = AppSearch(
     "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
-    http_auth="<search key>"
+    bearer_auth="<search key>"
 )
 
 # Creating a Signed Search Key on the server side...
@@ -108,13 +108,11 @@ signed_search_key = server_side.create_signed_search_key(
 # use the Signed Search key for searches:
 client_side = AppSearch(
     "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
-    http_auth=signed_search_key
+    bearer_auth=signed_search_key
 )
 resp = client_side.search(
     engine_name="example-engine",
-    body={
-        ...
-    }
+    query="..."
 )
 ----------------------------
 
@@ -137,13 +135,13 @@ ent_search = EnterpriseSearch(
 
 # Authenticating with Workplace Search
 # Custom API Content Source access token
-ent_search.workplace_search.http_auth = "<content source access token>"
+ent_search.workplace_search.option(bearer_auth="<content source access token>")
 
 # You can also use an authentication method for a single
 # request. This is useful for per-user authentication like OAuth:
 ent_search.workplace_search.search(
     body={"query": "That one document"},
-    http_auth="<oauth access token>"
+    bearer_auth="<oauth access token>"
 )
 
 # You can also create a WorkplaceSearch client on its
@@ -152,7 +150,7 @@ from elastic_enterprise_search import WorkplaceSearch
 
 workplace_search = WorkplaceSearch(
     "https://<...>.ent-search.us-central1.gcp.cloud.es.io",
-    http_auth="<content source access token>"
+    bearer_auth="<content source access token>"
 )
 ----------------------------
 
@@ -181,7 +179,9 @@ ent_search = EnterpriseSearch(
 ent_search.http_auth = ("enterprise_search", "<password>")
 
 # You can also set a per-request `http_auth`
-ent_search.get_version(http_auth=("enterprise_search", "<password>"))
+ent_search.options(
+    basic_auth=("enterprise_search", "<password>")
+).get_version()
 ----------------------------
 
 [discrete]
@@ -194,10 +194,10 @@ come from https://github.com/elastic/elastic-transport-python[`elastic-transport
 [options="header"]
 |============
 | Parameter                 | Types                         | Default               | Description
-| `host`                    | `str`                         | `"localhost"`         | TCP host to connect to. If set to a URL will set `port`, `use_ssl`, and `url_prefix` after parsing.
-| `port`                    | `Optional[int]`               | `3002`                | TCP port to connect to
-| `use_ssl`                 | `bool`                        | `False`               | Whether to connect using TLS/SSL
-| `url_prefix`              | `str`                         | `""`                  | Path prefix for all requests
+| `scheme`                  | `str`                         | N/A                   | Whether to use HTTPS or HTTP for connecting to Enterprise Search
+| `host`                    | `str`                         | N/A                   | TCP host to connect to. If set to a URL will set `port`, `use_ssl`, and `url_prefix` after parsing.
+| `port`                    | `Optional[int]`               | N/A                   | TCP port to connect to
+| `path_prefix`             | `str`                         | `""`                  | Path prefix for all requests
 | `request_timeout`         | `Optional[float]`             | `10.0`                | Amount of time to wait for a response. Set to `None` for no limit
 | `headers`                 | `Dict[str, str]`              | `{}`                  | HTTP headers to add to every request
 | `connections_per_host`    | `int`                         | `10`                  | Number of concurrent connections to allow per-host. Only matters if making concurrent requests
