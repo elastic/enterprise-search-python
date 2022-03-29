@@ -12,3 +12,9 @@ $ python -m pip install elastic-enterprise-search
 The package `elastic-enterprise-search` was previously used as a client for
 only 'Elastic Workplace Search' before the product was renamed. When installing
 make sure you receive a version greater than 7.10.0
+
+[discrete]
+=== Compatibility
+
+Language clients are forward compatible; meaning that clients support communicating
+with greater or equal minor versions of Elastic Enterprise Search.
