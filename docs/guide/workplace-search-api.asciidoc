@@ -206,11 +206,9 @@ Deletes documents that match a query or filters
 # Request
 workplace_search.delete_documents_by_query(
     content_source_id="<CONTENT_SOURCE_ID>",
-    body={
-        "filters": {
-            "last_updated_at": {
-                "from": "2020-06-01T12:00:00+00:00"
-            }
+    filters={
+        "last_updated_at": {
+            "from": "2020-06-01T12:00:00+00:00"
         }
     }
 )
@@ -226,8 +224,7 @@ Deletes all the documents in a Content Source
 [source,python]
 ---------------
 workplace_search.delete_documents_by_query(
-    content_source_id="<CONTENT_SOURCE_ID>",
-    body={}
+    content_source_id="<CONTENT_SOURCE_ID>"
 )
 ---------------
 
@@ -239,20 +236,18 @@ workplace_search.delete_documents_by_query(
 [source,python]
 ---------------
 workplace_search.create_content_source(
-    body={
-        "name": "Content Source Name",
-        "schema": {
-            "title": "text",
-            "body": "text",
-            "url": "text"
-        },
-        "display": {
-            "title_field": "title",
-            "url_field": "url",
-            "color": "#f00f00"
-        },
-        "is_searchable": True
-    }
+    name="Content Source Name",
+    schema={
+        "title": "text",
+        "body": "text",
+        "url": "text"
+    },
+    display={
+        "title_field": "title",
+        "url_field": "url",
+        "color": "#f00f00"
+    },
+    is_searchable=True
 )
 ---------------
 
@@ -297,20 +292,18 @@ workplace_search.list_content_sources()
 ---------------
 workplace_search.put_content_source(
     content_source_id="<CONTENT_SOURCE_ID>",
-    body={
-        "name": "Content Source Name",
-        "schema": {
-            "title": "text",
-            "body": "text",
-            "url": "text"
-        },
-        "display": {
-            "title_field": "title",
-            "url_field": "url",
-            "color": "#f00f00"
-        },
-        "is_searchable": True
-    }
+    name="Content Source Name",
+    schema={
+        "title": "text",
+        "body": "text",
+        "url": "text"
+    },
+    display={
+        "title_field": "title",
+        "url_field": "url",
+        "color": "#f00f00"
+    },
+    is_searchable=True
 )
 ---------------
 
@@ -339,11 +332,9 @@ with open("alt-icon.png", "rb") as f:
 
 workplace_search.put_content_source_icon(
     content_source_id="<CONTENT_SOURCE_ID>",
-    body={
-        "main_icon": main_icon,
-        # This icon is optional, if not provided 'main_icon' will be used.
-        "alt_icon": alt_icon
-    }
+    main_icon=main_icon,
+    # This icon is optional, if not provided 'main_icon' will be used.
+    alt_icon=alt_icon
 )
 ---------------
 
@@ -357,9 +348,7 @@ in the `http_auth` parameter to authenticate.
 ---------------
 # Request:
 workplace_search.search(
-    body={
-        "query": "sleep"
-    }
+    query="sleep"
 )
 
 # Response:
@@ -402,33 +391,6 @@ workplace_search.search(
 Permissions can be set per-user and then applied  to documents either
 by `_allow_permissions` or `_deny_permissions` to control access to documents.
 
-==== Add Permission to User
-
-To add permissions to a user `example.user`
-use the `add_user_permissions()` method:
-
-[source,python]
----------------
-# Request:
-workplace_search.add_user_permissions(
-    content_source_id="<CONTENT_SOURCE_ID>",
-    http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>",
-    user="example.user",
-    body={
-        "permissions": ["permission1", "permission2"]
-    }
-)
-
-# Response:
-{
- "user": "example.user",
- "permissions": [
-   "permission1",
-   "permission2"
- ]
-}
----------------
-
 ==== Get User Permissions
 
 To view a users permissions use the `get_permissions()` method:
@@ -459,9 +421,10 @@ To view all users permissions for a custom content source use the `list_permissi
 [source,python]
 ---------------
 # Request:
-workplace_search.list_permissions(
-    content_source_id="<CONTENT_SOURCE_ID>",
-    http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>"
+workplace_search.options(
+  bearer_auth="<CONTENT_SOURCE_ACCESS_TOKEN>"
+).list_permissions(
+    content_source_id="<CONTENT_SOURCE_ID>"
 )
 
 # Response:
@@ -474,31 +437,6 @@ workplace_search.list_permissions(
    ]
   }
 ]
----------------
-
-==== Remove Permissions from User
-
-To remove one or more permissions from a user use the `delete_user_permissions()` method:
-
-[source,python]
----------------
-# Request:
-workplace_search.delete_user_permissions(
-    content_source_id="<CONTENT_SOURCE_ID>",
-    http_auth="<CONTENT_SOURCE_ACCESS_TOKEN>",
-    user="example.user",
-    body={
-        "permissions": ["permission2"]
-    }
-)
-
-# Response:
-{
-  "user": "example.user",
-  "permissions": [
-    "permission1"
-  ]
-}
 ---------------
 
 ==== Get current User
@@ -523,12 +461,10 @@ workplace_search.get_current_user()
 ---------------
 # Request
 workplace_search.create_batch_synonym_sets(
-    body={
-        "synonym_sets": [
-            {"synonyms": ["house", "home", "abode"]},
-            {"synonyms": ["cat", "feline", "kitty"]}
-        ]
-    }
+    synonym_sets=[
+        {"synonyms": ["house", "home", "abode"]},
+        {"synonyms": ["cat", "feline", "kitty"]}
+    ]
 )
 
 # Response
@@ -571,10 +507,8 @@ workplace_search.get_synonym_set(
 ---------------
 # Request
 workplace_search.list_synonym_sets(
-    body={
-        "filter": {
-            "terms": ["home"]
-        }
+    filter={
+        "terms": ["home"]
     }
 )
 
@@ -619,9 +553,7 @@ workplace_search.delete_synonym_set(
 ---------------
 workplace_search.put_synonym_set(
     synonym_set_id="<ID>",
-    body={
-        "synonyms": ["mouses", "mice", "rat"]
-    }
+    synonyms=["mouses", "mice", "rat"]
 )
 ---------------
 
@@ -668,11 +600,8 @@ access_token = resp["access_token"]
 refresh_token = resp["refresh_token"]
 
 # Use the 'access_token' to make search requests
-results = workplace_search.search(
-    body={
-        "query": "Things I want to find"
-    },
-    http_auth=access_token
+results = workplace_search.options(bearer_auth=access_token).search(
+    query="Things I want to find"
 )
 
 # When the access token eventually expires, use the
