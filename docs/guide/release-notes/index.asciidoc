@@ -4,7 +4,7 @@
 [discrete]
 === 7.x
 
-* <<release-notes-7-16-0, 7.17.0 Release Notes>>
+* <<release-notes-7-17-0, 7.17.0 Release Notes>>
 * <<release-notes-7-16-0, 7.16.0 Release Notes>>
 * <<release-notes-7-15-0, 7.15.0 Release Notes>>
 * <<release-notes-7-14-0, 7.14.0 Release Notes>>
