@@ -109,7 +109,7 @@ class EnterpriseSearch(BaseClient):
         """
         Get version information for this server
 
-        `<https://www.elastic.co/guide/en/enterprise-search/current/management-apis.html>`_
+        `<https://www.elastic.co/guide/en/enterprise-search/current/monitoring-apis.html#monitoring-apis-version-api>`_
         """
         __headers = {"accept": "application/json"}
         return self.perform_request(  # type: ignore[return-value]

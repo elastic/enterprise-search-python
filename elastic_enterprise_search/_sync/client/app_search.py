@@ -583,7 +583,6 @@ class AppSearch(BaseClient):
         pattern: str,
         policy: t.Union["t.Literal['allow', 'deny']", str],
         rule: t.Union["t.Literal['begins', 'contains', 'ends', 'regex']", str],
-        created_at: t.Optional[str] = None,
     ) -> ObjectApiResponse[t.Any]:
         """
         Creates a crawl rule for a given engine and domain
@@ -596,7 +595,6 @@ class AppSearch(BaseClient):
         :param pattern:
         :param policy:
         :param rule:
-        :param created_at:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
@@ -619,8 +617,6 @@ class AppSearch(BaseClient):
             __body["policy"] = policy
         if rule is not None:
             __body["rule"] = rule
-        if created_at is not None:
-            __body["created_at"] = created_at
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "POST",
@@ -642,7 +638,6 @@ class AppSearch(BaseClient):
         pattern: str,
         policy: t.Union["t.Literal['allow', 'deny']", str],
         rule: t.Union["t.Literal['begins', 'contains', 'ends', 'regex']", str],
-        created_at: t.Optional[str] = None,
     ) -> ObjectApiResponse[t.Any]:
         """
         Updates crawl rule configuration
@@ -656,7 +651,6 @@ class AppSearch(BaseClient):
         :param pattern:
         :param policy:
         :param rule:
-        :param created_at:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
@@ -681,8 +675,6 @@ class AppSearch(BaseClient):
             __body["policy"] = policy
         if rule is not None:
             __body["rule"] = rule
-        if created_at is not None:
-            __body["created_at"] = created_at
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "PUT",
@@ -1027,7 +1019,6 @@ class AppSearch(BaseClient):
         engine_name: str,
         domain_id: str,
         value: str,
-        created_at: t.Optional[str] = None,
     ) -> ObjectApiResponse[t.Any]:
         """
         Creates a crawler domain entry point for a given engine and domain
@@ -1037,7 +1028,6 @@ class AppSearch(BaseClient):
         :param engine_name: Name of the engine
         :param domain_id: Crawler Domain ID
         :param value:
-        :param created_at:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
@@ -1048,8 +1038,6 @@ class AppSearch(BaseClient):
         __body: t.Dict[str, t.Any] = {}
         if value is not None:
             __body["value"] = value
-        if created_at is not None:
-            __body["created_at"] = created_at
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "POST",
@@ -1068,7 +1056,6 @@ class AppSearch(BaseClient):
         domain_id: str,
         entry_point_id: str,
         value: str,
-        created_at: t.Optional[str] = None,
     ) -> ObjectApiResponse[t.Any]:
         """
         Updates a crawler entry point with a new value
@@ -1079,7 +1066,6 @@ class AppSearch(BaseClient):
         :param domain_id: Crawler Domain ID
         :param entry_point_id: Crawler Entry Point identifier
         :param value:
-        :param created_at:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
@@ -1092,8 +1078,6 @@ class AppSearch(BaseClient):
         __body: t.Dict[str, t.Any] = {}
         if value is not None:
             __body["value"] = value
-        if created_at is not None:
-            __body["created_at"] = created_at
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "PUT",
@@ -1273,7 +1257,6 @@ class AppSearch(BaseClient):
         engine_name: str,
         domain_id: str,
         url: str,
-        created_at: t.Optional[str] = None,
     ) -> ObjectApiResponse[t.Any]:
         """
         Creates a crawler sitemap configuration for a given engine and domain
@@ -1283,7 +1266,6 @@ class AppSearch(BaseClient):
         :param engine_name: Name of the engine
         :param domain_id: Crawler Domain ID
         :param url:
-        :param created_at:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
@@ -1294,8 +1276,6 @@ class AppSearch(BaseClient):
         __body: t.Dict[str, t.Any] = {}
         if url is not None:
             __body["url"] = url
-        if created_at is not None:
-            __body["created_at"] = created_at
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "POST",
@@ -1314,7 +1294,6 @@ class AppSearch(BaseClient):
         domain_id: str,
         sitemap_id: str,
         url: str,
-        created_at: t.Optional[str] = None,
     ) -> ObjectApiResponse[t.Any]:
         """
         Updates sitemap configuration
@@ -1325,7 +1304,6 @@ class AppSearch(BaseClient):
         :param domain_id: Crawler Domain ID
         :param sitemap_id: Sitemap ID
         :param url:
-        :param created_at:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
@@ -1338,8 +1316,6 @@ class AppSearch(BaseClient):
         __body: t.Dict[str, t.Any] = {}
         if url is not None:
             __body["url"] = url
-        if created_at is not None:
-            __body["created_at"] = created_at
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "PUT",
@@ -1379,13 +1355,13 @@ class AppSearch(BaseClient):
         )
 
     @_rewrite_parameters(
-        body_fields=True,
+        body_name="body",
     )
     def get_crawler_url_tracing_result(
         self,
         *,
         engine_name: str,
-        url: str,
+        body: str,
     ) -> ObjectApiResponse[t.Any]:
         """
         Returns information about the history of a given URL with the App Search Crawler.
@@ -1393,15 +1369,13 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/web-crawler-api-reference.html#web-crawler-apis-post-crawler-trace-url>`_
 
         :param engine_name: Name of the engine
-        :param url:
+        :param body:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
-        if url is None:
-            raise ValueError("Empty value passed for parameter 'url'")
-        __body: t.Dict[str, t.Any] = {}
-        if url is not None:
-            __body["url"] = url
+        if body is None:
+            raise ValueError("Empty value passed for parameter 'body'")
+        __body = body
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "POST",
@@ -1411,30 +1385,13 @@ class AppSearch(BaseClient):
         )
 
     @_rewrite_parameters(
-        body_fields=True,
+        body_name="body",
     )
     def get_crawler_url_validation_result(
         self,
         *,
         engine_name: str,
-        url: str,
-        checks: t.Optional[
-            t.Union[
-                t.List[
-                    t.Union[
-                        "t.Literal['dns', 'robots_txt', 'tcp', 'url', 'url_content', 'url_request']",
-                        str,
-                    ]
-                ],
-                t.Tuple[
-                    t.Union[
-                        "t.Literal['dns', 'robots_txt', 'tcp', 'url', 'url_content', 'url_request']",
-                        str,
-                    ],
-                    ...,
-                ],
-            ]
-        ] = None,
+        body: str,
     ) -> ObjectApiResponse[t.Any]:
         """
         Performs a number of checks on a given URL to make sure it is ready to be crawled
@@ -1443,18 +1400,13 @@ class AppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/web-crawler-api-reference.html#web-crawler-apis-post-crawler-validate-url>`_
 
         :param engine_name: Name of the engine
-        :param url:
-        :param checks:
+        :param body:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
-        if url is None:
-            raise ValueError("Empty value passed for parameter 'url'")
-        __body: t.Dict[str, t.Any] = {}
-        if url is not None:
-            __body["url"] = url
-        if checks is not None:
-            __body["checks"] = checks
+        if body is None:
+            raise ValueError("Empty value passed for parameter 'body'")
+        __body = body
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "POST",
@@ -2189,6 +2141,42 @@ class AppSearch(BaseClient):
     @_rewrite_parameters(
         body_fields=True,
     )
+    def search_es_search(
+        self,
+        *,
+        engine_name: str,
+        request: t.Mapping[str, t.Any],
+        analytics: t.Optional[t.Mapping[str, t.Any]] = None,
+    ) -> ObjectApiResponse[t.Any]:
+        """
+        Execute the provided Elasticsearch search query against an App Search Engine
+
+        `<https://www.elastic.co/guide/en/app-search/current/elasticsearch-search-api-reference.html>`_
+
+        :param engine_name: Name of the engine
+        :param request:
+        :param analytics:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for parameter 'engine_name'")
+        if request is None:
+            raise ValueError("Empty value passed for parameter 'request'")
+        __body: t.Dict[str, t.Any] = {}
+        if request is not None:
+            __body["request"] = request
+        if analytics is not None:
+            __body["analytics"] = analytics
+        __headers = {"accept": "application/json", "content-type": "application/json"}
+        return self.perform_request(  # type: ignore[return-value]
+            "POST",
+            f"/api/as/v0/engines/{_quote(engine_name)}/elasticsearch/_search",
+            body=__body,
+            headers=__headers,
+        )
+
+    @_rewrite_parameters(
+        body_fields=True,
+    )
     def get_api_logs(
         self,
         *,
@@ -2395,6 +2383,116 @@ class AppSearch(BaseClient):
         return self.perform_request(  # type: ignore[return-value]
             "POST",
             f"/api/as/v1/engines/{_quote(engine_name)}/search",
+            body=__body,
+            headers=__headers,
+        )
+
+    @_rewrite_parameters(
+        body_fields=True,
+    )
+    def multi_search(
+        self,
+        *,
+        engine_name: str,
+        queries: t.Union[
+            t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]
+        ],
+    ) -> ObjectApiResponse[t.Any]:
+        """
+        Submit a multi search query and receive a set of results with meta data
+
+        `<https://www.elastic.co/guide/en/app-search/current/multi-search.html>`_
+
+        :param engine_name: Name of the engine
+        :param queries:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for parameter 'engine_name'")
+        if queries is None:
+            raise ValueError("Empty value passed for parameter 'queries'")
+        __body: t.Dict[str, t.Any] = {}
+        if queries is not None:
+            __body["queries"] = queries
+        __headers = {"accept": "application/json", "content-type": "application/json"}
+        return self.perform_request(  # type: ignore[return-value]
+            "POST",
+            f"/api/as/v1/engines/{_quote(engine_name)}/multi_search",
+            body=__body,
+            headers=__headers,
+        )
+
+    @_rewrite_parameters(
+        body_fields=True,
+    )
+    def search_explain(
+        self,
+        *,
+        engine_name: str,
+        query: str,
+        analytics: t.Optional[t.Mapping[str, t.Any]] = None,
+        boost: t.Optional[t.Mapping[str, t.Any]] = None,
+        current_page: t.Optional[int] = None,
+        facets: t.Optional[t.Mapping[str, t.Any]] = None,
+        filters: t.Optional[t.Mapping[str, t.Any]] = None,
+        group: t.Optional[t.Mapping[str, t.Any]] = None,
+        page_size: t.Optional[int] = None,
+        result_fields: t.Optional[t.Mapping[str, t.Any]] = None,
+        search_fields: t.Optional[t.Mapping[str, t.Any]] = None,
+        sort: t.Optional[
+            t.Union[t.List[t.Mapping[str, t.Any]], t.Tuple[t.Mapping[str, t.Any], ...]]
+        ] = None,
+    ) -> ObjectApiResponse[t.Any]:
+        """
+        Submit a search and retrieve an Elasticsearch query
+
+        `<https://www.elastic.co/guide/en/app-search/current/search-explain.html>`_
+
+        :param engine_name: Name of the engine
+        :param query:
+        :param analytics:
+        :param boost:
+        :param current_page:
+        :param facets:
+        :param filters:
+        :param group:
+        :param page_size:
+        :param result_fields:
+        :param search_fields:
+        :param sort:
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for parameter 'engine_name'")
+        if query is None:
+            raise ValueError("Empty value passed for parameter 'query'")
+        __body: t.Dict[str, t.Any] = {}
+        if query is not None:
+            __body["query"] = query
+        if analytics is not None:
+            __body["analytics"] = analytics
+        if boost is not None:
+            __body["boost"] = boost
+        if current_page is not None:
+            __body.setdefault("page", {})
+            __body["page"]["current"] = current_page
+        if facets is not None:
+            __body["facets"] = facets
+        if filters is not None:
+            __body["filters"] = filters
+        if group is not None:
+            __body["group"] = group
+        if page_size is not None:
+            __body.setdefault("page", {})
+            __body["page"]["size"] = page_size
+        if result_fields is not None:
+            __body["result_fields"] = result_fields
+        if search_fields is not None:
+            __body["search_fields"] = search_fields
+        if sort is not None:
+            __body["sort"] = sort
+        __headers = {"accept": "application/json", "content-type": "application/json"}
+        return self.perform_request(  # type: ignore[return-value]
+            "POST",
+            f"/api/as/v0/engines/{_quote(engine_name)}/search_explain",
             body=__body,
             headers=__headers,
         )
