@@ -1,0 +1,31 @@
+[[release-notes-8-2-0]]
+=== 8.2.0 Release Notes
+
+[discrete]
+==== Added
+
+- Added `AsyncAppSearch`, `AsyncEnterpriseSearch`, and `AsyncWorkplaceSearch` clients which have async API methods.
+- Added the top-level `.options()` method to all client classes for modifying options per request.
+- Added parameters for JSON request body fields for all APIs
+- Added `basic_auth` parameter for specifying username and password authentication.
+- Added `bearer_auth` parameter for specifying authentication with HTTP Bearer tokens.
+- Added the `meta` property to `ApiError` and subclasses to access the HTTP response metadata of an error.
+- Added a check that a compatible version of `elastic-transport` package is installed.
+
+[discrete]
+==== Changed
+
+- Changed responses to be objects with two properties, `meta` for response metadata (HTTP status, headers, node, etc) and `body` for the raw deserialized body object.
+
+[discrete]
+==== Removed
+
+- Removed support for Python 2.7 and Python 3.5. The package now requires Python 3.6 or higher.
+- Removed the default URL of `http://localhost:3002`. The URL must now be specified explicitly, including scheme and port.
+- Removed the ability to use positional arguments with API methods. Going forward all API parameters must be specified as keyword parameters.
+
+[discrete]
+==== Deprecated
+
+- Deprecated the `body` and `params` parameters for all API methods.
+- Deprecated setting transport options `http_auth`, `ignore`, `request_timeout`, and `headers` in API methods. All of these settings should be set via the `.options()` method instead.
