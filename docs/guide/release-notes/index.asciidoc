@@ -2,6 +2,11 @@
 == Release Notes
 
 [discrete]
+=== 8.x
+
+* <<release-notes-8-2-0, 8.2.0 Release Notes>>
+
+[discrete]
 === 7.x
 
 * <<release-notes-7-17-0, 7.17.0 Release Notes>>
@@ -13,6 +18,7 @@
 * <<release-notes-7-11-0, 7.11.0 Release Notes>>
 * <<release-notes-7-10-0, 7.10.0-beta1 Release Notes>>
 
+include::8-2-0.asciidoc[]
 include::7-17-0.asciidoc[]
 include::7-16-0.asciidoc[]
 include::7-15-0.asciidoc[]
