@@ -237,6 +237,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
+        current_page: t.Optional[int] = None,
         filters: t.Optional[t.Mapping[str, t.Any]] = None,
         page_size: t.Optional[int] = None,
         query: t.Optional[str] = None,
@@ -247,6 +248,7 @@ class AsyncAppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/clicks.html>`_
 
         :param engine_name: Name of the engine
+        :param current_page:
         :param filters:
         :param page_size:
         :param query:
@@ -254,6 +256,9 @@ class AsyncAppSearch(BaseClient):
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
         __body: t.Dict[str, t.Any] = {}
+        if current_page is not None:
+            __body.setdefault("page", {})
+            __body["page"]["current"] = current_page
         if filters is not None:
             __body["filters"] = filters
         if page_size is not None:
@@ -314,6 +319,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
+        current_page: t.Optional[int] = None,
         filters: t.Optional[t.Mapping[str, t.Any]] = None,
         page_size: t.Optional[int] = None,
     ) -> ObjectApiResponse[t.Any]:
@@ -323,12 +329,16 @@ class AsyncAppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/queries.html#queries-top-queries>`_
 
         :param engine_name: Name of the engine
+        :param current_page:
         :param filters:
         :param page_size:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
         __body: t.Dict[str, t.Any] = {}
+        if current_page is not None:
+            __body.setdefault("page", {})
+            __body["page"]["current"] = current_page
         if filters is not None:
             __body["filters"] = filters
         if page_size is not None:
@@ -428,11 +438,7 @@ class AsyncAppSearch(BaseClient):
         self,
         *,
         engine_name: str,
-        domain_allowlist: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-        max_crawl_depth: t.Optional[int] = None,
-        seed_urls: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
-        sitemap_discovery_disabled: t.Optional[bool] = None,
-        sitemap_urls: t.Optional[t.Union[t.List[str], t.Tuple[str, ...]]] = None,
+        overrides: t.Mapping[str, t.Any],
     ) -> ObjectApiResponse[t.Any]:
         """
         Creates a request to perform a crawl of a given engine with the Crawler.
@@ -440,28 +446,16 @@ class AsyncAppSearch(BaseClient):
         `<https://www.elastic.co/guide/en/app-search/current/web-crawler-api-reference.html#web-crawler-apis-post-crawler-crawl-requests>`_
 
         :param engine_name: Name of the engine
-        :param domain_allowlist:
-        :param max_crawl_depth:
-        :param seed_urls:
-        :param sitemap_discovery_disabled:
-        :param sitemap_urls:
+        :param overrides:
         """
         if engine_name in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'engine_name'")
+        if overrides is None:
+            raise ValueError("Empty value passed for parameter 'overrides'")
         __body: t.Dict[str, t.Any] = {}
-        if domain_allowlist is not None:
-            __body["domain_allowlist"] = domain_allowlist
-        if max_crawl_depth is not None:
-            __body["max_crawl_depth"] = max_crawl_depth
-        if seed_urls is not None:
-            __body["seed_urls"] = seed_urls
-        if sitemap_discovery_disabled is not None:
-            __body["sitemap_discovery_disabled"] = sitemap_discovery_disabled
-        if sitemap_urls is not None:
-            __body["sitemap_urls"] = sitemap_urls
-        __headers = {"accept": "application/json"}
-        if __body is not None:
-            __headers["content-type"] = "application/json"
+        if overrides is not None:
+            __body["overrides"] = overrides
+        __headers = {"accept": "application/json", "content-type": "application/json"}
         return await self.perform_request(  # type: ignore[return-value]
             "POST",
             f"/api/as/v1/engines/{_quote(engine_name)}/crawler/crawl_requests",

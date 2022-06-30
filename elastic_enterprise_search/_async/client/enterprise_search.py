@@ -115,3 +115,17 @@ class AsyncEnterpriseSearch(BaseClient):
         return await self.perform_request(  # type: ignore[return-value]
             "GET", "/api/ent/v1/internal/version", headers=__headers
         )
+
+    @_rewrite_parameters()
+    async def get_search_engines(
+        self,
+    ) -> ObjectApiResponse[t.Any]:
+        """
+        Retrieve information about search engines
+
+        `<https://www.elastic.co/guide/en/enterprise-search/current/search-engines-apis.html>`_
+        """
+        __headers = {"accept": "application/json"}
+        return await self.perform_request(  # type: ignore[return-value]
+            "GET", "/api/search_engines", headers=__headers
+        )
