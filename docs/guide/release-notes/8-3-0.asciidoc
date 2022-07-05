@@ -1,0 +1,20 @@
+[[release-notes-8-3-0]]
+=== 8.3.0 Release Notes
+
+[discrete]
+==== Added
+
+- Added the `current_page` parameter to many APIs that support pagination.
+- Added the `app_search.multi_search` API for v8.x
+- Added the `enterprise_search.get_search_engines` API
+
+[discrete]
+==== Fixed
+
+- Fixed the `overrides` parameter of the `app_search.get_top_queries_analytics` and `create_crawler_crawl_request` APIs
+
+
+[discrete]
+==== Removed
+
+- Removed unused `created_at` parameters for various `create_*` APIs. These parameters weren't used by the server and were only generated due to issues with the API specification.
