@@ -201,7 +201,7 @@ come from https://github.com/elastic/elastic-transport-python[`elastic-transport
 | `request_timeout`         | `Optional[float]`             | `10.0`                | Amount of time to wait for a response. Set to `None` for no limit
 | `headers`                 | `Dict[str, str]`              | `{}`                  | HTTP headers to add to every request
 | `connections_per_host`    | `int`                         | `10`                  | Number of concurrent connections to allow per-host. Only matters if making concurrent requests
-| `verify_cert`             | `bool`                        | `True`                | Whether to verify the server certificate during TLS handshake
+| `verify_certs`            | `bool`                        | `True`                | Whether to verify the server certificate during TLS handshake
 | `ca_certs`                | `Optional[str]`               | `certifi.where()`     | CA certificates to use when verifying server certificate
 | `client_cert`             | `Optional[str]`               | `None`                | Client certificate to present during TLS/SSL handshake
 | `client_key`              | `Optional[str]`               | `None`                | Client private key for `client_cert`
