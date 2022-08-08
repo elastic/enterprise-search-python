@@ -22,7 +22,7 @@ from elastic_enterprise_search import AppSearch
 from tests.conftest import DummyNode
 
 
-def test_search_es_search():
+def test_mock_request():
     client = AppSearch(node_class=DummyNode, meta_header=False)
     client.search_es_search(
         engine_name="test",
@@ -87,3 +87,22 @@ def test_search_es_search_params_type_error(param_value):
             params={"key": param_value},
         )
     assert str(e.value) == "Values for 'params' parameter must be of type 'str'"
+
+
+@pytest.mark.vcr()
+def test_search_es_search(app_search):
+    resp = app_search.search_es_search(
+        engine_name="elastic-docs",
+        params={"sort": "_score"},
+        body={"query": {"match": {"*": "client"}}},
+    )
+    assert resp.body == {
+        "took": 0,
+        "timed_out": False,
+        "_shards": {"total": 1, "successful": 1, "skipped": 0, "failed": 0},
+        "hits": {
+            "total": {"value": 0, "relation": "eq"},
+            "max_score": None,
+            "hits": [],
+        },
+    }
