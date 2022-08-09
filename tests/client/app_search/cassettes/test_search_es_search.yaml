@@ -1,0 +1,49 @@
+interactions:
+- request:
+    body: '{"query":{"match":{"*":"client"}}}'
+    headers:
+      accept:
+      - application/json
+      authorization:
+      - Bearer private-ybzoyx7cok65hpxyxkwaarnn
+      connection:
+      - keep-alive
+      content-type:
+      - application/json
+    method: POST
+    uri: https://my-deployment-c6095a.ent.us-central1.gcp.cloud.es.io/api/as/v0/engines/elastic-docs/elasticsearch/_search?sort=_score
+  response:
+    body:
+      string: '{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":0,"relation":"eq"},"max_score":null,"hits":[]}}'
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Length:
+      - '160'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Mon, 08 Aug 2022 19:44:31 GMT
+      Etag:
+      - W/"95041d5366989a0ed1304624d63355eb"
+      Server:
+      - Jetty(9.4.43.v20210629)
+      Vary:
+      - Origin
+      - Accept-Encoding, User-Agent
+      X-App-Search-Version:
+      - 8.4.0
+      X-Cloud-Request-Id:
+      - opbW3tOmRSOqGzamTfbLOQ
+      X-Found-Handling-Cluster:
+      - c99499ef963b4d11a9312e341f6d32cb
+      X-Found-Handling-Instance:
+      - instance-0000000001
+      X-Request-Id:
+      - opbW3tOmRSOqGzamTfbLOQ
+      X-Runtime:
+      - '0.084247'
+    status:
+      code: 200
+      message: OK
+version: 1
