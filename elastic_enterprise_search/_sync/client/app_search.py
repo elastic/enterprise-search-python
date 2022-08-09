@@ -24,6 +24,49 @@ from ._base import BaseClient
 
 
 class AppSearch(BaseClient):
+    @_rewrite_parameters(body_name="body", ignore_deprecated_options={"body", "params"})
+    def search_es_search(
+        self,
+        *,
+        engine_name: str,
+        params: t.Optional[t.Mapping[str, t.Any]] = None,
+        body: t.Optional[t.Mapping[str, t.Any]] = None,
+        analytics_query: t.Optional[str] = None,
+        analytics_tags: t.Optional[t.Union[str, t.Sequence[str]]] = None,
+    ) -> ObjectApiResponse[t.Any]:
+        """
+        Execute the provided Elasticsearch search query against an App Search Engine
+
+        `<https://www.elastic.co/guide/en/app-search/current/elasticsearch-search-api-reference.html>`_
+
+        :param engine_name: Name of the engine
+        :param params: Query parameters for the Elasticsearch Search request.
+        :param body: Body parameters for the Elasticsearch Search request.
+        :param analytics_query: The search query associated with this request when recording search analytics.
+        :param analytics_tags: The tags to apply to the query when recording search analytics.
+        """
+        if engine_name in SKIP_IN_PATH:
+            raise ValueError("Empty value passed for parameter 'engine_name'")
+
+        if params is not None and any(not isinstance(x, str) for x in params.values()):
+            raise TypeError("Values for 'params' parameter must be of type 'str'")
+
+        __headers = {"accept": "application/json", "content-type": "application/json"}
+        if analytics_query is not None:
+            __headers["X-Enterprise-Search-Analytics"] = analytics_query
+        if analytics_tags is not None:
+            if isinstance(analytics_tags, str):
+                analytics_tags = (analytics_tags,)
+            __headers["X-Enterprise-Search-Analytics-Tags"] = ",".join(analytics_tags)
+
+        return self.perform_request(  # type: ignore[return-value]
+            "POST",
+            f"/api/as/v0/engines/{_quote(engine_name)}/elasticsearch/_search",
+            params=params,
+            body=body,
+            headers=__headers,
+        )
+
     # AUTO-GENERATED-API-DEFINITIONS #
 
     @_rewrite_parameters()
@@ -2128,42 +2171,6 @@ class AppSearch(BaseClient):
         return self.perform_request(  # type: ignore[return-value]
             "POST",
             f"/api/as/v1/engines/{_quote(engine_name)}/source_engines",
-            body=__body,
-            headers=__headers,
-        )
-
-    @_rewrite_parameters(
-        body_fields=True,
-    )
-    def search_es_search(
-        self,
-        *,
-        engine_name: str,
-        request: t.Mapping[str, t.Any],
-        analytics: t.Optional[t.Mapping[str, t.Any]] = None,
-    ) -> ObjectApiResponse[t.Any]:
-        """
-        Execute the provided Elasticsearch search query against an App Search Engine
-
-        `<https://www.elastic.co/guide/en/app-search/current/elasticsearch-search-api-reference.html>`_
-
-        :param engine_name: Name of the engine
-        :param request:
-        :param analytics:
-        """
-        if engine_name in SKIP_IN_PATH:
-            raise ValueError("Empty value passed for parameter 'engine_name'")
-        if request is None:
-            raise ValueError("Empty value passed for parameter 'request'")
-        __body: t.Dict[str, t.Any] = {}
-        if request is not None:
-            __body["request"] = request
-        if analytics is not None:
-            __body["analytics"] = analytics
-        __headers = {"accept": "application/json", "content-type": "application/json"}
-        return self.perform_request(  # type: ignore[return-value]
-            "POST",
-            f"/api/as/v0/engines/{_quote(engine_name)}/elasticsearch/_search",
             body=__body,
             headers=__headers,
         )
