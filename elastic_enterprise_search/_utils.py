@@ -186,9 +186,11 @@ def client_node_configs(hosts, **kwargs) -> t.List[NodeConfig]:
     node_configs = []
     for host in hosts:
         if isinstance(host, str):
-            node_configs.append(url_to_node_config(host))
+            node_configs.append(
+                url_to_node_config(host, use_default_ports_for_scheme=True)
+            )
         else:
-            raise ValueError("NOT SUPPORTED")
+            raise TypeError("URLs must be of type 'str'")
 
     # Remove all values which are 'DEFAULT' to avoid overwriting actual defaults.
     node_options = {k: v for k, v in kwargs.items() if v is not DEFAULT}
