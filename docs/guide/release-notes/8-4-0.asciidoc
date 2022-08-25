@@ -1,0 +1,12 @@
+[[release-notes-8-4-0]]
+=== 8.4.0 Release Notes
+
+[discrete]
+==== Added
+
+- Added the `app_search.search_es_search` API method.
+
+[discrete]
+==== Changed
+
+- Changed URL parsing to use default ports for `http` and `https` schemes instead of raising an error.
