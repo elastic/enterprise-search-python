@@ -49,11 +49,11 @@ from .exceptions import (
 
 # Ensure that a compatible version of elastic-transport is installed.
 _version_groups = tuple(int(x) for x in re.search(r"^(\d+)\.(\d+)\.(\d+)", _elastic_transport_version).groups())  # type: ignore
-if _version_groups < (8, 0, 0) or _version_groups > (9, 0, 0):
+if _version_groups < (8, 4, 0) or _version_groups > (9, 0, 0):
     raise ImportError(
         "An incompatible version of elastic-transport is installed. Must be between "
-        "v8.0.0 and v9.0.0. Install the correct version with the following command: "
-        "$ python -m pip install 'elastic-transport>=8, <9'"
+        "v8.4.0 and v9.0.0. Install the correct version with the following command: "
+        "$ python -m pip install 'elastic-transport>=8.4, <9'"
     )
 
 __all__ = [
