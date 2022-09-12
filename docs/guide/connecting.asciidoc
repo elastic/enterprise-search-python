@@ -33,15 +33,7 @@ from elastic_enterprise_search import EnterpriseSearch
 client = EnterpriseSearch("<paste here>")
 ---------------
 
-The URL will look like this:
-
-[source,python]
---------
-"https://3b898c...ent-search.us-central1.gcp.cloud.es.io/login"
---------
-
-Notice the `/login` at the end, remove this part from
-the URL so that you end up with a URL like this:
+You end up with a method call like this:
 
 [source,python]
 ---------------
