@@ -1,0 +1,4 @@
+[[release-notes-8-5-0]]
+=== 8.5.0 Release Notes
+
+Client is compatible with Elastic Enterprise Search 8.5.0
