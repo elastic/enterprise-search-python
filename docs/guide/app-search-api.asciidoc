@@ -604,7 +604,7 @@ app_search.list_curations(
 )
 ---------------
 
-==== Get Curation
+==== Delete Curation
 
 [source,python]
 ---------------
