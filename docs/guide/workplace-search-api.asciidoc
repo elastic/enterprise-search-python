@@ -217,17 +217,6 @@ workplace_search.delete_documents_by_query(
 {"total": 100, "deleted": 100, "failures": []}
 ---------------
 
-==== Delete all documents
-
-Deletes all the documents in a Content Source
-
-[source,python]
----------------
-workplace_search.delete_documents_by_query(
-    content_source_id="<CONTENT_SOURCE_ID>"
-)
----------------
-
 [[workplace-search-content-source-apis]]
 === Content Source APIs
 
