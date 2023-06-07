@@ -1,0 +1,3 @@
+steps:
+  - label: ":python: Greetings :elastic-enterprise-search:"
+    command: "echo 'Hello, world!'"
