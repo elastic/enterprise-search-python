@@ -60,8 +60,8 @@ setup(
     version=version,
     author="Elastic",
     author_email="support@elastic.co",
-    maintainer="Seth Michael Larson",
-    maintainer_email="seth.larson@elastic.co",
+    maintainer="Clients Team",
+    maintainer_email="clients-team@elastic.co",
     url="https://github.com/elastic/enterprise-search-python",
     project_urls={
         "Documentation": "https://www.elastic.co/guide/en/enterprise-search-clients/python/current/index.html",
