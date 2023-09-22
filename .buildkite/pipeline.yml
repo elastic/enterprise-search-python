@@ -1,3 +1,32 @@
+---
 steps:
-  - label: ":python: Greetings :elastic-enterprise-search:"
-    command: "echo 'Hello, world!'"
+  - label: ":python: :elastic-enterprise-search:"
+    agents:
+      provider: gcp
+    matrix:
+      setup:
+        python:
+          - "3.7"
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+        stack_version:
+          - "8.3.0-SNAPSHOT"
+    env:
+      PYTHON_VERSION: "{{ matrix.python }}"
+      STACK_VERSION: "{{ matrix.stack_version }}"
+    command: ./.buildkite/run-tests
+    artifact_paths: "*-junit.xml"
+  - wait: ~
+    continue_on_failure: true
+  - label: ":junit: Test results"
+    agents:
+      provider: "gcp"
+      image: family/core-ubuntu-2204
+    plugins:
+      - junit-annotate#v2.4.1:
+          artifacts: "junit/*-junit.xml"
+          job-uuid-file-pattern: "(.*)-junit.xml"
+          fail-build-on-error: true
+          failure-format: file

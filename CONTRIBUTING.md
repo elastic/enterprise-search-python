@@ -49,7 +49,7 @@
 
 ## Running Integration Tests
 
-Run the full integration test suite with `$ .ci/run-tests`.
+Run the full integration test suite with `$ .buildkite/run-tests`.
 
 There are several environment variabels that control integration tests:
 
