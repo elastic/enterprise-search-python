@@ -38,21 +38,21 @@ echo -e "\033[32;1mSUCCESS:\033[0m successfully started the ${STACK_VERSION} sta
 echo -e "\033[34;1mINFO:\033[0m STACK_VERSION ${STACK_VERSION}\033[0m"
 echo -e "\033[34;1mINFO:\033[0m PYTHON_VERSION ${PYTHON_VERSION}\033[0m"
 
-echo -e "\033[1m>>>>> Build [elastic/enterprise-search-python container] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>\033[0m"
+echo ":docker: :python: :elastic-enterprise-search: Build elastic/enterprise-search-python image"
 
 docker build \
-       --file .ci/Dockerfile \
-       --tag elastic/enterprise-search-python \
-       --build-arg PYTHON_VERSION=${PYTHON_VERSION} \
-       .
+  --file .buildkite/Dockerfile \
+  --tag elastic/enterprise-search-python \
+  --build-arg PYTHON_VERSION="$PYTHON_VERSION" \
+  .
 
-echo -e "\033[1m>>>>> Run [elastic/enterprise-search-python container] >>>>>>>>>>>>>>>>>>>>>>>>>>>>>\033[0m"
+echo ":docker: :python: :elastic-enterprise-search: Run elastic/enterprise-search-python container"
 
-mkdir -p junit
+mkdir -p "$(pwd)/junit"
 docker run \
   --network ${network_name} \
   --name enterprise-search-python \
   --rm \
-  --volume `pwd`:/code/enterprise-search-python \
+  -v "$(pwd)/junit:/junit" \
   elastic/enterprise-search-python \
-  nox -s test-${PYTHON_VERSION}
+  bash -c "nox -s test-$PYTHON_VERSION; [ -f ./junit/$BUILDKITE_JOB_ID-junit.xml ] && mv ./junit/$BUILDKITE_JOB_ID-junit.xml /junit || echo 'No JUnit artifact found'"

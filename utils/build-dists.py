@@ -58,7 +58,6 @@ def run(*argv, expect_exit_code=0):
 
 def test_dist(dist):
     with set_tmp_dir() as tmp_dir:
-
         # Build the venv and install the dist
         run("python", "-m", "venv", os.path.join(tmp_dir, "venv"))
         venv_python = os.path.join(tmp_dir, "venv/bin/python")

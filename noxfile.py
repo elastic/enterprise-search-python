@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+import os
 from os.path import abspath, dirname, join
 
 import nox
@@ -51,10 +52,18 @@ def lint(session):
 
 
 def tests_impl(session):
-    junit_xml = join(
-        abspath(dirname(__file__)),
-        "junit/enterprise-search-python-junit.xml",
-    )
+    job_id = os.environ.get("BUILDKITE_JOB_ID", None)
+    if job_id is not None:
+        junit_xml = join(
+            abspath(dirname(__file__)),
+            f"junit/{job_id}-junit.xml",
+        )
+    else:
+        junit_xml = join(
+            abspath(dirname(__file__)),
+            "junit/enterprise-search-python-junit.xml",
+        )
+
     session.install("git+https://github.com/elastic/elastic-transport-python")
     session.install(".[develop]")
     session.run(

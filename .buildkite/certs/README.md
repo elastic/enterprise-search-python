@@ -8,7 +8,7 @@ The `ca.crt` and `ca.key` can be used to generate any other certificates that ma
 for CI. Perhaps the easiest way to do so is using 
 [`elasticsearch-certutil`](https://www.elastic.co/guide/en/elasticsearch/reference/current/certutil.html)
 
-Using the elasticsearch docker container, run the following from the `.ci/certs` directory
+Using the elasticsearch docker container, run the following from the `.buildkite/certs` directory
 
 ```sh
 docker run \

@@ -7,7 +7,7 @@
 
 # Version 1.1.0
 # - Initial version of the run-app-search.sh script
-# - Refactored .ci version
+# - Refactored .buildkite version
 
 script_path=$(dirname $(realpath -s $0))
 source $script_path/functions/imports.sh
