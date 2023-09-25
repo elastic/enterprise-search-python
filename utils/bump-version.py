@@ -73,7 +73,6 @@ def main():
         path=SOURCE_DIR / ".buildkite/pipeline.yml",
         pattern=r'STACK_VERSION:\s+\- "[0-9]+[0-9\.]*[0-9](?:\-SNAPSHOT)?"',
         replace=f'STACK_VERSION:\n          - "{major_minor_version}.0-SNAPSHOT"',
-
     )
     find_and_replace(
         path=SOURCE_DIR / ".github/workflows/unified-release.yml",
