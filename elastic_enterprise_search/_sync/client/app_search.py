@@ -2361,7 +2361,7 @@ class AppSearch(BaseClient):
         if analytics is not None:
             __body["analytics"] = analytics
         if boost is not None:
-            __body["boost"] = boost
+            __body["boosts"] = boost
         if current_page is not None:
             __body.setdefault("page", {})
             __body["page"]["current"] = current_page
@@ -2471,7 +2471,7 @@ class AppSearch(BaseClient):
         if analytics is not None:
             __body["analytics"] = analytics
         if boost is not None:
-            __body["boost"] = boost
+            __body["boosts"] = boost
         if current_page is not None:
             __body.setdefault("page", {})
             __body["page"]["current"] = current_page
