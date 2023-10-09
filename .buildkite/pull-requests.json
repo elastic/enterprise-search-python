@@ -1,0 +1,9 @@
+{
+  "jobs": [
+    {
+      "enabled": true,
+      "pipeline_slug": "enterprise-search-python-test",
+      "allow_org_users": true
+    }
+  ]
+}
