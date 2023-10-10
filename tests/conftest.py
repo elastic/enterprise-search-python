@@ -48,7 +48,9 @@ def ent_search_url():
     for try_url in urls_to_try:
         try:
             http = urllib3.PoolManager()
-            http.request("GET", try_url)
+            # do not follow redirect to avoid hitting authenticated endpoints
+            # we only need to check that Enterprise Search is up at this point
+            http.request("GET", try_url, redirect=False)
             url = try_url
             break
         except Exception:

@@ -70,6 +70,7 @@ def tests_impl(session):
         "pytest",
         f"--junitxml={junit_xml}",
         "--cov=elastic_enterprise_search",
+        "-ra",  # report all except passes
         *(session.posargs or ("tests/",)),
         env={"PYTHONWARNINGS": "always::DeprecationWarning"},
     )
