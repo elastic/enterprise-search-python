@@ -1,5 +1,5 @@
 build
-nox-py2
+nox
 twine
 unasync
 aiohttp

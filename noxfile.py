@@ -70,12 +70,13 @@ def tests_impl(session):
         "pytest",
         f"--junitxml={junit_xml}",
         "--cov=elastic_enterprise_search",
+        "-ra",  # report all except passes
         *(session.posargs or ("tests/",)),
         env={"PYTHONWARNINGS": "always::DeprecationWarning"},
     )
     session.run("coverage", "report", "-m")
 
 
-@nox.session(python=["3.6", "3.7", "3.8", "3.9", "3.10"])
+@nox.session(python=["3.6", "3.7", "3.8", "3.9", "3.10", "3.11"])
 def test(session):
     tests_impl(session)
