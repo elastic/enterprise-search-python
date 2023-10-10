@@ -16,13 +16,12 @@
 #  under the License.
 
 import pytest
+import pytest_asyncio
 
 from elastic_enterprise_search import AsyncAppSearch
 
-pytestmark = pytest.mark.asyncio
 
-
-@pytest.fixture
+@pytest_asyncio.fixture
 async def app_search(ent_search_url, app_search_bearer_auth) -> AsyncAppSearch:
     async with AsyncAppSearch(
         ent_search_url, bearer_auth=app_search_bearer_auth
