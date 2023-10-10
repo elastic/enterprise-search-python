@@ -55,8 +55,8 @@ def ent_search_url():
             break
         except Exception:
             continue
-    else:
-        pytest.skip("No Enterprise Search instance running on 'localhost:3002'")
+    else:  # nobreak
+        pytest.fail("No Enterprise Search instance running on 'localhost:3002'")
     return url
 
 
