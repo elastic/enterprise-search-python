@@ -32,7 +32,7 @@ cleanup_node $es_node_name
 master_node_name=${es_node_name}
 cluster_name=${moniker}${suffix}
 
-if [[ "$BUILDKITE" == "true" ]]; then
+if [[ "${BUILDKITE:-}" == "true" ]]; then
   sudo sysctl -w vm.max_map_count=262144
 fi
 
