@@ -19,9 +19,8 @@ import pytest
 
 from elastic_enterprise_search import AsyncAppSearch, NotFoundError
 
-pytestmark = pytest.mark.asyncio
 
-
+@pytest.mark.asyncio
 async def test_engines(app_search: AsyncAppSearch):
     await app_search.options(ignore_status=404).delete_engine(
         engine_name="example-engine"
@@ -52,6 +51,7 @@ async def test_engines(app_search: AsyncAppSearch):
     assert resp.body == {"deleted": True}
 
 
+@pytest.mark.asyncio
 async def test_error(app_search: AsyncAppSearch):
     with pytest.raises(NotFoundError) as e:
         await app_search.get_engine(engine_name="does-not-exist")
