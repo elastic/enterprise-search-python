@@ -2321,7 +2321,7 @@ class AppSearch(BaseClient):
         engine_name: str,
         query: str,
         analytics: t.Optional[t.Mapping[str, t.Any]] = None,
-        boost: t.Optional[t.Mapping[str, t.Any]] = None,
+        boosts: t.Optional[t.Mapping[str, t.Any]] = None,
         current_page: t.Optional[int] = None,
         facets: t.Optional[t.Mapping[str, t.Any]] = None,
         filters: t.Optional[t.Mapping[str, t.Any]] = None,
@@ -2341,7 +2341,7 @@ class AppSearch(BaseClient):
         :param engine_name: Name of the engine
         :param query:
         :param analytics:
-        :param boost:
+        :param boosts:
         :param current_page:
         :param facets:
         :param filters:
@@ -2360,8 +2360,8 @@ class AppSearch(BaseClient):
             __body["query"] = query
         if analytics is not None:
             __body["analytics"] = analytics
-        if boost is not None:
-            __body["boost"] = boost
+        if boosts is not None:
+            __body["boosts"] = boosts
         if current_page is not None:
             __body.setdefault("page", {})
             __body["page"]["current"] = current_page
@@ -2431,7 +2431,7 @@ class AppSearch(BaseClient):
         engine_name: str,
         query: str,
         analytics: t.Optional[t.Mapping[str, t.Any]] = None,
-        boost: t.Optional[t.Mapping[str, t.Any]] = None,
+        boosts: t.Optional[t.Mapping[str, t.Any]] = None,
         current_page: t.Optional[int] = None,
         facets: t.Optional[t.Mapping[str, t.Any]] = None,
         filters: t.Optional[t.Mapping[str, t.Any]] = None,
@@ -2451,7 +2451,7 @@ class AppSearch(BaseClient):
         :param engine_name: Name of the engine
         :param query:
         :param analytics:
-        :param boost:
+        :param boosts:
         :param current_page:
         :param facets:
         :param filters:
@@ -2470,8 +2470,8 @@ class AppSearch(BaseClient):
             __body["query"] = query
         if analytics is not None:
             __body["analytics"] = analytics
-        if boost is not None:
-            __body["boost"] = boost
+        if boosts is not None:
+            __body["boosts"] = boosts
         if current_page is not None:
             __body.setdefault("page", {})
             __body["page"]["current"] = current_page
@@ -2493,7 +2493,7 @@ class AppSearch(BaseClient):
         __headers = {"accept": "application/json", "content-type": "application/json"}
         return self.perform_request(  # type: ignore[return-value]
             "POST",
-            f"/api/as/v0/engines/{_quote(engine_name)}/search_explain",
+            f"/api/as/v1/engines/{_quote(engine_name)}/search_explain",
             body=__body,
             headers=__headers,
         )
@@ -2529,6 +2529,7 @@ class AppSearch(BaseClient):
         engine_name: str,
         boosts: t.Optional[t.Mapping[str, t.Any]] = None,
         precision: t.Optional[int] = None,
+        precision_enabled: t.Optional[bool] = None,
         result_fields: t.Optional[t.Mapping[str, t.Any]] = None,
         search_fields: t.Optional[t.Mapping[str, t.Any]] = None,
     ) -> ObjectApiResponse[t.Any]:
@@ -2540,6 +2541,7 @@ class AppSearch(BaseClient):
         :param engine_name: Name of the engine
         :param boosts:
         :param precision:
+        :param precision_enabled:
         :param result_fields:
         :param search_fields:
         """
@@ -2550,6 +2552,8 @@ class AppSearch(BaseClient):
             __body["boosts"] = boosts
         if precision is not None:
             __body["precision"] = precision
+        if precision_enabled is not None:
+            __body["precision_enabled"] = precision_enabled
         if result_fields is not None:
             __body["result_fields"] = result_fields
         if search_fields is not None:
