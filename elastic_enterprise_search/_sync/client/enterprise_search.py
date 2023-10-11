@@ -103,6 +103,58 @@ class EnterpriseSearch(BaseClient):
         )
 
     @_rewrite_parameters()
+    def get_storage(
+        self,
+    ) -> ObjectApiResponse[t.Any]:
+        """
+        Get information on the application indices and the space used
+
+        `<https://www.elastic.co/guide/en/enterprise-search/current/storage-api.html#get-storage-api>`_
+        """
+        __headers = {"accept": "application/json"}
+        return self.perform_request(  # type: ignore[return-value]
+            "GET", "/api/ent/v1/internal/storage", headers=__headers
+        )
+
+    @_rewrite_parameters()
+    def get_stale_storage(
+        self,
+    ) -> ObjectApiResponse[t.Any]:
+        """
+        Get information on the outdated application indices
+
+        `<https://www.elastic.co/guide/en/enterprise-search/current/storage-api.html#get-stale-storage-api>`_
+        """
+        __headers = {"accept": "application/json"}
+        return self.perform_request(  # type: ignore[return-value]
+            "GET", "/api/ent/v1/internal/storage/stale", headers=__headers
+        )
+
+    @_rewrite_parameters()
+    def delete_stale_storage(
+        self,
+        *,
+        force: t.Optional[bool] = None,
+    ) -> ObjectApiResponse[t.Any]:
+        """
+        Cleanup outdated application indices
+
+        `<https://www.elastic.co/guide/en/enterprise-search/current/storage-api.html#delete-stale-storage-api>`_
+
+        :param force: The value for the "force" flag
+        """
+        __query: t.Dict[str, t.Any] = {}
+        if force is not None:
+            __query["force"] = force
+        __headers = {"accept": "application/json"}
+        return self.perform_request(  # type: ignore[return-value]
+            "DELETE",
+            "/api/ent/v1/internal/storage/stale",
+            params=__query,
+            headers=__headers,
+        )
+
+    @_rewrite_parameters()
     def get_version(
         self,
     ) -> ObjectApiResponse[t.Any]:
