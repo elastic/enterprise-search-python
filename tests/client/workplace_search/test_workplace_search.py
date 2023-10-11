@@ -143,7 +143,7 @@ def test_documents(workplace_search, content_source):
 
     resp = workplace_search.delete_documents_by_query(content_source_id=content_source)
     assert resp.meta.status == 200
-    assert resp == {"deleted": 0, "failures": [], "total": 0}
+    assert resp.body == {"deleted": 2, "failures": [], "total": 2}
 
 
 @pytest.mark.vcr()
