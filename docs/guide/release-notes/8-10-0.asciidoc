@@ -1,0 +1,16 @@
+[[release-notes-8-10-0]]
+=== 8.10.0 Release Notes
+
+Client is compatible with Elastic Enterprise Search 8.10.0
+
+[discrete]
+==== Added
+
+- Added `get_storage`, `get_stale_storage` and `delete_stale_storage` to `enterprise_search`.
+- Added `precision_enabled` parameter name to `app_search.put_search_settings`.
+
+
+[discrete]
+==== Fixed
+
+- Fixed `boosts` parameter name in `app_search.search` and `app_search.search_explain`.
