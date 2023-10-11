@@ -323,7 +323,7 @@ def test_query_suggestions(app_search):
     }
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail(strict=True)
 @pytest.mark.vcr()
 def test_multi_search(app_search):
     resp = app_search.multi_search(
