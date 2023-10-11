@@ -53,6 +53,7 @@ docker run \
   --network ${network_name} \
   --name enterprise-search-python \
   --rm \
+  -e ENTERPRISE_SEARCH_PASSWORD="$elastic_password" \
   -v "$(pwd)/junit:/junit" \
   elastic/enterprise-search-python \
-  bash -c "nox -s test-$PYTHON_VERSION; [ -f ./junit/$BUILDKITE_JOB_ID-junit.xml ] && mv ./junit/$BUILDKITE_JOB_ID-junit.xml /junit || echo 'No JUnit artifact found'"
+  bash -c "nox -s test-$PYTHON_VERSION; [ -f ./junit/${BUILDKITE_JOB_ID:-}-junit.xml ] && mv ./junit/${BUILDKITE_JOB_ID:-}-junit.xml /junit || echo 'No JUnit artifact found'"
