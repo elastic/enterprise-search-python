@@ -27,9 +27,11 @@ SOURCE_FILES = (
     "utils/",
     "tests/",
 )
+# Allow building aiohttp when no wheels are available (eg. for recent Python versions)
+INSTALL_ENV = {"AIOHTTP_NO_EXTENSIONS": "1"}
 
 
-@nox.session()
+@nox.session(python="3.12")
 def format(session):
     session.install("black", "isort", "flynt", "unasync")
 
@@ -42,7 +44,7 @@ def format(session):
     lint(session)
 
 
-@nox.session
+@nox.session(python="3.12")
 def lint(session):
     session.install("flake8", "black", "isort")
     session.run("black", "--check", "--target-version=py36", *SOURCE_FILES)
@@ -68,6 +70,7 @@ def tests_impl(session):
         ".[develop]",
         # https://github.com/elastic/elastic-transport-python/pull/121 broke the VCRpy cassettes on Python 3.10+
         "elastic-transport<8.10",
+        env=INSTALL_ENV,
         silent=False,
     )
     session.run(
@@ -81,6 +84,6 @@ def tests_impl(session):
     session.run("coverage", "report", "-m")
 
 
-@nox.session(python=["3.6", "3.7", "3.8", "3.9", "3.10", "3.11"])
+@nox.session(python=["3.6", "3.7", "3.8", "3.9", "3.10", "3.11", "3.12"])
 def test(session):
     tests_impl(session)
