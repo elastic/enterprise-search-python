@@ -68,6 +68,7 @@ def tests_impl(session):
         "git+https://github.com/elastic/elastic-transport-python", silent=False
     )
     session.install(".[develop]", silent=False)
+    session.install("urllib3<2", silent=False)
     session.run(
         "pytest",
         f"--junitxml={junit_xml}",
