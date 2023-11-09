@@ -594,6 +594,24 @@ resp = app_search.get_curation(
 }
 ---------------
 
+==== Update Curation
+
+[source,python]
+---------------
+# Request:
+app_search.put_curation(
+  engine_name='my-engine',
+  curation_id='cur-6011f5b57cef06e6c883814a',
+  queries=["foo", "bar"],
+  promoted=["doc-1", "doc-2"],
+  hidden=["doc-3"]
+)
+# Response:
+{
+  "id": "cur-6011f5b57cef06e6c883814a"
+}
+---------------
+
 ==== List Curations
 
 [source,python]
