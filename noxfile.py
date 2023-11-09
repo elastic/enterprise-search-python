@@ -64,8 +64,10 @@ def tests_impl(session):
             "junit/enterprise-search-python-junit.xml",
         )
 
-    session.install("git+https://github.com/elastic/elastic-transport-python")
-    session.install(".[develop]")
+    session.install(
+        "git+https://github.com/elastic/elastic-transport-python", silent=False
+    )
+    session.install(".[develop]", silent=False)
     session.run(
         "pytest",
         f"--junitxml={junit_xml}",
