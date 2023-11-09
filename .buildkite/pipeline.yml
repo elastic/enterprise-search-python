@@ -1,6 +1,6 @@
 ---
 steps:
-  - label: ":python: :elastic-enterprise-search:"
+  - label: ":python: {{ matrix.python }} :elastic-enterprise-search: {{ matrix.stack_version }}"
     agents:
       provider: gcp
     matrix:

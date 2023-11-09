@@ -65,10 +65,11 @@ def tests_impl(session):
         )
 
     session.install(
-        "git+https://github.com/elastic/elastic-transport-python", silent=False
+        ".[develop]",
+        # https://github.com/elastic/elastic-transport-python/pull/121 broke the VCRpy cassettes on Python 3.10+
+        "elastic-transport<8.10",
+        silent=False,
     )
-    session.install(".[develop]", silent=False)
-    session.install("elastic-transport<8.10", silent=False)
     session.run(
         "pytest",
         f"--junitxml={junit_xml}",
