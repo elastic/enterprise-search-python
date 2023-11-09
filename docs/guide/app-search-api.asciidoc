@@ -594,7 +594,7 @@ resp = app_search.get_curation(
 }
 ---------------
 
-==== Update Curations
+==== Update Curation
 
 [source,python]
 ---------------
