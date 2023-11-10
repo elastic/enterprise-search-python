@@ -1,6 +1,6 @@
 ---
 steps:
-  - label: ":python: :elastic-enterprise-search:"
+  - label: ":python: {{ matrix.python }} :elastic-enterprise-search: {{ matrix.stack_version }}"
     agents:
       provider: gcp
     matrix:
@@ -12,7 +12,7 @@ steps:
           - "3.10"
           - "3.11"
         stack_version:
-          - "8.10.0-SNAPSHOT"
+          - "8.11.0-SNAPSHOT"
     env:
       PYTHON_VERSION: "{{ matrix.python }}"
       STACK_VERSION: "{{ matrix.stack_version }}"
