@@ -1,0 +1,9 @@
+[[release-notes-8-11-0]]
+=== 8.10.0 Release Notes
+
+Client is compatible with Elastic Enterprise Search 8.11.0
+
+[discrete]
+==== Added
+
+- Added supported for Python 3.12.
