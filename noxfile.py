@@ -33,7 +33,7 @@ INSTALL_ENV = {"AIOHTTP_NO_EXTENSIONS": "1"}
 
 @nox.session(python="3.12")
 def format(session):
-    session.install("black", "isort", "flynt", "unasync")
+    session.install("black~=24.0", "isort", "flynt", "unasync", "setuptools")
 
     session.run("python", "utils/run-unasync.py")
     session.run("isort", "--profile=black", *SOURCE_FILES)
@@ -46,7 +46,7 @@ def format(session):
 
 @nox.session(python="3.12")
 def lint(session):
-    session.install("flake8", "black", "isort")
+    session.install("flake8", "black~=24.0", "isort")
     session.run("black", "--check", "--target-version=py36", *SOURCE_FILES)
     session.run("isort", "--check", *SOURCE_FILES)
     session.run("flake8", "--ignore=E501,W503,E203", *SOURCE_FILES)
