@@ -8,8 +8,9 @@
 <a href="https://pypi.org/project/elastic-enterprise-search"><img src="https://img.shields.io/badge/python-2.7%20%7C%203.6%20%7C%203.7%20%7C%203.8%20%7C%203.9-blue" alt="Supported Python Versions"></a>
 <a href="https://pepy.tech/project/elastic-enterprise-search"><img src="https://pepy.tech/badge/elastic-enterprise-search" alt="Downloads"></a>
 <a href="https://github.com/elastic/enterprise-search-python/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/elastic/enterprise-search-python/CI?label=tests" alt="GitHub Actions Status"></a>
-<a href="https://clients-ci.elastic.co/view/Python/job/elastic+enterprise-search-python+main"><img src="https://clients-ci.elastic.co/view/Python/job/elastic+enterprise-search-python+main/badge/icon?subject=intergration" alt="Jenkins Status"></a>
+<a href="https://buildkite.com/elastic/enterprise-search-python-test"><img src="https://badge.buildkite.com/52eefb5552fe436257c38234d19d9d457e5140b621ccb910e9.svg" alt="Buildkite Status"></a>
 </p>
+
 
 Official Python client for Elastic Enterprise Search, App Search, and Workplace Search
 
