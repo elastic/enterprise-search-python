@@ -157,9 +157,9 @@ def resolve_auth_headers(
         if isinstance(basic_auth, str):
             headers["authorization"] = f"Basic {basic_auth}"
         elif isinstance(basic_auth, (list, tuple)):
-            headers[
-                "authorization"
-            ] = f"Basic {base64.b64encode(':'.join(basic_auth).encode('utf-8')).decode('ascii')}"
+            headers["authorization"] = (
+                f"Basic {base64.b64encode(':'.join(basic_auth).encode('utf-8')).decode('ascii')}"
+            )
         elif basic_auth is None:
             headers["authorization"] = None
         elif basic_auth is not DEFAULT:
