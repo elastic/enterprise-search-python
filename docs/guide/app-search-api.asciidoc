@@ -25,7 +25,7 @@ from elastic_enterprise_search import AppSearch
 
 app_search = AppSearch(
     "http://localhost:3002",
-    http_auth="private-..."
+    bearer_auth="private-..."
 )
 # Now call API methods
 app_search.search(...)
