@@ -13,7 +13,7 @@ steps:
           - "3.11"
           - "3.12"
         stack_version:
-          - "8.11.0-SNAPSHOT"
+          - "8.18.0-SNAPSHOT"
     env:
       PYTHON_VERSION: "{{ matrix.python }}"
       STACK_VERSION: "{{ matrix.stack_version }}"
