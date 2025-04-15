@@ -1,0 +1,20 @@
+[[release-notes-8-18-0]]
+=== 8.18.0 Release Notes
+
+Client is compatible with Elastic Enterprise Search 8.18.0
+
+[discrete]
+[WARNING]
+====
+*App Search and Workplace Search will be discontinued in 9.0*
+
+Starting with Elastic version 9.0, the standalone Enterprise Search products, will no longer be included in our offering.
+They remain supported in their current form in version 8.x and will only receive security upgrades and fixes.
+Enterprise Search clients will continue to be supported in their current form throughout 8.x versions, according to our https://www.elastic.co/support/eol[EOL policy].
+We recommend transitioning to our actively developed https://www.elastic.co/elastic-stack[Elastic Stack] tools for your search use cases. However, if you're still using any Enterprise Search products, we recommend using the latest stable release of the clients.
+
+Here are some useful links with more information:
+
+* https://www.elastic.co/resources/enterprise-search/enterprise-search-faq[Enterprise Search FAQ]
+* https://www.elastic.co/guide/en/enterprise-search/current/upgrading-to-9-x.html[One stop shop for Upgrading to Elastic Search 9]
+====

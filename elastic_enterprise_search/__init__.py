@@ -18,6 +18,7 @@
 """Python Elastic Enterprise Search Client"""
 
 import re
+import warnings
 
 from elastic_transport import ConnectionError as ConnectionError
 from elastic_transport import ConnectionTimeout as ConnectionTimeout
@@ -45,6 +46,17 @@ from .exceptions import (
     PayloadTooLargeError,
     ServiceUnavailableError,
     UnauthorizedError,
+)
+
+warnings.warn(
+    "Starting with Elastic version 9.0, the standalone Enterprise Search products, will no longer be included in our offering. "
+    "They remain supported in their current form in version 8.x and will only receive security upgrades and fixes. "
+    "Enterprise Search clients will continue to be supported in their current form throughout 8.x versions, according to our EOL policy (https://www.elastic.co/support/eol)."
+    "\n"
+    "We recommend transitioning to our actively developed Elastic Stack (https://www.elastic.co/elastic-stack) tools for your search use cases. "
+    "However, if you're still using any Enterprise Search products, we recommend using the latest stable release of the clients.",
+    category=DeprecationWarning,
+    stacklevel=2,
 )
 
 # Ensure that a compatible version of elastic-transport is installed.
