@@ -80,12 +80,6 @@ class BaseClient:
     ):
         if _transport is None:
             transport_kwargs = {}
-            if connections_per_node is not DEFAULT:
-                transport_kwargs["connections_per_node"] = connections_per_node
-            if http_compress is not DEFAULT:
-                transport_kwargs["http_compress"] = http_compress
-            if verify_certs is not DEFAULT:
-                transport_kwargs["verify_certs"] = verify_certs
             if node_class is not DEFAULT:
                 transport_kwargs["node_class"] = node_class
             if dead_node_backoff_factor is not DEFAULT:
