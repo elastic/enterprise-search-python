@@ -38,7 +38,3 @@ spec:
         build_branches: true
       cancel_intermediate_builds: true
       cancel_intermediate_builds_branch_filter: '!main'
-      schedules:
-        main_semi_daily:
-          branch: 'main'
-          cronline: '@daily'
